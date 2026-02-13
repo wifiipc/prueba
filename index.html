@@ -8,7 +8,7 @@
         /* --- FUENTES --- */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
-        /* --- BASE --- */
+        /* --- RESET Y BASE --- */
         *, *::after, *::before { padding: 0; margin: 0; box-sizing: border-box; }
         :root { --dark-color: #000; --accent: #ff4d6d; --glass: rgba(255, 255, 255, 0.1); }
 
@@ -20,82 +20,127 @@
             -webkit-user-select: none; user-select: none;
         }
 
-        /* --- BOTÓN DE ESCENA (Top Right) --- */
-        .scene-nav {
-            position: absolute; top: 20px; right: 20px; z-index: 10000;
+        /* --- PANTALLA DE BLOQUEO (LOGIN) --- */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; z-index: 40000; /* Capa más alta */
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
-        .btn-glass {
-            padding: 8px 16px; background: var(--glass);
-            border: 1px solid rgba(255, 255, 255, 0.2); color: white;
-            border-radius: 30px; cursor: pointer; backdrop-filter: blur(5px);
-            transition: 0.3s; font-weight: bold; font-size: 0.85rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        
+        .login-card {
+            text-align: center; width: 90%; max-width: 350px;
+            padding: 30px; background: rgba(20,20,20,0.8);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 77, 109, 0.1);
         }
-        .btn-glass:active { transform: scale(0.95); background: var(--accent); }
 
+        .date-inputs {
+            display: flex; justify-content: center; gap: 10px; margin: 20px 0;
+        }
+
+        select {
+            background: #222; color: white; border: 1px solid #444;
+            padding: 10px; border-radius: 10px; font-size: 1rem;
+            text-align: center; outline: none; appearance: none; /* Estilo nativo móvil */
+        }
+
+        .unlock-btn {
+            background: var(--accent); color: white; border: none;
+            padding: 12px 30px; border-radius: 30px; font-weight: bold;
+            font-size: 1rem; cursor: pointer; margin-top: 15px;
+            box-shadow: 0 0 15px var(--accent); transition: 0.3s;
+        }
+        .unlock-btn:active { transform: scale(0.95); }
+
+        .error-msg { color: #ff4d4d; margin-top: 10px; font-size: 0.9rem; opacity: 0; transition: 0.3s; }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); }
+        }
+
+        /* --- POP-UP MÚSICA (RESPONSIVE) --- */
+        #music-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 30000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.8s ease;
+        }
+        
+        .music-card {
+            background: #121212; padding: 30px; border-radius: 20px;
+            box-shadow: 0 0 50px rgba(255, 77, 109, 0.2);
+            text-align: center; max-width: 400px; width: 85%;
+            border: 1px solid #333;
+        }
+
+        .song-list { display: flex; flex-direction: column; gap: 10px; max-height: 50vh; overflow-y: auto; }
+
+        .song-btn {
+            background: #282828; color: white; border: none;
+            padding: 12px; border-radius: 10px; cursor: pointer;
+            display: flex; align-items: center; gap: 15px;
+            transition: 0.2s; text-align: left;
+        }
+        .song-btn:active { background: #444; }
+
+        /* --- CONTROLES MÓVILES --- */
+        .controls { position: absolute; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 8px; opacity: 0; transition: 1s; }
+        .btn-glass { padding: 8px 16px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 30px; cursor: pointer; backdrop-filter: blur(5px); transition: 0.3s; font-weight: bold; font-size: 0.85rem; }
+        
         /* --- SPOTIFY PLAYER (Bottom) --- */
         .spotify-player {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; height: 70px;
-            background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(15px);
+            width: 95%; max-width: 400px; height: 70px;
+            background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 15px; z-index: 20000;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: opacity 1s, transform 0.5s;
-            opacity: 0; pointer-events: none; /* Oculto al inicio */
+            transition: opacity 1s; opacity: 0; pointer-events: none;
         }
         .spotify-player.visible { opacity: 1; pointer-events: all; }
-
+        
         .track-info { display: flex; flex-direction: column; justify-content: center; flex-grow: 1; overflow: hidden; margin-right: 10px; }
         .track-title { font-weight: bold; font-size: 0.9rem; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .track-artist { font-size: 0.75rem; color: #b3b3b3; }
+        
+        .player-controls { display: flex; align-items: center; gap: 15px; }
+        .control-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
+        .play-btn { width: 35px; height: 35px; background: white; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .progress-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent); width: 0%; border-radius: 0 0 0 12px; transition: width 0.1s linear; }
 
-        .controls { display: flex; align-items: center; gap: 15px; }
-        .control-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .control-btn:active { transform: scale(0.9); color: var(--accent); }
-        .play-btn { width: 35px; height: 35px; background: white; color: black; border-radius: 50%; font-size: 1rem; padding-left: 2px; } /* Botón play circular */
-
-        /* Barra de progreso visual */
-        .progress-bar {
-            position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent);
-            width: 0%; border-radius: 0 0 0 12px; transition: width 0.1s linear;
-        }
-
-        /* --- POP-UP INICIAL --- */
-        #music-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); z-index: 30000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
-        }
-        .music-card {
-            background: #121212; padding: 30px; border-radius: 20px;
-            box-shadow: 0 0 50px rgba(255, 77, 109, 0.2); text-align: center; width: 85%; max-width: 350px;
-        }
-        .song-list { display: flex; flex-direction: column; gap: 10px; max-height: 40vh; overflow-y: auto; margin-top: 20px; }
-        .song-select-btn {
-            background: #282828; color: white; border: none; padding: 12px; border-radius: 8px;
-            cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; text-align: left;
-        }
-        .song-select-btn:active { background: #333; }
-
-        /* --- ESCENAS (Igual que antes) --- */
+        /* --- ESCENAS --- */
         .escena { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 1s ease; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .activa { opacity: 1; pointer-events: all; }
 
+        /* --- ESCENA 1: UNIVERSO --- */
         #universo { background: black; }
         #starCanvas { position: absolute; z-index: 1; top:0; left:0; width:100%; height:100%; }
-        #contenido-texto { position: relative; z-index: 10; text-align: center; background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 600px; }
+        #contenido-texto { position: relative; z-index: 10; text-align: center; background: rgba(0, 0, 0, 0.4); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 600px; }
         h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff4d6d; text-shadow: 0 0 20px #ff4d6d; margin: 0; line-height: 1.1; }
 
+        /* --- ESCENA 2: JARDÍN --- */
         #jardin { width: 100%; height: 100%; }
-        .night { position: fixed; left: 50%; top: 0; transform: translateX(-50%); width: 100%; height: 100%; filter: blur(0.1vmin); background: radial-gradient(ellipse at bottom, #020202 0%, #000000 100%); z-index: 0; }
-        
+        .night { position: fixed; left: 50%; top: 0; transform: translateX(-50%); width: 100%; height: 100%; filter: blur(0.1vmin); background-image: radial-gradient(ellipse at top, transparent 0%, var(--dark-color)), radial-gradient(ellipse at bottom, var(--dark-color), rgba(145, 233, 255, 0.2)), repeating-linear-gradient(220deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), repeating-linear-gradient(189deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), repeating-linear-gradient(148deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), linear-gradient(90deg, rgb(0, 255, 250), rgb(240, 240, 240)); z-index: 0; }
         .flowers-container { position: absolute; bottom: -5vmin; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         .flower-wrapper { position: absolute; bottom: 0; transform-origin: bottom center; }
 
-        /* --- FLORES Y HIERBA CSS --- */
+        /* TEXTOS */
+        .mensaje-poema { position: absolute; top: 15%; z-index: 100; text-align: center; width: 90%; font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px rgba(0, 255, 250, 0.8); animation: aparecer 3s ease-in forwards; }
+        .contador-dias { position: absolute; top: 28%; width: 100%; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: bold; color: #ff99ac; text-shadow: 0 2px 5px rgba(0,0,0,0.8); z-index: 100; letter-spacing: 1px; padding: 0 10px; }
+
+        /* --- ESCENA 3 & 4 --- */
+        #corazon-scene { background: radial-gradient(circle, #1a0b14 0%, #000 100%); }
+        #heartCanvas { position: absolute; z-index: 1; }
+        .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 2.5rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 3s infinite; text-align: center; width: 100%; }
+        #galeria { background: #000; overflow: hidden; }
+        .carousel-container { position: relative; width: 140px; height: 200px; transform-style: preserve-3d; animation: rotarCarrusel 20s infinite linear; margin-top: 40px; }
+        .foto-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255,77,109,0.5); }
+        .foto-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- CSS FLORES (MINIMIZADO) --- */
         .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; --fl-speed: 0.8s; }
         .flower--1 { animation: moving-flower-1 4s linear infinite; } .flower--2 { left: 50%; transform: rotate(20deg); animation: moving-flower-2 4s linear infinite; } .flower--3 { left: 50%; transform: rotate(-15deg); animation: moving-flower-3 4s linear infinite; }
         .flower__line { height: 55vmin; width: 1.5vmin; background-image: linear-gradient(to left, rgba(0,0,0,0.2), transparent, rgba(255,255,255,0.2)), linear-gradient(to top, transparent 10%, #14757a, #39c6d6); box-shadow: inset 0 0 2px rgba(0,0,0,0.5); animation: grow-flower-tree 4s backwards; }
@@ -118,29 +163,9 @@
         .long-g { position: absolute; bottom: 25vmin; left: -42vmin; transform-origin: bottom left; } .long-g--1 { bottom: 0vmin; transform: scale(0.8) rotate(-5deg); } .long-g--1 .leaf { -webkit-mask-image: linear-gradient(to top, transparent 40%, #079097 80%) !important; } .long-g--1 .leaf--1 { --w: 5vmin; --h: 60vmin; left: -2vmin; transform: rotate(3deg) rotateY(-180deg); } .long-g--2, .long-g--3 { bottom: -3vmin; left: -35vmin; transform-origin: center; transform: scale(0.6) rotateX(60deg); } .long-g--2 .leaf, .long-g--3 .leaf { -webkit-mask-image: linear-gradient(to top, transparent 50%, #079097 80%) !important; } .long-g--2 .leaf--1 { left: -1vmin; transform: rotateY(-180deg); } .long-g--3 { left: -17vmin; bottom: 0vmin; } .long-g--5 { left: 42vmin; bottom: 0vmin; transform: scale(0.8) rotate(2deg); } .long-g .leaf { --w: 15vmin; --h: 40vmin; --c: #1aaa15; position: absolute; bottom: 0; width: var(--w); height: var(--h); border-top-left-radius: 100%; border-left: 2vmin solid var(--c); -webkit-mask-image: linear-gradient(to top, transparent 20%, var(--dark-color)); transform-origin: bottom center; } .long-g .leaf--0 { left: 2vmin; animation: leaf-ans-1 4s linear infinite; } .long-g .leaf--1 { --w: 5vmin; --h: 60vmin; animation: leaf-ans-1 4s linear infinite; }
 
         @keyframes moving-flower-1 { 0%, 100% { transform: rotate(2deg); } 50% { transform: rotate(-2deg); } } @keyframes moving-flower-2 { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(14deg); } } @keyframes moving-flower-3 { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(-20deg) rotateY(-10deg); } } @keyframes blooming-flower { 0% { transform: scale(0); } } @keyframes grow-flower-tree { 0% { height: 0; border-radius: 1vmin; } } @keyframes blooming-leaf-right { 0% { transform-origin: left; transform: rotate(70deg) rotateY(30deg) scale(0); } } @keyframes blooming-leaf-left { 0% { transform-origin: right; transform: rotate(-70deg) rotateY(30deg) scale(0); } } @keyframes light-ans { 0% { opacity: 0; transform: translateY(0vmin); } 25% { opacity: 1; transform: translateY(-5vmin) translateX(-2vmin); } 50% { opacity: 1; transform: translateY(-15vmin) translateX(2vmin); filter: blur(0.2vmin); } 75% { transform: translateY(-20vmin) translateX(-2vmin); filter: blur(0.2vmin); } 100% { transform: translateY(-30vmin); opacity: 0; filter: blur(1vmin); } }
-        @keyframes moving-grass { 0%, 100% { transform: rotate(-48deg) rotateY(40deg); } 50% { transform: rotate(-50deg) rotateY(40deg); } }
-        @keyframes moving-grass--2 { 0%, 100% { transform: scale(0.5) rotate(75deg) rotateX(10deg) rotateY(-200deg); } 50% { transform: scale(0.5) rotate(79deg) rotateX(10deg) rotateY(-200deg); } }
-        @keyframes growing-grass-ans--1 { 0% { transform-origin: bottom left; transform: rotate(-20deg) scale(0); } }
-        @keyframes growing-grass-ans--2 { 0% { transform-origin: bottom right; transform: rotate(10deg) scale(0); } }
-        @keyframes leaf-ans-1 { 0%, 100% { transform: rotate(-5deg) scale(1); } 50% { transform: rotate(5deg) scale(1.1); } }
-        @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } }
-        @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes aparecer { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes moving-grass { 0%, 100% { transform: rotate(-48deg) rotateY(40deg); } 50% { transform: rotate(-50deg) rotateY(40deg); } } @keyframes moving-grass--2 { 0%, 100% { transform: scale(0.5) rotate(75deg) rotateX(10deg) rotateY(-200deg); } 50% { transform: scale(0.5) rotate(79deg) rotateX(10deg) rotateY(-200deg); } } @keyframes growing-grass-ans--1 { 0% { transform-origin: bottom left; transform: rotate(-20deg) scale(0); } } @keyframes growing-grass-ans--2 { 0% { transform-origin: bottom right; transform: rotate(10deg) scale(0); } } @keyframes leaf-ans-1 { 0%, 100% { transform: rotate(-5deg) scale(1); } 50% { transform: rotate(5deg) scale(1.1); } } @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } } @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } } @keyframes aparecer { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } } @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* TEXTOS */
-        .mensaje-poema { position: absolute; top: 15%; z-index: 100; text-align: center; width: 100%; font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: #fff; text-shadow: 0 0 10px rgba(0, 255, 250, 0.8); animation: aparecer 3s ease-in forwards; }
-        .contador-dias { position: absolute; top: 25%; width: 100%; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: bold; color: #ff99ac; text-shadow: 0 2px 5px rgba(0,0,0,0.8); z-index: 100; letter-spacing: 2px; }
-
-        /* OTROS */
-        #corazon-scene { background: radial-gradient(circle, #1a0b14 0%, #000 100%); flex-direction: column; overflow: hidden; }
-        #heartCanvas { position: absolute; z-index: 1; }
-        .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 3rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 3s infinite; }
-        #galeria { background: #000; overflow: hidden; }
-        .carousel-container { position: relative; width: 200px; height: 300px; transform-style: preserve-3d; animation: rotarCarrusel 20s infinite linear; }
-        .foto-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255,77,109,0.5); }
-        .foto-card img { width: 100%; height: 100%; object-fit: cover; }
-
+        /* Ajustes Mobile */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .mensaje-poema { font-size: 1.4rem; top: 12%; }
@@ -148,33 +173,55 @@
             .flowers-container { transform: scale(0.85) translateY(5%); }
             .carousel-container { width: 120px; height: 180px; }
             .titulo-flotante { font-size: 2rem; top: 10%; }
-            .spotify-player { bottom: 10px; width: 95%; height: 65px; } /* Ajuste reproductor */
         }
-
         .not-loaded * { animation-play-state: paused !important; }
     </style>
 </head>
 <body class="not-loaded">
 
-    <div id="music-overlay">
-        <div class="music-card">
-            <h2 style="font-family:'Pacifico'; color:#ff4d6d; font-size:2rem;">Nuestra Playlist 🎵</h2>
-            <p style="color:#aaa; margin-bottom:20px;">Elige nuestra banda sonora...</p>
-            <div class="song-list" id="song-list">
-                </div>
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2 style="font-family:'Dancing Script'; color:var(--accent); font-size:2rem; margin-bottom:10px;">Nuestra Fecha Especial</h2>
+            <p style="color:#aaa; font-size:0.9rem;">Introduce el día que cambió todo...</p>
+            
+            <div class="date-inputs">
+                <select id="day-select"></select>
+                <select id="month-select">
+                    <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+                    <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
+                    <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+                    <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+                </select>
+                <select id="year-select">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                </select>
+            </div>
+
+            <button class="unlock-btn" onclick="checkPassword()">Entrar ❤️</button>
+            <div class="error-msg" id="error-msg">Fecha incorrecta, inténtalo de nuevo</div>
         </div>
     </div>
 
-    <div class="scene-nav">
-        <button class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button>
+    <div id="music-overlay">
+        <div class="music-card">
+            <h2 style="font-family:'Pacifico'; color:#ff4d6d; font-size:2rem;">Playlist 🎵</h2>
+            <p style="color:#aaa; margin-bottom:20px;">Elige una canción para comenzar...</p>
+            <div class="song-list" id="song-list"></div>
+        </div>
+    </div>
+
+    <div class="controls" id="controls">
+        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button>
     </div>
 
     <div class="spotify-player" id="spotify-player">
         <div class="track-info">
-            <div class="track-title" id="track-title">Selecciona una canción</div>
+            <div class="track-title" id="track-title">Selecciona canción</div>
             <div class="track-artist" id="track-artist">...</div>
         </div>
-        <div class="controls">
+        <div class="player-controls">
             <button class="control-btn" onclick="prevSong()">⏮</button>
             <button class="control-btn play-btn" onclick="togglePlayPause()" id="play-btn">▶</button>
             <button class="control-btn" onclick="nextSong()">⏭</button>
@@ -182,7 +229,7 @@
         <div class="progress-bar" id="progress-bar"></div>
     </div>
 
-    <audio id="audio-player"></audio>
+    <audio id="bg-music"></audio>
 
     <div id="universo" class="escena activa">
         <canvas id="starCanvas"></canvas>
@@ -198,7 +245,6 @@
         <div class="night"></div>
         <div class="mensaje-poema">Bajo este cielo de luces infinitas,<br>mi corazón florece solo para ti.</div>
         <div id="contador-dias" class="contador-dias">Calculando...</div>
-
         <div class="flowers-container">
             <div class="flower-wrapper" style="left: 5%; transform: scale(0.5);"><div class="flower flower--2" style="left: -3vmin; transform: rotate(-15deg) scale(0.8); bottom: 1vmin;"><div class="flower__leafs flower__leafs--2"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--3" style="left: 3vmin; transform: rotate(15deg) scale(0.8); bottom: 1vmin;"><div class="flower__leafs flower__leafs--3"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--1" style="left: 0; bottom: 0; z-index: 2;"><div class="flower__leafs flower__leafs--1"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div></div>
             <div class="flower-wrapper" style="left: 20%; transform: scale(0.7);"><div class="flower flower--3" style="left: -3vmin; transform: rotate(-10deg) scale(0.9); bottom: 1vmin;"><div class="flower__leafs flower__leafs--3"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--1" style="left: 3vmin; transform: rotate(10deg) scale(0.9); bottom: 1vmin;"><div class="flower__leafs flower__leafs--1"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--2" style="left: 0; bottom: 0; z-index: 2;"><div class="flower__leafs flower__leafs--2"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div></div>
@@ -206,7 +252,6 @@
             <div class="flower-wrapper" style="left: 60%; transform: scale(0.85);"><div class="flower flower--3" style="left: -4vmin; transform: rotate(-12deg) scale(0.85); bottom: 1vmin;"><div class="flower__leafs flower__leafs--3"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--1" style="left: 4vmin; transform: rotate(12deg) scale(0.85); bottom: 1vmin;"><div class="flower__leafs flower__leafs--1"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--2" style="left: 0; bottom: 0; z-index: 2;"><div class="flower__leafs flower__leafs--2"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div></div>
             <div class="flower-wrapper" style="left: 75%; transform: scale(0.7);"><div class="flower flower--2" style="left: -3vmin; transform: rotate(-10deg) scale(0.9); bottom: 1vmin;"><div class="flower__leafs flower__leafs--2"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--3" style="left: 3vmin; transform: rotate(10deg) scale(0.9); bottom: 1vmin;"><div class="flower__leafs flower__leafs--3"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--1" style="left: 0; bottom: 0; z-index: 2;"><div class="flower__leafs flower__leafs--1"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div></div>
             <div class="flower-wrapper" style="left: 90%; transform: scale(0.5);"><div class="flower flower--1" style="left: -3vmin; transform: rotate(-15deg) scale(0.8); bottom: 1vmin;"><div class="flower__leafs flower__leafs--1"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--2" style="left: 3vmin; transform: rotate(15deg) scale(0.8); bottom: 1vmin;"><div class="flower__leafs flower__leafs--2"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div><div class="flower flower--3" style="left: 0; bottom: 0; z-index: 2;"><div class="flower__leafs flower__leafs--3"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div><div class="flower__white-circle"></div><div class="flower__light flower__light--1"></div><div class="flower__light flower__light--2"></div><div class="flower__light flower__light--3"></div><div class="flower__light flower__light--4"></div><div class="flower__light flower__light--5"></div><div class="flower__light flower__light--6"></div><div class="flower__light flower__light--7"></div><div class="flower__light flower__light--8"></div></div><div class="flower__line"><div class="flower__line__leaf flower__line__leaf--1"></div><div class="flower__line__leaf flower__line__leaf--2"></div><div class="flower__line__leaf flower__line__leaf--3"></div><div class="flower__line__leaf flower__line__leaf--4"></div></div></div></div>
-
             <div class="growing-grass"><div class="flower__grass flower__grass--1"><div class="flower__grass--top"></div><div class="flower__grass--bottom"></div><div class="flower__grass__leaf flower__grass__leaf--1"></div><div class="flower__grass__leaf flower__grass__leaf--2"></div><div class="flower__grass__overlay"></div></div></div>
             <div class="growing-grass"><div class="flower__grass flower__grass--2"><div class="flower__grass--top"></div><div class="flower__grass--bottom"></div><div class="flower__grass__leaf flower__grass__leaf--1"></div><div class="flower__grass__leaf flower__grass__leaf--2"></div><div class="flower__grass__overlay"></div></div></div>
             <div class="long-g long-g--0"><div class="grow-ans" style="--d:3s"><div class="leaf leaf--0"></div></div><div class="grow-ans" style="--d:2.2s"><div class="leaf leaf--1"></div></div></div>
@@ -226,7 +271,7 @@
         const FECHA_INICIO = new Date("2025-10-25T00:00:00");
         const PLAYLIST = [
             { titulo: "Huracán", artista: "Funzo & BabyLoud", archivo: "cancion1.mp3" },
-            { titulo: "Yelow", artista: "Coldplay", archivo: "cancion2.mp3" },
+            { titulo: "Yellow", artista: "Coldplay", archivo: "cancion2.mp3" },
             { titulo: "Lo que pido", artista: "DePol", archivo: "cancion3.mp3" },
             { titulo: "12x3", artista: "DEKKO", archivo: "cancion4.mp3" }
         ];
@@ -234,32 +279,65 @@
         let escenaActual = 0;
         let currentSongIndex = 0;
         const escenasIds = ['universo', 'jardin', 'corazon-scene', 'galeria'];
-        const audio = document.getElementById('audio-player');
+        const audio = document.getElementById('bg-music');
 
-        // --- INICIALIZAR PLAYLIST ---
+        // --- SISTEMA LOGIN ---
+        // Llenar selectores de fecha
+        const daySelect = document.getElementById('day-select');
+        for(let i=1; i<=31; i++) {
+            let opt = document.createElement('option');
+            opt.value = i;
+            opt.innerText = i;
+            daySelect.appendChild(opt);
+        }
+
+        function checkPassword() {
+            const d = document.getElementById('day-select').value;
+            const m = document.getElementById('month-select').value;
+            const y = document.getElementById('year-select').value;
+
+            if (d == 25 && m == 10 && y == 2025) {
+                // Correcto
+                document.getElementById('login-overlay').style.opacity = '0';
+                document.getElementById('login-overlay').style.visibility = 'hidden';
+                
+                // Mostrar Music Overlay con efecto
+                setTimeout(() => {
+                    document.getElementById('music-overlay').style.display = 'flex';
+                    setTimeout(() => document.getElementById('music-overlay').style.opacity = '1', 50);
+                }, 800);
+            } else {
+                // Incorrecto - Temblor
+                const card = document.querySelector('.login-card');
+                card.style.animation = 'shake 0.3s';
+                document.getElementById('error-msg').style.opacity = '1';
+                setTimeout(() => card.style.animation = '', 300);
+            }
+        }
+
+        // --- SISTEMA MÚSICA ---
         function initPlaylist() {
             const list = document.getElementById('song-list');
             PLAYLIST.forEach((song, index) => {
                 const btn = document.createElement('div');
-                btn.className = 'song-select-btn';
+                btn.className = 'song-btn';
                 btn.innerHTML = `<span style="font-size:1.2rem;color:var(--accent)">▶</span>
-                                 <div><div style="font-weight:bold;font-size:0.9rem">${song.titulo}</div>
-                                 <div style="font-size:0.75rem;color:#aaa">${song.artista}</div></div>`;
+                                 <div><div style="font-weight:bold">${song.titulo}</div>
+                                 <div style="font-size:0.8rem;color:#ccc">${song.artista}</div></div>`;
                 btn.onclick = () => startExperience(index);
                 list.appendChild(btn);
             });
         }
 
-        // --- REPRODUCTOR LOGICA ---
         function startExperience(index) {
             loadSong(index);
-            // Ocultar Overlay
             document.getElementById('music-overlay').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('music-overlay').style.display = 'none';
-                document.getElementById('spotify-player').classList.add('visible'); // Mostrar mini-player
+                document.getElementById('spotify-player').classList.add('visible');
+                document.getElementById('controls').style.opacity = '1';
             }, 800);
-            
+
             // Iniciar animaciones
             document.body.classList.remove('not-loaded');
             initStars(); animateStars(); typeWriter();
@@ -272,7 +350,7 @@
             audio.src = song.archivo;
             document.getElementById('track-title').innerText = song.titulo;
             document.getElementById('track-artist').innerText = song.artista;
-            audio.play().then(() => updatePlayIcon(true)).catch(e => console.log("Interacción requerida"));
+            audio.play().then(() => updatePlayIcon(true)).catch(e => console.log("Click necesario"));
         }
 
         function togglePlayPause() {
@@ -300,15 +378,14 @@
             loadSong(currentSongIndex);
         }
 
-        // --- BARRA DE PROGRESO & AUTOPLAY ---
         audio.ontimeupdate = () => {
             const progress = (audio.currentTime / audio.duration) * 100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
         };
 
-        audio.onended = () => nextSong(); // Autoplay Siguiente
+        audio.onended = () => nextSong();
 
-        // --- NAVEGACIÓN ESCENAS ---
+        // --- NAVEGACIÓN ---
         function siguienteEscena() {
             document.getElementById(escenasIds[escenaActual]).classList.remove('activa');
             escenaActual = (escenaActual + 1) % escenasIds.length;
@@ -342,4 +419,5 @@
     </script>
 </body>
 </html>
+
 
