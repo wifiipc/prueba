@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para ti ❤️</title>
     <style>
-        /* --- FUENTES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500&display=swap');
-        @import url('https://fonts.googleapis.com/css?family=Georgia&display=swap');
+        /* --- FUENTES ESTILO "DEDICAPAG" --- */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500;700&display=swap');
 
+        /* --- CONFIGURACIÓN BASE --- */
         body {
             margin: 0;
             overflow: hidden;
@@ -17,175 +17,231 @@
             color: white;
         }
 
-        /* --- BOTÓN --- */
+        /* --- BOTÓN FLOTANTE ESTILIZADO --- */
         #btn-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 100;
-            padding: 8px 15px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ccc;
-            border-radius: 20px;
+            padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.1); /* Efecto cristal */
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            border-radius: 50px;
             cursor: pointer;
+            backdrop-filter: blur(10px);
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            transition: 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.3);
+            animation: latido 2s infinite; /* Animación de latido constante */
         }
+        
         #btn-toggle:hover {
             background: white;
-            color: black;
-            border-color: white;
+            color: #ff4d6d;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 77, 109, 0.8);
         }
 
-        /* --- ESCENA UNIVERSO --- */
-        #universo {
+        /* --- ESCENAS Y TRANSICIONES --- */
+        .escena {
             position: absolute;
             width: 100%;
             height: 100vh;
-            background: radial-gradient(ellipse at center, #090a0f 0%, #000000 100%);
-            display: flex;
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out; /* Transición súper suave */
+            opacity: 0;
+            pointer-events: none;
+            display: flex; /* Flex para centrar todo */
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            transition: opacity 1s;
         }
 
-        /* Lienzo para las estrellas (estelas) */
+        .escena.activa {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1);
+        }
+
+        .escena.oculta {
+            opacity: 0;
+            transform: scale(1.1); /* Efecto zoom al salir */
+        }
+
+        /* --- ESCENA 1: UNIVERSO --- */
+        #universo {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+        }
+
         #spaceCanvas {
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1; /* Al fondo */
+            z-index: 1;
         }
 
-        /* Contenedor del texto */
         #contenido-universo {
-            position: absolute;
-            z-index: 10; /* Por encima de todo */
+            position: relative;
+            z-index: 10;
             text-align: center;
+            /* Efecto cristal (Glassmorphism) */
+            background: rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: flotar 6s ease-in-out infinite;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 4rem;
-            color: #ff4d6d;
-            text-shadow: 0 0 20px #ff4d6d;
+            font-size: 4.5rem;
+            background: linear-gradient(to right, #ff4d6d, #ff8fa3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin: 0;
-            font-weight: normal;
+            text-shadow: 0 0 30px rgba(255, 77, 109, 0.5);
+            animation: aparecerDesdeAbajo 1.5s ease-out;
         }
 
         #frase {
-            font-size: 1.2rem;
-            margin-top: 10px;
-            color: #ccc;
-            transition: opacity 0.5s;
+            font-size: 1.4rem;
+            margin-top: 20px;
+            min-height: 1.5em; /* Evita saltos */
+            color: #eee;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         }
 
-        /* --- PLANETAS CSS --- */
+        /* Cursor de escritura */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: white;
+            animation: parpadeo 1s infinite;
+            vertical-align: bottom;
+            margin-left: 2px;
+        }
+
+        /* PLANETAS */
         .planeta {
             position: absolute;
             border-radius: 50%;
-            z-index: 5; /* Entre el canvas y el texto */
-            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.5);
+            z-index: 5;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.1);
+            animation: orbitar 60s linear infinite;
         }
+        .p1 { width: 120px; height: 120px; top: 10%; left: 10%; background: radial-gradient(#ff99ac, #ff006e); animation-duration: 45s; }
+        .p2 { width: 60px; height: 60px; bottom: 20%; right: 15%; background: radial-gradient(#a2d2ff, #0077b6); animation-duration: 35s; }
 
-        /* Planeta Rosa Grande */
-        .p1 {
-            width: 150px;
-            height: 150px;
-            top: 15%;
-            left: 20%;
-            background: radial-gradient(circle at 30% 30%, #ff8fa3, #ff4d6d);
-        }
-
-        /* Planeta Morado */
-        .p2 {
-            width: 50px;
-            height: 50px;
-            top: 15%;
-            right: 20%;
-            background: radial-gradient(circle at 30% 30%, #c77dff, #7b2cbf);
-        }
-
-        /* Planeta Azul Pequeño */
-        .p3 {
-            width: 30px;
-            height: 30px;
-            bottom: 25%;
-            left: 15%;
-            background: radial-gradient(circle at 30% 30%, #90e0ef, #00b4d8);
-        }
-        
-        /* Planeta Morado Pequeño */
-        .p4 {
-            width: 20px;
-            height: 20px;
-            top: 55%;
-            left: 25%;
-            background: radial-gradient(circle at 30% 30%, #e0aaff, #9d4edd);
-            opacity: 0.6;
-        }
-
-        /* --- ESCENA JARDÍN --- */
+        /* --- ESCENA 2: JARDÍN --- */
         #jardin {
-            position: absolute;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(to bottom, #fff0f3, #ffffff);
-            display: none;
-            opacity: 0;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe3e9 100%);
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s;
-            color: #555;
-            z-index: 20;
         }
+
         canvas#arbolCanvas {
-            border-bottom: 2px solid #5c3a45;
-            margin-bottom: 20px;
+            z-index: 2;
         }
-        .tarjeta {
-            background: rgba(255,255,255,0.9);
-            padding: 25px;
-            border-radius: 15px;
+
+        .tarjeta-jardin {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 20px 50px rgba(255, 77, 109, 0.2);
+            position: absolute;
+            bottom: 10%; /* Posición fija abajo */
+            z-index: 10;
+            max-width: 80%;
+            border: 2px solid white;
+            animation: aparecerConRebote 1s ease-out 0.5s both; /* Entra con retraso y rebote */
         }
+
+        .texto-poema {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: #5c3a45;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .contador-caja {
+            background: #ff4d6d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        /* --- ANIMACIONES KEYFRAMES --- */
+        @keyframes latido {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.1); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+            60% { transform: scale(1); }
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes aparecerDesdeAbajo {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes aparecerConRebote {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            60% { opacity: 1; transform: scale(1.05) translateY(-5px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        @keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        @keyframes orbitar {
+            from { transform: rotate(0deg) translateX(20px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
+        }
+
     </style>
 </head>
 <body>
 
-    <button id="btn-toggle" onclick="cambiarEscena()">Ir al Jardín 🌱</button>
+    <button id="btn-toggle" onclick="cambiarEscena()">Ver Jardín 🌹</button>
 
-    <div id="universo">
+    <div id="universo" class="escena activa">
         <canvas id="spaceCanvas"></canvas>
-        
         <div class="planeta p1"></div>
         <div class="planeta p2"></div>
-        <div class="planeta p3"></div>
-        <div class="planeta p4"></div>
 
         <div id="contenido-universo">
             <h1>Para mi Amor</h1>
-            <div id="frase">Cargando...</div>
+            <div id="frase"></div><span class="cursor"></span>
         </div>
     </div>
 
-    <div id="jardin">
-        <canvas id="arbolCanvas" width="350" height="400"></canvas>
-        <div class="tarjeta">
-            <p style="font-style: italic; font-family: 'Georgia', serif; font-size: 1.1rem; color: #5c3a45;">
-                "En la inmensidad del universo,<br>mi lugar favorito es a tu lado."
-            </p>
-            <div style="font-size: 0.75rem; color: #ff4d6d; font-weight: bold; margin-top:15px; letter-spacing: 1px;">
-                JUNTOS DESDE EL 25 OCT 2025
+    <div id="jardin" class="escena oculta">
+        <canvas id="arbolCanvas" width="350" height="500"></canvas>
+        
+        <div class="tarjeta-jardin">
+            <div class="texto-poema">
+                "En cada latido del universo te busco,<br>
+                pero es aquí, a tu lado,<br>
+                donde realmente florezco."
             </div>
-            <div id="contador" style="font-size: 1.3rem; font-weight: bold; margin-top: 5px; color: #333;">
-                Calculando...
+            <div style="font-size: 0.8rem; color: #ff8fa3; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px;">
+                Creciendo juntos desde el 25/10/2025
             </div>
+            <div id="contador" class="contador-caja">Calculando...</div>
         </div>
     </div>
 
@@ -194,37 +250,52 @@
         const fechaInicio = new Date("2025-10-25T00:00:00");
         const frases = [
             "Eres mi universo entero.",
-            "Viajando a la velocidad de la luz hacia ti.",
-            "No hay distancia que mi amor no recorra.",
-            "Tú eres mi destino favorito.",
-            "Te quiero más allá de las estrellas."
+            "Contigo el tiempo se detiene.",
+            "Te elijo hoy y siempre.",
+            "Mi destino favorito eres tú."
         ];
 
-        // --- VARIABLES ---
-        let escena = 1; 
-        let indiceFrase = 0;
+        // --- VARIABLES GLOBALES ---
+        let escenaActual = 1;
         const divUniverso = document.getElementById('universo');
         const divJardin = document.getElementById('jardin');
         const btn = document.getElementById('btn-toggle');
-        const txtFrase = document.getElementById('frase');
-
+        
         // --- INICIO ---
         window.onload = function() {
-            initSpace(); // Iniciar estrellas
-            // Actualizar frase inicial inmediatamente
-            txtFrase.innerText = frases[0]; 
-            setInterval(cambiarFrase, 4000);
+            initSpace(); 
+            escribirFrase(0); // Iniciar efecto máquina de escribir
             setInterval(actualizarReloj, 1000);
         };
-        
-        window.addEventListener('resize', function() {
-            if(escena === 1) initSpace();
-        });
 
-        // --- LÓGICA DE ESTRELLAS (ESTELAS) ---
-        const spaceCanvas = document.getElementById('spaceCanvas');
-        const sCtx = spaceCanvas.getContext('2d');
-        let sWidth, sHeight;
-        let stars = [];
-        const numStars = 300; // Cantidad de estrellas
-        const speed = 8;
+        // --- MÁQUINA DE ESCRIBIR (EFECTO DEDICAPAG) ---
+        let fraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingSpeed = 100; // Velocidad escribir
+        const deletingSpeed = 50; // Velocidad borrar
+        const pauseEnd = 2000; // Pausa al final de la frase
+
+        function escribirFrase() {
+            if (escenaActual !== 1) return; // Solo escribir si estamos en el universo
+
+            const currentText = frases[fraseIndex];
+            const fraseEl = document.getElementById('frase');
+
+            if (isDeleting) {
+                fraseEl.innerText = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                fraseEl.innerText = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? deletingSpeed : typingSpeed;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typeSpeed = pauseEnd;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                fraseIndex = (fraseIndex + 1) % frases.length;
+                typeSpeed
