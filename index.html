@@ -6,13 +6,13 @@
     <title>Para ti ❤️</title>
     <style>
         /* --- FUENTES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
         /* --- ESTILOS GENERALES --- */
         body {
             margin: 0;
             overflow: hidden;
-            background-color: #000; /* Fondo negro puro */
+            background-color: #000;
             font-family: 'Montserrat', sans-serif;
             color: white;
             height: 100vh;
@@ -24,8 +24,8 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            z-index: 1000; /* Siempre encima */
-            padding: 10px 20px;
+            z-index: 1000;
+            padding: 10px 25px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
@@ -34,11 +34,13 @@
             backdrop-filter: blur(5px);
             transition: all 0.3s;
             font-weight: bold;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
         #btn-toggle:hover {
             background: #ff4d6d;
             border-color: #ff4d6d;
-            box-shadow: 0 0 15px #ff4d6d;
+            box-shadow: 0 0 20px #ff4d6d;
+            transform: scale(1.05);
         }
 
         /* --- CAPAS (ESCENAS) --- */
@@ -50,41 +52,30 @@
             height: 100%;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 1s ease;
+            transition: opacity 1s ease, transform 1s ease;
             display: flex;
             justify-content: center;
             align-items: center;
+            transform: scale(1.1); /* Efecto zoom out al salir */
         }
 
         .activa {
             opacity: 1;
             pointer-events: all;
+            transform: scale(1);
         }
 
-        /* --- ESCENA 1: ESPACIO --- */
-        #universo {
-            background: black; /* Asegurar fondo */
-        }
-
-        /* IMPORTANTE: El Canvas debe ocupar todo y estar detrás del texto */
-        #starCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; /* Nivel 1 */
-        }
-
+        /* --- ESCENA 1: UNIVERSO --- */
+        #universo { background: black; }
+        #starCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         #contenido-texto {
             position: relative;
-            z-index: 10; /* Nivel 10 (encima de estrellas) */
+            z-index: 10;
             text-align: center;
-            background: rgba(0, 0, 0, 0.3); /* Un poco de oscuridad para leer mejor */
+            background: rgba(0, 0, 0, 0.3);
             padding: 40px;
             border-radius: 20px;
         }
-
         h1 {
             font-family: 'Dancing Script', cursive;
             font-size: 4rem;
@@ -92,7 +83,6 @@
             text-shadow: 0 0 20px #ff4d6d;
             margin: 0;
         }
-
         #maquina-escribir {
             font-size: 1.5rem;
             margin-top: 15px;
@@ -101,29 +91,13 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
-        /* Cursor parpadeante */
-        .cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background-color: white;
-            animation: blink 1s infinite;
-            vertical-align: sub;
-        }
-
         /* --- ESCENA 2: JARDÍN --- */
         #jardin {
             background: linear-gradient(to bottom, #fff0f3, #ffffff);
             flex-direction: column;
-            z-index: 5; /* Nivel base del jardín */
+            z-index: 20;
         }
-
-        canvas#arbolCanvas {
-            margin-bottom: 20px;
-            z-index: 10; /* Árbol sobre el fondo */
-            position: relative;
-        }
-
+        canvas#arbolCanvas { margin-bottom: 20px; z-index: 2; }
         .tarjeta {
             background: white;
             padding: 25px 40px;
@@ -133,10 +107,8 @@
             color: #5c3a45;
             max-width: 80%;
             border: 2px solid #fff0f3;
-            z-index: 20; /* Tarjeta sobre el árbol */
-            position: relative;
+            z-index: 3;
         }
-
         .contador {
             font-weight: 700;
             color: #ff4d6d;
@@ -144,22 +116,54 @@
             margin-top: 10px;
         }
 
+        /* --- ESCENA 3: CORAZÓN 3D --- */
+        #corazon-scene {
+            background: radial-gradient(circle, #1a0b14 0%, #000000 100%);
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #heartCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .titulo-corazon {
+            position: absolute;
+            top: 15%;
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            color: #ff99ac;
+            text-shadow: 0 0 15px #ff006e, 0 0 30px #ff006e;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+            animation: flotarTitulo 3s ease-in-out infinite;
+        }
+
+        @keyframes flotarTitulo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .cursor {
+            display: inline-block; width: 2px; height: 1.2em;
+            background-color: white; animation: blink 1s infinite; vertical-align: sub;
+        }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     </style>
 </head>
 <body>
 
-    <button id="btn-toggle" onclick="alternarEscena()">Ver Jardín 🌱</button>
+    <button id="btn-toggle" onclick="siguienteEscena()">Siguiente Sorpresa ✨</button>
 
     <div id="universo" class="escena activa">
         <canvas id="starCanvas"></canvas>
-        
         <div id="contenido-texto">
             <h1>Para mi Amor</h1>
-            <div>
-                <span id="maquina-escribir"></span><span class="cursor"></span>
-            </div>
+            <div><span id="maquina-escribir"></span><span class="cursor"></span></div>
         </div>
     </div>
 
@@ -167,206 +171,57 @@
         <canvas id="arbolCanvas"></canvas>
         <div class="tarjeta">
             <p style="font-style: italic; font-size: 1.1rem;">
-                "Te quiero no solo por cómo eres,<br>sino por cómo soy yo cuando estoy contigo."
+                "Mis raíces buscan tu tierra,<br>mis hojas buscan tu luz."
             </p>
             <div style="font-size: 0.8rem; text-transform: uppercase; margin-top: 15px; letter-spacing: 1px;">
-                Juntos desde el 25/10/2025
+                Creciendo juntos desde el 25/10/2025
             </div>
             <div id="reloj" class="contador">Calculando...</div>
         </div>
     </div>
 
+    <div id="corazon-scene" class="escena">
+        <h2 class="titulo-corazon">Feliz Mes, Mi Vida</h2>
+        <canvas id="heartCanvas"></canvas>
+    </div>
+
     <script>
         /* =========================================
-           CONFIGURACIÓN (¡Edita esto si quieres!)
+           CONFIGURACIÓN
            ========================================= */
         const FECHA_INICIO = new Date("2025-10-25T00:00:00");
-        const FRASES = [
-            "Eres mi universo entero.",
-            "Me pierdo en tu mirada.",
-            "Viajando hacia ti...",
-            "Te quiero hasta el infinito."
-        ];
-
-        /* =========================================
-           1. SISTEMA DE ESTRELLAS (WARP SPEED)
-           ========================================= */
-        const canvas = document.getElementById('starCanvas');
-        const ctx = canvas.getContext('2d');
+        const FRASES = ["Eres mi universo.", "Viajando hacia ti...", "Te amo infinito."];
         
-        let width, height, stars;
-        const numStars = 400; // Cantidad de estrellas (ajusta si va lento)
+        // Estado de la App
+        let escenaActual = 0; // 0: Universo, 1: Jardín, 2: Corazón
         
-        // Inicializar tamaño y estrellas
-        function initStars() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < numStars; i++) {
-                stars.push({
-                    x: Math.random() * width - width / 2,
-                    y: Math.random() * height - height / 2,
-                    z: Math.random() * width // Profundidad
-                });
-            }
-        }
-
-        // Bucle de animación (Optimizado)
-        function animateStars() {
-            if (!document.getElementById('universo').classList.contains('activa')) return;
-
-            // Fondo negro con rastro muy leve (trail effect)
-            ctx.fillStyle = "rgba(0, 0, 0, 0.4)"; 
-            ctx.fillRect(0, 0, width, height);
-            
-            ctx.fillStyle = "#ffffff"; // Estrellas blancas
-            
-            stars.forEach(star => {
-                // Mover estrella hacia la cámara
-                star.z -= 10; // Velocidad
-
-                // Si la estrella pasa la pantalla, reiniciarla al fondo
-                if (star.z <= 0) {
-                    star.z = width;
-                    star.x = Math.random() * width - width / 2;
-                    star.y = Math.random() * height - height / 2;
-                }
-
-                // Matemáticas de proyección 3D a 2D
-                const x = (star.x / star.z) * width + width / 2;
-                const y = (star.y / star.z) * height + height / 2;
-                
-                // Tamaño basado en cercanía
-                const size = (1 - star.z / width) * 4;
-
-                // Dibujar solo si está en pantalla
-                if (x > 0 && x < width && y > 0 && y < height) {
-                    ctx.beginPath();
-                    ctx.arc(x, y, size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            });
-
-            requestAnimationFrame(animateStars);
-        }
-
         /* =========================================
-           2. MÁQUINA DE ESCRIBIR
+           1. LOGICA GENERAL (Escenas y Reloj)
            ========================================= */
-        let fraseIdx = 0;
-        let charIdx = 0;
-        let isDeleting = false;
-        const element = document.getElementById('maquina-escribir');
-
-        function typeWriter() {
-            const current = FRASES[fraseIdx];
-            
-            if (isDeleting) {
-                element.innerText = current.substring(0, charIdx - 1);
-                charIdx--;
-            } else {
-                element.innerText = current.substring(0, charIdx + 1);
-                charIdx++;
-            }
-
-            let speed = isDeleting ? 50 : 100;
-
-            if (!isDeleting && charIdx === current.length) {
-                speed = 2000; // Pausa al terminar frase
-                isDeleting = true;
-            } else if (isDeleting && charIdx === 0) {
-                isDeleting = false;
-                fraseIdx = (fraseIdx + 1) % FRASES.length;
-                speed = 500;
-            }
-
-            setTimeout(typeWriter, speed);
-        }
-
-        /* =========================================
-           3. JARDÍN Y ÁRBOL (Estilo Bonsái)
-           ========================================= */
-        const treeCanvas = document.getElementById('arbolCanvas');
-        const tCtx = treeCanvas.getContext('2d');
-        let growth = 0;
-
-        function resizeTree() {
-            treeCanvas.width = 350;
-            treeCanvas.height = 400;
-        }
-
-        function drawTree() {
-            if (!document.getElementById('jardin').classList.contains('activa')) return;
-            
-            tCtx.clearRect(0, 0, treeCanvas.width, treeCanvas.height);
-            if (growth < 1) growth += 0.01;
-
-            // Iniciar dibujo del bonsái desde el centro inferior
-            drawBranch(treeCanvas.width/2, treeCanvas.height, 80 * growth, 0, 12);
-            requestAnimationFrame(drawTree);
-        }
-
-        function drawBranch(x, y, len, angle, width) {
-            tCtx.save();
-            tCtx.translate(x, y);
-            tCtx.rotate(angle * Math.PI / 180);
-            tCtx.beginPath();
-            tCtx.moveTo(0, 0);
-            tCtx.lineTo(0, -len);
-            // Color verde oscuro para el tronco tipo bonsái
-            tCtx.strokeStyle = "#556b2f"; 
-            tCtx.lineWidth = width;
-            tCtx.lineCap = "round"; // Bordes redondeados
-            tCtx.stroke();
-
-            // Dibujar hojas/corazones al final de las ramas más pequeñas
-            if (len < 20 && len > 0) {
-                tCtx.fillStyle = "#ff006e";
-                tCtx.font = "18px Arial";
-                tCtx.fillText("❤️", -9, -len);
-            }
-
-            // Recursividad para crear ramas, con ángulos más pronunciados para bonsái
-            if (len > 10) {
-                tCtx.translate(0, -len);
-                // Ramas más cortas y con más ángulo para efecto retorcido
-                drawBranch(0, 0, len * 0.7, 35 + Math.random()*10, width * 0.7);
-                drawBranch(0, 0, len * 0.7, -35 - Math.random()*10, width * 0.7);
-            }
-            tCtx.restore();
-        }
-
-        /* =========================================
-           4. LÓGICA GENERAL
-           ========================================= */
-        function alternarEscena() {
-            const u = document.getElementById('universo');
-            const j = document.getElementById('jardin');
+        function siguienteEscena() {
+            const escenas = ['universo', 'jardin', 'corazon-scene'];
             const btn = document.getElementById('btn-toggle');
-
-            if (u.classList.contains('activa')) {
-                // IR A JARDÍN
-                u.classList.remove('activa');
-                u.style.opacity = 0; // Forzar ocultado visual
-                
-                j.style.display = 'flex';
-                setTimeout(() => j.classList.add('activa'), 50);
-                
-                btn.innerText = "Volver al Universo ✨";
-                growth = 0; 
-                resizeTree();
-                drawTree();
-            } else {
-                // IR A UNIVERSO
-                j.classList.remove('activa');
-                setTimeout(() => j.style.display = 'none', 1000);
-                
-                u.classList.add('activa');
-                u.style.opacity = 1;
-                
+            
+            // Ocultar actual
+            document.getElementById(escenas[escenaActual]).classList.remove('activa');
+            
+            // Avanzar índice
+            escenaActual = (escenaActual + 1) % 3;
+            
+            // Mostrar nueva
+            const nueva = document.getElementById(escenas[escenaActual]);
+            nueva.classList.add('activa');
+            
+            // Lógica específica por escena
+            if (escenaActual === 0) { // Universo
                 btn.innerText = "Ver Jardín 🌱";
-                initStars();
-                animateStars();
+                initStars(); animateStars();
+            } else if (escenaActual === 1) { // Jardín
+                btn.innerText = "Ver Sorpresa 💖";
+                growth = 0; resizeTree(); drawTree();
+            } else { // Corazón
+                btn.innerText = "Volver al Inicio ✨";
+                initHeart(); animateHeart();
             }
         }
 
@@ -379,17 +234,222 @@
             document.getElementById('reloj').innerText = `${d}d ${h}h ${m}m ${s}s`;
         }
 
-        // ARRANQUE
-        window.addEventListener('resize', initStars);
+        /* =========================================
+           2. UNIVERSO (Estrellas)
+           ========================================= */
+        const starCanvas = document.getElementById('starCanvas');
+        const sCtx = starCanvas.getContext('2d');
+        let stars = []; 
+
+        function initStars() {
+            starCanvas.width = window.innerWidth;
+            starCanvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 400; i++) {
+                stars.push({
+                    x: Math.random() * starCanvas.width - starCanvas.width/2,
+                    y: Math.random() * starCanvas.height - starCanvas.height/2,
+                    z: Math.random() * starCanvas.width
+                });
+            }
+        }
+
+        function animateStars() {
+            if (!document.getElementById('universo').classList.contains('activa')) return;
+            sCtx.fillStyle = "rgba(0, 0, 0, 0.4)"; 
+            sCtx.fillRect(0, 0, starCanvas.width, starCanvas.height);
+            sCtx.fillStyle = "#ffffff";
+            
+            stars.forEach(s => {
+                s.z -= 10;
+                if (s.z <= 0) { s.z = starCanvas.width; s.x = Math.random()*starCanvas.width - starCanvas.width/2; s.y = Math.random()*starCanvas.height - starCanvas.height/2; }
+                const x = (s.x / s.z) * starCanvas.width + starCanvas.width/2;
+                const y = (s.y / s.z) * starCanvas.height + starCanvas.height/2;
+                const size = (1 - s.z / starCanvas.width) * 4;
+                if (x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) {
+                    sCtx.beginPath(); sCtx.arc(x, y, size, 0, Math.PI*2); sCtx.fill();
+                }
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        /* =========================================
+           3. JARDÍN (Bonsái)
+           ========================================= */
+        const treeCanvas = document.getElementById('arbolCanvas');
+        const tCtx = treeCanvas.getContext('2d');
+        let growth = 0;
+
+        function resizeTree() { treeCanvas.width = 350; treeCanvas.height = 400; }
+
+        function drawTree() {
+            if (!document.getElementById('jardin').classList.contains('activa')) return;
+            tCtx.clearRect(0, 0, treeCanvas.width, treeCanvas.height);
+            if (growth < 1) growth += 0.01;
+            drawBranch(treeCanvas.width/2, treeCanvas.height, 80 * growth, 0, 12);
+            requestAnimationFrame(drawTree);
+        }
+
+        function drawBranch(x, y, len, angle, width) {
+            tCtx.save(); tCtx.translate(x, y); tCtx.rotate(angle * Math.PI/180);
+            tCtx.beginPath(); tCtx.moveTo(0, 0); tCtx.lineTo(0, -len);
+            tCtx.strokeStyle = "#556b2f"; tCtx.lineWidth = width; tCtx.lineCap = "round"; tCtx.stroke();
+            if (len < 20 && len > 0) { tCtx.fillStyle = "#ff006e"; tCtx.font = "18px Arial"; tCtx.fillText("❤️", -9, -len); }
+            if (len > 10) {
+                tCtx.translate(0, -len);
+                drawBranch(0, 0, len*0.7, 35+Math.random()*10, width*0.7);
+                drawBranch(0, 0, len*0.7, -35-Math.random()*10, width*0.7);
+            }
+            tCtx.restore();
+        }
+
+        /* =========================================
+           4. CORAZÓN 3D (Partículas)
+           ========================================= */
+        const hCanvas = document.getElementById('heartCanvas');
+        const hCtx = hCanvas.getContext('2d');
+        let heartPoints = [];
+        let angleY = 0;
+
+        function initHeart() {
+            hCanvas.width = window.innerWidth;
+            hCanvas.height = window.innerHeight;
+            heartPoints = [];
+            
+            // Generar puntos del corazón usando fórmula 3D
+            for (let i = 0; i < 1500; i++) {
+                // Variables aleatorias para distribuir puntos
+                const t = Math.random() * Math.PI * 2;
+                const r = Math.random(); // Relleno
+                const scale = 12; 
+                
+                // Fórmula del corazón
+                const x = scale * 16 * Math.pow(Math.sin(t), 3);
+                const y = -scale * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                // Z para dar volumen (aleatorio dentro del grosor)
+                const z = (Math.random() - 0.5) * 40 * r; 
+
+                // Escalamos un poco aleatoriamente para llenar el volumen
+                const s = 0.5 + Math.random() * 0.5;
+                
+                heartPoints.push({
+                    x: x * s, 
+                    y: y * s, 
+                    z: z,
+                    color: `hsl(${330 + Math.random() * 40}, 100%, ${50 + Math.random() * 30}%)`
+                });
+            }
+        }
+
+        function animateHeart() {
+            if (!document.getElementById('corazon-scene').classList.contains('activa')) return;
+            
+            // Limpiar con rastro
+            hCtx.fillStyle = "rgba(0, 0, 0, 0.2)";
+            hCtx.fillRect(0, 0, hCanvas.width, hCanvas.height);
+            
+            const cx = hCanvas.width / 2;
+            const cy = hCanvas.height / 2 - 50; // Subir un poco el corazón
+            
+            angleY += 0.015; // Velocidad rotación
+
+            // DIBUJAR PUNTOS
+            heartPoints.forEach(p => {
+                // Rotación Y
+                const cos = Math.cos(angleY);
+                const sin = Math.sin(angleY);
+                const rx = p.x * cos - p.z * sin;
+                const rz = p.x * sin + p.z * cos;
+                
+                // Perspectiva
+                const fov = 400;
+                const scale = fov / (fov + rz + 100); // +100 para alejar un poco
+                
+                const x2d = rx * scale + cx;
+                const y2d = p.y * scale + cy;
+                const size = scale * 2.5;
+
+                if (size > 0) {
+                    hCtx.fillStyle = p.color;
+                    hCtx.beginPath();
+                    hCtx.arc(x2d, y2d, size, 0, Math.PI * 2);
+                    hCtx.fill();
+                }
+            });
+
+            // DIBUJAR ANILLO DE TEXTO
+            drawRing(cx, cy + 180, angleY); // Debajo del corazón
+            
+            requestAnimationFrame(animateHeart);
+        }
+
+        function drawRing(cx, cy, angle) {
+            hCtx.save();
+            hCtx.translate(cx, cy);
+            // Efecto perspectiva: aplastamos Y
+            hCtx.scale(1, 0.3); 
+            hCtx.rotate(angle * 0.5); // Gira más lento
+
+            hCtx.font = "bold 24px Montserrat";
+            hCtx.fillStyle = "#ff4d6d";
+            hCtx.textAlign = "center";
+            
+            const text = "TE AMO · ERES MI VIDA · SIEMPRE JUNTOS · ";
+            // Dibujar texto en círculo es complejo, simplificamos con un anillo de partículas o texto repetido
+            // Para mantener rendimiento, dibujamos el texto rotado simple
+            
+            // Truco visual: Dibujar anillo brillante
+            hCtx.beginPath();
+            hCtx.arc(0, 0, 200, 0, Math.PI * 2);
+            hCtx.strokeStyle = "rgba(255, 77, 109, 0.5)";
+            hCtx.lineWidth = 2;
+            hCtx.stroke();
+            
+            // Texto flotante (simulado)
+            // No podemos curvar texto nativamente en canvas fácil sin librerías,
+            // así que dibujamos palabras en posiciones cardinales que giran
+            const words = ["TE AMO", "MI VIDA", "POR SIEMPRE", "JUNTOS"];
+            const step = (Math.PI * 2) / words.length;
+            
+            words.forEach((w, i) => {
+                hCtx.save();
+                hCtx.rotate(i * step);
+                hCtx.translate(0, -200); // Radio del anillo
+                hCtx.fillStyle = "white";
+                hCtx.shadowBlur = 10;
+                hCtx.shadowColor = "#ff006e";
+                hCtx.fillText(w, 0, 0);
+                hCtx.restore();
+            });
+
+            hCtx.restore();
+        }
+
+        /* =========================================
+           5. STARTUP
+           ========================================= */
+        let typeIdx = 0; let charIdx = 0; let isDel = false;
+        function typeWriter() {
+            if (!document.getElementById('universo').classList.contains('activa')) { setTimeout(typeWriter, 500); return; }
+            const txt = FRASES[typeIdx];
+            const el = document.getElementById('maquina-escribir');
+            el.innerText = isDel ? txt.substring(0, charIdx--) : txt.substring(0, charIdx++);
+            let spd = isDel ? 50 : 100;
+            if (!isDel && charIdx === txt.length + 1) { spd = 2000; isDel = true; }
+            else if (isDel && charIdx === 0) { isDel = false; typeIdx = (typeIdx + 1) % FRASES.length; spd = 500; }
+            setTimeout(typeWriter, spd);
+        }
+
         window.onload = () => {
-            initStars();
-            animateStars();
+            initStars(); animateStars();
             typeWriter();
             setInterval(updateClock, 1000);
+            
+            // Iniciar botón correcto
+            document.getElementById('btn-toggle').innerText = "Ver Jardín 🌱";
         };
+        window.addEventListener('resize', () => { initStars(); resizeTree(); initHeart(); });
 
     </script>
 </body>
 </html>
-</html>
-
