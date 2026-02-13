@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para ti ❤️</title>
     <style>
-        /* FUENTES */
+        /* --- FUENTES --- */
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Georgia&display=swap');
 
         body {
             margin: 0;
@@ -16,66 +17,69 @@
             color: white;
         }
 
-        /* --- BOTÓN DE CAMBIO --- */
+        /* --- BOTÓN --- */
         #btn-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 100;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            color: white;
+            padding: 8px 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ccc;
             border-radius: 20px;
             cursor: pointer;
-            backdrop-filter: blur(5px);
             font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
             transition: 0.3s;
         }
         #btn-toggle:hover {
             background: white;
-            color: #ff4d6d;
+            color: black;
+            border-color: white;
         }
 
-        /* --- ESCENA 1: EL UNIVERSO --- */
+        /* --- ESCENA UNIVERSO --- */
         #universo {
             position: absolute;
             width: 100%;
             height: 100vh;
-            perspective: 800px; /* Profundidad 3D */
-            overflow: hidden;
-            /* Fondo oscuro profundo */
-            background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%);
+            background: radial-gradient(ellipse at center, #090a0f 0%, #000000 100%);
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
             transition: opacity 1s;
         }
 
-        /* Contenedor del texto (fijo en el centro) */
+        /* Lienzo para las estrellas (estelas) */
+        #spaceCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1; /* Al fondo */
+        }
+
+        /* Contenedor del texto */
         #contenido-universo {
             position: absolute;
-            z-index: 10; /* Texto por encima de todo */
+            z-index: 10; /* Por encima de todo */
             text-align: center;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
+            font-size: 4rem;
             color: #ff4d6d;
             text-shadow: 0 0 20px #ff4d6d;
             margin: 0;
+            font-weight: normal;
         }
 
         #frase {
-            font-size: 1.5rem;
-            margin-top: 20px;
-            min-height: 30px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #ccc;
             transition: opacity 0.5s;
         }
 
@@ -83,63 +87,48 @@
         .planeta {
             position: absolute;
             border-radius: 50%;
-            z-index: 2; /* Detrás del texto, delante del fondo */
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.1);
-            animation: flotar 6s ease-in-out infinite;
+            z-index: 5; /* Entre el canvas y el texto */
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.5);
         }
 
-        /* Planeta 1: Grande y Rosado */
+        /* Planeta Rosa Grande */
         .p1 {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             top: 15%;
-            right: 15%;
-            background: radial-gradient(circle at 30% 30%, #ff99ac, #ff4d6d);
-        }
-
-        /* Planeta 2: Pequeño y Azul */
-        .p2 {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 10%;
-            background: radial-gradient(circle at 30% 30%, #a2d2ff, #3a86ff);
-            animation-duration: 8s; /* Velocidad diferente */
-        }
-
-        /* Planeta 3: Lejano y Morado */
-        .p3 {
-            width: 40px;
-            height: 40px;
-            top: 60%;
             left: 20%;
-            background: radial-gradient(circle at 30% 30%, #e0c3fc, #8e44ad);
-            animation-duration: 10s;
-            opacity: 0.7;
+            background: radial-gradient(circle at 30% 30%, #ff8fa3, #ff4d6d);
         }
 
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        /* Planeta Morado */
+        .p2 {
+            width: 50px;
+            height: 50px;
+            top: 15%;
+            right: 20%;
+            background: radial-gradient(circle at 30% 30%, #c77dff, #7b2cbf);
         }
 
-        /* --- ESTRELLAS WARP SPEED --- */
-        .estrella {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            transform: translateZ(-1000px); 
-            opacity: 0;
-            z-index: 1; /* Al fondo */
+        /* Planeta Azul Pequeño */
+        .p3 {
+            width: 30px;
+            height: 30px;
+            bottom: 25%;
+            left: 15%;
+            background: radial-gradient(circle at 30% 30%, #90e0ef, #00b4d8);
+        }
+        
+        /* Planeta Morado Pequeño */
+        .p4 {
+            width: 20px;
+            height: 20px;
+            top: 55%;
+            left: 25%;
+            background: radial-gradient(circle at 30% 30%, #e0aaff, #9d4edd);
+            opacity: 0.6;
         }
 
-        @keyframes warpSpace {
-            0% { opacity: 0; transform: translateZ(-1000px); }
-            20% { opacity: 1; }
-            100% { opacity: 1; transform: translateZ(800px); }
-        }
-
-        /* --- ESCENA 2: JARDÍN --- */
+        /* --- ESCENA JARDÍN --- */
         #jardin {
             position: absolute;
             width: 100%;
@@ -154,18 +143,16 @@
             color: #555;
             z-index: 20;
         }
-
         canvas#arbolCanvas {
             border-bottom: 2px solid #5c3a45;
             margin-bottom: 20px;
         }
-
         .tarjeta {
-            background: rgba(255,255,255,0.8);
-            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 25px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
     </style>
 </head>
@@ -174,28 +161,30 @@
     <button id="btn-toggle" onclick="cambiarEscena()">Ir al Jardín 🌱</button>
 
     <div id="universo">
+        <canvas id="spaceCanvas"></canvas>
         
         <div class="planeta p1"></div>
         <div class="planeta p2"></div>
         <div class="planeta p3"></div>
+        <div class="planeta p4"></div>
 
         <div id="contenido-universo">
-            <h1>Viajando hacia ti ❤️</h1>
-            <div id="frase">Eres mi destino favorito.</div>
+            <h1>Para mi Amor</h1>
+            <div id="frase">Cargando...</div>
         </div>
-        </div>
+    </div>
 
     <div id="jardin">
         <canvas id="arbolCanvas" width="350" height="400"></canvas>
         <div class="tarjeta">
-            <p style="font-style: italic; font-family: 'Georgia', serif;">
-                "Mis raíces buscan tu tierra,<br>mis hojas buscan tu luz."
+            <p style="font-style: italic; font-family: 'Georgia', serif; font-size: 1.1rem; color: #5c3a45;">
+                "En la inmensidad del universo,<br>mi lugar favorito es a tu lado."
             </p>
-            <div style="font-size: 0.8rem; color: #ff4d6d; font-weight: bold; margin-top:10px;">
+            <div style="font-size: 0.75rem; color: #ff4d6d; font-weight: bold; margin-top:15px; letter-spacing: 1px;">
                 JUNTOS DESDE EL 25 OCT 2025
             </div>
-            <div id="contador" style="font-size: 1.2rem; font-weight: bold; margin-top: 5px;">
-                Calculando tiempo...
+            <div id="contador" style="font-size: 1.3rem; font-weight: bold; margin-top: 5px; color: #333;">
+                Calculando...
             </div>
         </div>
     </div>
@@ -205,10 +194,10 @@
         const fechaInicio = new Date("2025-10-25T00:00:00");
         const frases = [
             "Eres mi universo entero.",
-            "Me pierdo en tu gravedad.",
-            "Contigo hasta el infinito.",
-            "Eres mi estrella favorita.",
-            "Te quiero en todas las galaxias."
+            "Viajando a la velocidad de la luz hacia ti.",
+            "No hay distancia que mi amor no recorra.",
+            "Tú eres mi destino favorito.",
+            "Te quiero más allá de las estrellas."
         ];
 
         // --- VARIABLES ---
@@ -221,19 +210,21 @@
 
         // --- INICIO ---
         window.onload = function() {
-            crearEstrellasCSS();
+            initSpace(); // Iniciar estrellas
+            // Actualizar frase inicial inmediatamente
+            txtFrase.innerText = frases[0]; 
             setInterval(cambiarFrase, 4000);
             setInterval(actualizarReloj, 1000);
         };
+        
+        window.addEventListener('resize', function() {
+            if(escena === 1) initSpace();
+        });
 
-        // --- ESTRELLAS (JS genera los divs, CSS anima) ---
-        function crearEstrellasCSS() {
-            const cantidadEstrellas = 150; 
-            const contenedor = document.getElementById('universo');
-
-            for (let i = 0; i < cantidadEstrellas; i++) {
-                let estrella = document.createElement('div');
-                estrella.className = 'estrella';
-                
-                // Posición aleatoria
-                const x = (Math.
+        // --- LÓGICA DE ESTRELLAS (ESTELAS) ---
+        const spaceCanvas = document.getElementById('spaceCanvas');
+        const sCtx = spaceCanvas.getContext('2d');
+        let sWidth, sHeight;
+        let stars = [];
+        const numStars = 300; // Cantidad de estrellas
+        const speed = 8;
