@@ -3,275 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para ti</title>
+    <title>Para ti ❤️</title>
     <style>
-        /* Importar fuentes */
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500;700&family=Lora:ital@1&display=swap');
-
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #000; /* Fondo negro por defecto */
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        /* --- BOTÓN --- */
-        #btn-cambiar {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 999;
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            backdrop-filter: blur(4px);
-        }
-
-        /* --- ESCENA 1: UNIVERSO --- */
-        #escena-universo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            display: flex; /* Flex para centrar */
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s;
-            opacity: 1;
-            z-index: 10;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        #contenido-universo {
-            position: relative;
-            z-index: 20;
-            text-align: center;
-            color: white;
-            padding: 20px;
-            background: rgba(0,0,0,0.4);
-            border-radius: 20px;
-        }
-
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            color: #ff4d6d;
-            margin: 0;
-            text-shadow: 0 0 15px #ff4d6d;
-        }
-
-        #frase-universo {
-            font-size: 1.2rem;
-            margin-top: 10px;
-            min-height: 1.5em;
-        }
-
-        /* --- ESCENA 2: JARDÍN --- */
-        #escena-jardin {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(to bottom, #ffe6eb, #ffffff);
-            display: none; /* Oculto al principio */
-            opacity: 0;
-            transition: opacity 1s;
-            z-index: 10;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .contenedor-jardin {
-            display: flex;
-            width: 90%;
-            height: 80%;
-            max-width: 1000px;
-            align-items: center;
-        }
-
-        #area-arbol {
-            flex: 1;
-            height: 100%;
-            position: relative;
-        }
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Arial', sans-serif; }
         
-        #area-texto {
-            flex: 1;
-            padding: 20px;
-            text-align: center;
+        /* PANTALLA INICIO */
+        #capa-inicio {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #ff4d6d; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; cursor: pointer; text-align: center;
         }
+        #capa-inicio h1 { font-size: 3rem; margin: 0; animation: latido 1s infinite; }
+        #capa-inicio p { font-size: 1.2rem; margin-top: 10px; }
 
-        .poema {
-            font-family: 'Lora', serif;
-            font-size: 1.2rem;
-            color: #633;
-            font-style: italic;
-            margin-bottom: 20px;
-            border-left: 4px solid #ff4d6d;
-            padding-left: 15px;
-            background: rgba(255,255,255,0.5);
-        }
+        @keyframes latido { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
 
-        .contador {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-weight: bold;
-            color: #333;
-        }
+        /* ESCENAS */
+        .escena { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; display: none; opacity: 0; transition: opacity 1s; }
+        .activa { display: flex !important; opacity: 1 !important; }
 
-        /* Ajuste Móvil */
-        @media (max-width: 700px) {
-            .contenedor-jardin { flex-direction: column; }
-            #area-arbol { width: 100%; height: 50%; order: 1; }
-            #area-texto { width: 100%; height: 50%; order: 2; overflow-y: scroll; }
-            h1 { font-size: 2.5rem; }
+        /* ESCENA 1: UNIVERSO */
+        #universo { background: black; flex-direction: column; justify-content: center; align-items: center; color: white; }
+        .estrella { position: absolute; background: white; border-radius: 50%; animation: brillar 2s infinite; }
+        @keyframes brillar { 0%, 100% {opacity:0.2;} 50% {opacity:1;} }
+        
+        #texto-universo { z-index: 10; text-align: center; }
+        #frase-cambiante { font-size: 1.5rem; color: #ff99ac; min-height: 50px; margin: 20px 0; }
+        
+        .boton {
+            padding: 10px 20px; border: 2px solid white; background: transparent; color: white;
+            border-radius: 30px; cursor: pointer; font-size: 1rem; transition: 0.3s; z-index: 20;
         }
+        .boton:hover { background: white; color: #ff4d6d; }
+
+        /* ESCENA 2: JARDÍN */
+        #jardin { background: linear-gradient(to bottom, #ffe6eb, #fff); flex-direction: column; justify-content: center; align-items: center; color: #555; }
+        #canvas-arbol { border-bottom: 2px solid #8b5a2b; margin-bottom: 20px; }
+        .carta { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        #contador { font-weight: bold; color: #d63384; font-size: 1.2rem; margin: 10px 0; }
+
     </style>
 </head>
 <body>
 
-    <button id="btn-cambiar">Ir al Jardín 🌱</button>
+    <div id="capa-inicio" onclick="iniciar()">
+        <h1>❤️</h1>
+        <p>Haz clic para comenzar</p>
+    </div>
 
-    <div id="escena-universo">
-        <canvas id="canvas-universo"></canvas>
-        <div id="contenido-universo">
-            <h1>Para mi Amor</h1>
-            <div id="frase-universo">Cargando...</div>
+    <div id="universo" class="escena">
+        <div id="texto-universo">
+            <h1>Eres mi Universo</h1>
+            <div id="frase-cambiante">Cargando...</div>
+            <button class="boton" onclick="irJardin()">Ver nuestro jardín 🌱</button>
         </div>
     </div>
 
-    <div id="escena-jardin">
-        <div class="contenedor-jardin">
-            <div id="area-arbol">
-                <canvas id="canvas-arbol"></canvas>
-            </div>
-            <div id="area-texto">
-                <div class="poema">
-                    "Del universo bajé una estrella,<br>
-                    pero ninguna brilla como tú.<br>
-                    Aquí planto mi amor en la tierra,<br>
-                    donde crecemos bajo la misma luz."
-                </div>
-                <div class="contador">
-                    <div style="font-size: 0.8em; color: #ff4d6d; margin-bottom: 5px;">JUNTOS DESDE EL 25/10/2025</div>
-                    <div id="reloj">Calculando...</div>
-                </div>
-            </div>
+    <div id="jardin" class="escena">
+        <canvas id="canvas-arbol" width="320" height="400"></canvas>
+        <div class="carta">
+            <p><i>"Lo nuestro crece cada día..."</i></p>
+            <div style="font-size:0.8rem; color:#ff4d6d;">DESDE EL 25 OCT 2025</div>
+            <div id="contador">Calculando...</div>
+            <br>
+            <button class="boton" style="border-color:#d63384; color:#d63384" onclick="irUniverso()">Volver a las estrellas ✨</button>
         </div>
     </div>
 
     <script>
-        // --- DATOS A EDITAR ---
+        // --- CONFIGURACIÓN ---
         const fechaInicio = new Date("2025-10-25T00:00:00");
-        const frases = [
-            "Eres mi universo entero.",
-            "Contigo el tiempo vuela.",
-            "Gracias por existir.",
-            "Te quiero hasta el infinito."
-        ];
-        const palabras = ["Amor", "Vida", "Cielo", "Guapa", "Reina"];
+        const frases = ["Te quiero hasta el infinito", "Eres mi casualidad favorita", "Mi mundo eres tú", "Gracias por existir"];
 
-        // --- VARIABLES DE CONTROL ---
-        let escenaActual = 1; // 1 = Universo, 2 = Jardín
-        const divUniverso = document.getElementById('escena-universo');
-        const divJardin = document.getElementById('escena-jardin');
-        const btn = document.getElementById('btn-cambiar');
-
-        // --- INICIALIZACIÓN SEGURA ---
-        document.addEventListener('DOMContentLoaded', () => {
-            iniciarUniverso();
-            actualizarFrase();
-            setInterval(actualizarFrase, 4000);
+        // --- LÓGICA ---
+        let indice = 0;
+        
+        function iniciar() {
+            document.getElementById('capa-inicio').style.display = 'none';
+            document.getElementById('universo').classList.add('activa');
+            crearEstrellas();
+            setInterval(rotarFrase, 3500);
             setInterval(actualizarReloj, 1000);
-            
-            // Evento del botón
-            btn.addEventListener('click', cambiarEscena);
-            
-            // Evento resize
-            window.addEventListener('resize', () => {
-                configurarCanvasUniverso();
-                if(escenaActual === 2) configurarCanvasArbol();
-            });
-        });
-
-        // --- LÓGICA CAMBIO DE ESCENA ---
-        function cambiarEscena() {
-            if (escenaActual === 1) {
-                // Ir a Jardín
-                divUniverso.style.opacity = 0;
-                setTimeout(() => {
-                    divUniverso.style.display = 'none';
-                    divJardin.style.display = 'flex';
-                    setTimeout(() => {
-                        divJardin.style.opacity = 1;
-                        escenaActual = 2;
-                        btn.innerText = "Volver al Universo ✨";
-                        btn.style.color = "#ff4d6d";
-                        btn.style.borderColor = "#ff4d6d";
-                        iniciarArbol();
-                    }, 50);
-                }, 1000);
-            } else {
-                // Ir a Universo
-                divJardin.style.opacity = 0;
-                setTimeout(() => {
-                    divJardin.style.display = 'none';
-                    divUniverso.style.display = 'flex';
-                    setTimeout(() => {
-                        divUniverso.style.opacity = 1;
-                        escenaActual = 1;
-                        btn.innerText = "Ir al Jardín 🌱";
-                        btn.style.color = "white";
-                        btn.style.borderColor = "white";
-                    }, 50);
-                }, 1000);
-            }
+            rotarFrase();
+            actualizarReloj();
         }
 
-        // --- UNIVERSO ---
-        const cU = document.getElementById('canvas-universo');
-        const ctxU = cU.getContext('2d');
-        let wU, hU, estrellas = [];
-
-        function configurarCanvasUniverso() {
-            wU = cU.width = window.innerWidth;
-            hU = cU.height = window.innerHeight;
-        }
-
-        function iniciarUniverso() {
-            configurarCanvasUniverso();
+        // UNIVERSO
+        function crearEstrellas() {
+            const u = document.getElementById('universo');
             for(let i=0; i<100; i++) {
-                estrellas.push({
-                    x: Math.random() * wU,
-                    y: Math.random() * hU,
-                    z: Math.random() * wU,
-                    texto: Math.random() > 0.9 ? palabras[Math.floor(Math.random()*palabras.length)] : null
-                });
+                let s = document.createElement('div');
+                s.className = 'estrella';
+                s.style.left = Math.random()*100+'%';
+                s.style.top = Math.random()*100+'%';
+                s.style.width = Math.random()*3+'px';
+                s.style.height = s.style.width;
+                s.style.animationDuration = (Math.random()*2+1)+'s';
+                u.appendChild(s);
             }
-            animarUniverso();
         }
 
-        function animarUniverso() {
-            if(escenaActual === 1) {
-                ctxU.fillStyle = "black";
-                ctxU.fillRect(0, 0, wU, hU);
+        function rotarFrase() {
+            const el = document.getElementById('frase-cambiante');
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.innerText = frases[indice];
+                el.style.opacity = 1;
+                indice = (indice + 1) % frases.length;
+            }, 500);
+        }
+
+        // JARDÍN
+        function irJardin() {
+            document.getElementById('universo').classList.remove('activa');
+            const j = document.getElementById('jardin');
+            j.classList.add('activa');
+            dibujarArbol();
+        }
+
+        function irUniverso() {
+            document.getElementById('jardin').classList.remove('activa');
+            document.getElementById('universo').classList.add('activa');
+        }
+
+        function dibujarArbol() {
+            const ctx = document.getElementById('canvas-arbol').getContext('2d');
+            ctx.clearRect(0,0,320,400);
+            
+            function rama(x, y, alto, angulo, ancho) {
+                if(alto < 10) return;
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angulo * Math.PI/180);
+                ctx.moveTo(0,0);
+                ctx.lineTo(0, -alto);
+                ctx.strokeStyle = "#8b5a2b";
+                ctx.lineWidth = ancho;
+                ctx.stroke();
                 
-                estrellas.forEach(e => {
-                    e.z -= 2;
-                    if(e.z <= 0) { e.z = wU; e.x = Math.random()*wU; e.y = Math.random()*hU; }
-                    
-                    let x = (e.x - wU/2)
+                if(alto < 20) {
+                    ctx.fillStyle = "#ff006e";
+                    ctx.font = "20px Arial";
+                    ctx.fillText("❤️", -10, -alto);
+                }
+                
+                ctx.translate(0, -alto);
+                rama(0, 0, alto*0.7, 25, ancho*0.7);
+                rama(0, 0, alto*0.7, -25, ancho*0.7);
+                ctx.restore();
+            }
+            rama(160, 400, 90, 0, 10);
+        }
+
+        // RELOJ
+        function actualizarReloj() {
+            const diff = new Date() - fechaInicio;
+            const d = Math.floor(diff / (1000*60*60*24));
+            const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+            const s = Math.floor((diff % (1000*60)) / 1000);
+            document.getElementById('contador').innerText = `${d}d ${h}h ${m}m ${s}s`;
+        }
+    </script>
+</body>
+</html>
