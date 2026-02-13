@@ -32,22 +32,22 @@
 
         .btn-glass {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
             border-radius: 30px;
             cursor: pointer;
             backdrop-filter: blur(5px);
             transition: all 0.3s;
             font-weight: bold;
-            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
             font-size: 0.9rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
         
         .btn-glass:hover {
             background: #ff4d6d;
             border-color: #ff4d6d;
-            box-shadow: 0 0 20px #ff4d6d;
             transform: scale(1.05);
         }
 
@@ -98,9 +98,10 @@
             min-height: 1.5em;
         }
 
-        /* --- ESCENA 2: EL ÁRBOL TIKTOK (FONDO NEGRO) --- */
+        /* --- ESCENA 2: EL ÁRBOL (CORREGIDO) --- */
         #jardin {
-            background: black; /* El árbol viral suele tener fondo negro */
+            /* Fondo Atardecer Romántico (No negro) */
+            background: linear-gradient(to bottom, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             flex-direction: column;
             overflow: hidden;
         }
@@ -112,18 +113,92 @@
         }
         .mensaje-arbol {
             position: absolute;
-            bottom: 50px;
+            bottom: 30px;
             z-index: 10;
             text-align: center;
             font-family: 'Pacifico', cursive;
-            font-size: 2rem;
-            color: #ff99ac;
-            text-shadow: 0 0 10px #ff006e;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(255, 77, 109, 0.8);
             opacity: 0;
-            animation: aparecer 2s ease-in 4s forwards; /* Aparece después de que crece el árbol */
+            animation: aparecer 2s ease-in 3s forwards;
+            background: rgba(255, 77, 109, 0.3);
+            padding: 10px 30px;
+            border-radius: 50px;
         }
 
-        /* --- ESCENA 3: CORAZÓN 3D --- */
+        /* --- ESCENA 3: CARTA SORPRESA (NUEVO) --- */
+        #carta-scene {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            flex-direction: column;
+        }
+        
+        .sobre-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .sobre-container:hover { transform: scale(1.05); }
+
+        .sobre {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #ff4d6d;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 5;
+            overflow: hidden;
+        }
+        .solapa {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0; 
+            height: 0; 
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff758c;
+            transform-origin: top;
+            transition: transform 0.6s 1s; /* Retraso para que salga la carta */
+            z-index: 6;
+        }
+        .carta-papel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            color: #333;
+            text-align: center;
+            transition: transform 1s ease-in-out;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 -5px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Animación Carta Abierta */
+        .abrir-sobre .solapa { transform: rotateX(180deg); transition: transform 0.6s; z-index: 1;}
+        .abrir-sobre .carta-papel { transform: translateY(-150px); z-index: 10; transition: transform 1s 0.6s; }
+        
+        .click-hint {
+            margin-top: 50px;
+            color: white;
+            font-size: 0.9rem;
+            animation: blink 2s infinite;
+        }
+
+        /* --- ESCENA 4: CORAZÓN 3D --- */
         #corazon-scene {
             background: radial-gradient(circle, #1a0b14 0%, #000000 100%);
             flex-direction: column;
@@ -141,7 +216,7 @@
             animation: flotar 3s ease-in-out infinite;
         }
 
-        /* --- ESCENA 4: CARRUSEL --- */
+        /* --- ESCENA 5: CARRUSEL --- */
         #galeria {
             background: #000;
             overflow: hidden;
@@ -163,6 +238,7 @@
             overflow: hidden;
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 20px rgba(255, 77, 109, 0.5);
+            backface-visibility: hidden; /* Mejor rendimiento */
         }
         .foto-card img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -179,7 +255,7 @@
 
     <div class="controls">
         <button id="btn-music" class="btn-glass" onclick="toggleMusic()">🎵 Música</button>
-        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ✨</button>
+        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button>
     </div>
 
     <audio id="bg-music" loop>
@@ -197,9 +273,19 @@
     <div id="jardin" class="escena">
         <canvas id="arbolCanvas"></canvas>
         <div class="mensaje-arbol">
-            "Mi amor por ti crece cada día" <br>
-            <span style="font-size: 1rem; font-family: 'Montserrat'; color: white;">(Juntos desde el 25/10/2025)</span>
+            Nuestro Amor Florece
         </div>
+    </div>
+    
+    <div id="carta-scene" class="escena">
+        <div class="sobre-container" id="sobre" onclick="abrirCarta()">
+            <div class="sobre"></div>
+            <div class="solapa"></div>
+            <div class="carta-papel">
+                "Cada día a tu lado es un regalo.<br>Gracias por ser tú.<br>Te Amo."
+            </div>
+        </div>
+        <div class="click-hint">👇 Haz clic en el sobre 👇</div>
     </div>
 
     <div id="corazon-scene" class="escena">
@@ -227,7 +313,7 @@
         ];
 
         let escenaActual = 0;
-        const escenasIds = ['universo', 'jardin', 'corazon-scene', 'galeria'];
+        const escenasIds = ['universo', 'jardin', 'carta-scene', 'corazon-scene', 'galeria'];
 
         function siguienteEscena() {
             document.getElementById(escenasIds[escenaActual]).classList.remove('activa');
@@ -235,16 +321,22 @@
             const nueva = document.getElementById(escenasIds[escenaActual]);
             nueva.classList.add('activa');
             
-            // Iniciar animaciones según escena
-            if(escenaActual === 0) { initStars(); animateStars(); }
-            else if(escenaActual === 1) { initTree(); } // Inicia el árbol viral
-            else if(escenaActual === 2) { initHeart(); animateHeart(); }
-            else { crearCarrusel(); }
+            // Lógica por escena
+            const btn = document.getElementById('btn-next');
+            if(escenaActual === 0) { btn.innerText = "Ver Árbol 🌳"; initStars(); animateStars(); }
+            else if(escenaActual === 1) { btn.innerText = "Ver Carta 💌"; initTree(); } // Árbol
+            else if(escenaActual === 2) { btn.innerText = "Ver Corazón 💖"; } // Carta
+            else if(escenaActual === 3) { btn.innerText = "Ver Fotos 📸"; initHeart(); animateHeart(); }
+            else { btn.innerText = "Inicio ✨"; crearCarrusel(); }
         }
 
         function toggleMusic() {
             const audio = document.getElementById('bg-music');
             audio.paused ? audio.play() : audio.pause();
+        }
+        
+        function abrirCarta() {
+            document.getElementById('sobre').classList.toggle('abrir-sobre');
         }
 
         /* =========================================
@@ -273,90 +365,61 @@
         }
 
         /* =========================================
-           2. EL ÁRBOL VIRAL (CÓDIGO COMPLEJO)
+           2. ÁRBOL CORREGIDO (FRONDOSO Y SIN DERRETIRSE)
            ========================================= */
         const treeCanvas = document.getElementById('arbolCanvas');
         const tCtx = treeCanvas.getContext('2d');
         let treeW, treeH;
-        let fallingLeaves = [];
 
         function initTree() {
             treeW = treeCanvas.width = window.innerWidth;
             treeH = treeCanvas.height = window.innerHeight;
-            fallingLeaves = [];
-            // Limpiar y empezar animación
             tCtx.clearRect(0,0,treeW,treeH);
-            // Dibujar árbol recursivo desde abajo
-            drawBranch(treeW/2, treeH, 120, -90, 20, 0); 
-            animateFallingLeaves();
+            // Dibujar desde abajo
+            drawBranch(treeW/2, treeH, 130, -90, 25, 0); 
         }
 
         function drawBranch(x, y, len, angle, width, depth) {
-            // Animación de crecimiento: setTimeout para cada rama
             setTimeout(() => {
                 if(!document.getElementById('jardin').classList.contains('activa')) return;
                 
                 tCtx.beginPath();
                 tCtx.moveTo(x, y);
-                // Calcular fin de la rama
                 const endX = x + len * Math.cos(angle * Math.PI/180);
                 const endY = y + len * Math.sin(angle * Math.PI/180);
                 
                 tCtx.lineTo(endX, endY);
-                // Color tronco (marrón oscuro a claro)
-                tCtx.strokeStyle = `hsl(25, ${80-depth*5}%, ${20+depth*5}%)`;
+                // Color marrón oscuro para contraste con fondo rosa
+                tCtx.strokeStyle = `hsl(25, ${80-depth*5}%, ${15+depth*2}%)`;
                 tCtx.lineWidth = width;
                 tCtx.lineCap = "round";
                 tCtx.stroke();
 
-                // Si es el final (hojas)
-                if (depth > 8 || len < 10) {
-                    // Dibujar corazón
-                    tCtx.beginPath();
-                    tCtx.fillStyle = `hsl(${330 + Math.random()*30}, 100%, 60%)`; // Rosas variados
-                    tCtx.font = `${10 + Math.random()*15}px Arial`;
-                    tCtx.fillText("❤️", endX-6, endY+6);
-                    
-                    // A veces soltar una hoja
-                    if(Math.random() > 0.9) {
-                        fallingLeaves.push({x: endX, y: endY, speed: 1 + Math.random()*2, sway: Math.random()*0.1});
+                // DIBUJAR HOJAS (CORAZONES)
+                // Dibujamos corazones no solo al final, sino en ramas medias para que sea abundante
+                if (depth > 6) {
+                    // Dibujar varios corazones alrededor del punto final para dar volumen
+                    for(let i=0; i<3; i++) {
+                        tCtx.beginPath();
+                        // Colores rojos y rosas intensos
+                        tCtx.fillStyle = `hsl(${340 + Math.random()*20}, 100%, ${50 + Math.random()*20}%)`; 
+                        tCtx.font = `${15 + Math.random()*15}px Arial`;
+                        // Posición aleatoria pequeña alrededor del fin de rama
+                        let offsetX = (Math.random()-0.5) * 20;
+                        let offsetY = (Math.random()-0.5) * 20;
+                        tCtx.fillText("❤️", endX + offsetX - 8, endY + offsetY + 8);
                     }
-                    return;
                 }
 
-                // Recursividad: 2 ramas nuevas
-                // Ángulo aleatorio para realismo
-                const subLen = len * 0.75;
-                const subWidth = width * 0.7;
-                drawBranch(endX, endY, subLen, angle - 20 - Math.random()*10, subWidth, depth + 1);
-                drawBranch(endX, endY, subLen, angle + 20 + Math.random()*10, subWidth, depth + 1);
+                if (depth < 11) { // Límite de recursividad
+                    const subLen = len * 0.75;
+                    const subWidth = width * 0.7;
+                    // Ramificación
+                    drawBranch(endX, endY, subLen, angle - 20 - Math.random()*15, subWidth, depth + 1);
+                    drawBranch(endX, endY, subLen, angle + 20 + Math.random()*15, subWidth, depth + 1);
+                }
 
-            }, 100 * depth); // El retraso crea la animación de crecimiento
-        }
-
-        function animateFallingLeaves() {
-            if(!document.getElementById('jardin').classList.contains('activa')) return;
-            // No limpiamos todo el canvas para que el árbol se quede, 
-            // pero necesitamos limpiar las hojas viejas... 
-            // Truco: redibujar hojas cayendo sobre el lienzo existente
-            
-            // Para simplificar sin borrar el árbol, solo añadimos corazones cayendo encima
-            fallingLeaves.forEach((leaf, i) => {
-                // Borrar rastro hoja anterior (chapuza visual pero efectiva en fondo negro)
-                tCtx.globalCompositeOperation = 'destination-out';
-                tCtx.beginPath(); tCtx.arc(leaf.x, leaf.y-leaf.speed, 8, 0, Math.PI*2); tCtx.fill();
-                tCtx.globalCompositeOperation = 'source-over';
-
-                leaf.y += leaf.speed;
-                leaf.x += Math.sin(leaf.y * 0.05) * 2; // Oscilación
-                
-                tCtx.font = "16px Arial";
-                tCtx.fillStyle = "#ff4d6d";
-                tCtx.fillText("❤️", leaf.x, leaf.y);
-
-                if(leaf.y > treeH) fallingLeaves.splice(i, 1);
-            });
-            requestAnimationFrame(animateFallingLeaves);
+            }, 50 * depth); // Velocidad de crecimiento
         }
 
         /* =========================================
