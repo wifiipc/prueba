@@ -6,15 +6,17 @@
     <title>Para ti ❤️</title>
     <style>
         /* --- FUENTES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&display=swap');
 
-        /* --- CONFIGURACIÓN BASE --- */
+        /* --- ESTILOS GENERALES --- */
         body {
             margin: 0;
             overflow: hidden;
-            background-color: black;
+            background-color: #000; /* Fondo negro puro */
             font-family: 'Montserrat', sans-serif;
             color: white;
+            height: 100vh;
+            width: 100vw;
         }
 
         /* --- BOTÓN FLOTANTE --- */
@@ -22,219 +24,360 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            z-index: 100;
-            padding: 10px 25px;
+            z-index: 1000; /* Siempre encima */
+            padding: 10px 20px;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
-            border-radius: 50px;
+            border-radius: 30px;
             cursor: pointer;
-            backdrop-filter: blur(10px);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 15px rgba(255, 77, 109, 0.3);
-            animation: latido 2s infinite;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+            font-weight: bold;
         }
-        
         #btn-toggle:hover {
-            background: white;
-            color: #ff4d6d;
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 77, 109, 0.8);
+            background: #ff4d6d;
+            border-color: #ff4d6d;
+            box-shadow: 0 0 15px #ff4d6d;
         }
 
-        /* --- ESCENAS Y TRANSICIONES --- */
+        /* --- CAPAS (ESCENAS) --- */
         .escena {
-            position: absolute;
-            width: 100%;
-            height: 100vh;
-            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
-            opacity: 0;
-            pointer-events: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .escena.activa {
-            opacity: 1;
-            pointer-events: all;
-            transform: scale(1);
-        }
-
-        .escena.oculta {
-            opacity: 0;
-            transform: scale(1.1);
-        }
-
-        /* --- ESCENA 1: UNIVERSO --- */
-        #universo {
-            /* Fondo negro profundo para resaltar las estrellas */
-            background: radial-gradient(circle at center, #0a0a14 0%, #000000 100%);
-        }
-
-        #spaceCanvas {
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        #contenido-universo {
+        .activa {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* --- ESCENA 1: ESPACIO --- */
+        #universo {
+            background: black; /* Asegurar fondo */
+        }
+
+        /* IMPORTANTE: El Canvas debe ocupar todo y estar detrás del texto */
+        #starCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Nivel 1 */
+        }
+
+        #contenido-texto {
             position: relative;
-            z-index: 10;
+            z-index: 10; /* Nivel 10 (encima de estrellas) */
             text-align: center;
-            /* Efecto cristal sutil */
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3); /* Un poco de oscuridad para leer mejor */
             padding: 40px;
             border-radius: 20px;
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(255,255,255,0.05);
-            animation: flotar 6s ease-in-out infinite;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 4.5rem;
-            background: linear-gradient(to right, #ff4d6d, #ff8fa3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 4rem;
+            color: #ff4d6d;
+            text-shadow: 0 0 20px #ff4d6d;
             margin: 0;
-            text-shadow: 0 0 30px rgba(255, 77, 109, 0.5);
-            animation: aparecerDesdeAbajo 1.5s ease-out;
         }
 
-        #frase {
-            font-size: 1.4rem;
-            margin-top: 20px;
-            min-height: 1.5em;
+        #maquina-escribir {
+            font-size: 1.5rem;
+            margin-top: 15px;
+            min-height: 1.6em;
             color: #eee;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
+        /* Cursor parpadeante */
         .cursor {
             display: inline-block;
             width: 2px;
             height: 1.2em;
             background-color: white;
-            animation: parpadeo 1s infinite;
-            vertical-align: bottom;
-            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: sub;
         }
 
         /* --- ESCENA 2: JARDÍN --- */
         #jardin {
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe3e9 100%);
+            background: linear-gradient(to bottom, #fff0f3, #ffffff);
             flex-direction: column;
+            z-index: 20; /* Encima del universo cuando se activa */
         }
 
         canvas#arbolCanvas {
-            z-index: 2;
+            margin-bottom: 20px;
         }
 
-        .tarjeta-jardin {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px 40px;
+        .tarjeta {
+            background: white;
+            padding: 25px 40px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(255, 77, 109, 0.2);
-            position: absolute;
-            bottom: 10%;
-            z-index: 10;
-            max-width: 80%;
-            border: 2px solid white;
-            animation: aparecerConRebote 1s ease-out 0.5s both;
-        }
-
-        .texto-poema {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.1rem;
+            box-shadow: 0 10px 40px rgba(255, 77, 109, 0.2);
             color: #5c3a45;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            font-weight: 500;
+            max-width: 80%;
+            border: 2px solid #fff0f3;
         }
 
-        .contador-caja {
-            background: #ff4d6d;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 15px;
-            display: inline-block;
-            font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        .contador {
+            font-weight: 700;
+            color: #ff4d6d;
+            font-size: 1.2rem;
+            margin-top: 10px;
         }
 
-        /* --- ANIMACIONES KEYFRAMES --- */
-        @keyframes latido {
-            0%, 30%, 60% { transform: scale(1); }
-            15%, 45% { transform: scale(1.1); }
-        }
-
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes aparecerDesdeAbajo {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes aparecerConRebote {
-            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-            60% { opacity: 1; transform: scale(1.05) translateY(-5px); }
-            100% { transform: scale(1) translateY(0); }
-        }
-
-        @keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     </style>
 </head>
 <body>
 
-    <button id="btn-toggle" onclick="cambiarEscena()">Ver Jardín 🌹</button>
+    <button id="btn-toggle" onclick="alternarEscena()">Ver Jardín 🌱</button>
 
     <div id="universo" class="escena activa">
-        <canvas id="spaceCanvas"></canvas>
-        <div id="contenido-universo">
+        <canvas id="starCanvas"></canvas>
+        
+        <div id="contenido-texto">
             <h1>Para mi Amor</h1>
-            <div id="frase"></div><span class="cursor"></span>
+            <div>
+                <span id="maquina-escribir"></span><span class="cursor"></span>
+            </div>
         </div>
     </div>
 
-    <div id="jardin" class="escena oculta">
-        <canvas id="arbolCanvas" width="350" height="500"></canvas>
-        
-        <div class="tarjeta-jardin">
-            <div class="texto-poema">
-                "En cada latido del universo te busco,<br>
-                pero es aquí, a tu lado,<br>
-                donde realmente florezco."
+    <div id="jardin" class="escena">
+        <canvas id="arbolCanvas"></canvas>
+        <div class="tarjeta">
+            <p style="font-style: italic; font-size: 1.1rem;">
+                "Te quiero no solo por cómo eres,<br>sino por cómo soy yo cuando estoy contigo."
+            </p>
+            <div style="font-size: 0.8rem; text-transform: uppercase; margin-top: 15px; letter-spacing: 1px;">
+                Juntos desde el 25/10/2025
             </div>
-            <div style="font-size: 0.8rem; color: #ff8fa3; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px;">
-                Creciendo juntos desde el 25/10/2025
-            </div>
-            <div id="contador" class="contador-caja">Calculando...</div>
+            <div id="reloj" class="contador">Calculando...</div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN ---
-        const fechaInicio = new Date("2025-10-25T00:00:00");
-        const frases = [
+        /* =========================================
+           CONFIGURACIÓN (¡Edita esto si quieres!)
+           ========================================= */
+        const FECHA_INICIO = new Date("2025-10-25T00:00:00");
+        const FRASES = [
             "Eres mi universo entero.",
-            "Contigo el tiempo se detiene.",
-            "Te elijo hoy y siempre.",
-            "Mi destino favorito eres tú."
+            "Me pierdo en tu mirada.",
+            "Viajando hacia ti...",
+            "Te quiero hasta el infinito."
         ];
 
-        // --- VARIABLES GLOBALES ---
-        let escenaActual = 1;
-        const divUniverso = document.getElementById('universo');
-        const divJardin = document.getElementById('jardin');
-        const btn = document.getElementById('
+        /* =========================================
+           1. SISTEMA DE ESTRELLAS (WARP SPEED)
+           ========================================= */
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height, stars;
+        const numStars = 400; // Cantidad de estrellas (ajusta si va lento)
+        
+        // Inicializar tamaño y estrellas
+        function initStars() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width - width / 2,
+                    y: Math.random() * height - height / 2,
+                    z: Math.random() * width // Profundidad
+                });
+            }
+        }
+
+        // Bucle de animación (Optimizado)
+        function animateStars() {
+            if (!document.getElementById('universo').classList.contains('activa')) return;
+
+            // Fondo negro con rastro muy leve (trail effect)
+            ctx.fillStyle = "rgba(0, 0, 0, 0.4)"; 
+            ctx.fillRect(0, 0, width, height);
+            
+            ctx.fillStyle = "#ffffff"; // Estrellas blancas
+            
+            stars.forEach(star => {
+                // Mover estrella hacia la cámara
+                star.z -= 10; // Velocidad
+
+                // Si la estrella pasa la pantalla, reiniciarla al fondo
+                if (star.z <= 0) {
+                    star.z = width;
+                    star.x = Math.random() * width - width / 2;
+                    star.y = Math.random() * height - height / 2;
+                }
+
+                // Matemáticas de proyección 3D a 2D
+                const x = (star.x / star.z) * width + width / 2;
+                const y = (star.y / star.z) * height + height / 2;
+                
+                // Tamaño basado en cercanía
+                const size = (1 - star.z / width) * 4;
+
+                // Dibujar solo si está en pantalla
+                if (x > 0 && x < width && y > 0 && y < height) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            requestAnimationFrame(animateStars);
+        }
+
+        /* =========================================
+           2. MÁQUINA DE ESCRIBIR
+           ========================================= */
+        let fraseIdx = 0;
+        let charIdx = 0;
+        let isDeleting = false;
+        const element = document.getElementById('maquina-escribir');
+
+        function typeWriter() {
+            const current = FRASES[fraseIdx];
+            
+            if (isDeleting) {
+                element.innerText = current.substring(0, charIdx - 1);
+                charIdx--;
+            } else {
+                element.innerText = current.substring(0, charIdx + 1);
+                charIdx++;
+            }
+
+            let speed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIdx === current.length) {
+                speed = 2000; // Pausa al terminar frase
+                isDeleting = true;
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                fraseIdx = (fraseIdx + 1) % FRASES.length;
+                speed = 500;
+            }
+
+            setTimeout(typeWriter, speed);
+        }
+
+        /* =========================================
+           3. JARDÍN Y ÁRBOL
+           ========================================= */
+        const treeCanvas = document.getElementById('arbolCanvas');
+        const tCtx = treeCanvas.getContext('2d');
+        let growth = 0;
+
+        function resizeTree() {
+            treeCanvas.width = 350;
+            treeCanvas.height = 400;
+        }
+
+        function drawTree() {
+            if (!document.getElementById('jardin').classList.contains('activa')) return;
+            
+            tCtx.clearRect(0, 0, treeCanvas.width, treeCanvas.height);
+            if (growth < 1) growth += 0.01;
+
+            drawBranch(treeCanvas.width/2, treeCanvas.height, 100 * growth, 0, 10);
+            requestAnimationFrame(drawTree);
+        }
+
+        function drawBranch(x, y, len, angle, width) {
+            tCtx.save();
+            tCtx.translate(x, y);
+            tCtx.rotate(angle * Math.PI / 180);
+            tCtx.beginPath();
+            tCtx.moveTo(0, 0);
+            tCtx.lineTo(0, -len);
+            tCtx.strokeStyle = "#5c3a45";
+            tCtx.lineWidth = width;
+            tCtx.stroke();
+
+            if (len < 15 && len > 0) {
+                tCtx.fillStyle = "#ff006e";
+                tCtx.font = "20px Arial";
+                tCtx.fillText("❤️", -10, -len);
+            }
+
+            if (len > 10) {
+                tCtx.translate(0, -len);
+                drawBranch(0, 0, len * 0.75, 20, width * 0.7);
+                drawBranch(0, 0, len * 0.75, -20, width * 0.7);
+            }
+            tCtx.restore();
+        }
+
+        /* =========================================
+           4. LÓGICA GENERAL
+           ========================================= */
+        function alternarEscena() {
+            const u = document.getElementById('universo');
+            const j = document.getElementById('jardin');
+            const btn = document.getElementById('btn-toggle');
+
+            if (u.classList.contains('activa')) {
+                // IR A JARDÍN
+                u.classList.remove('activa');
+                u.style.opacity = 0; // Forzar ocultado visual
+                
+                j.style.display = 'flex';
+                setTimeout(() => j.classList.add('activa'), 50);
+                
+                btn.innerText = "Volver al Universo ✨";
+                growth = 0; 
+                resizeTree();
+                drawTree();
+            } else {
+                // IR A UNIVERSO
+                j.classList.remove('activa');
+                setTimeout(() => j.style.display = 'none', 1000);
+                
+                u.classList.add('activa');
+                u.style.opacity = 1;
+                
+                btn.innerText = "Ver Jardín 🌱";
+                initStars();
+                animateStars();
+            }
+        }
+
+        function updateClock() {
+            const diff = new Date() - FECHA_INICIO;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('reloj').innerText = `${d}d ${h}h ${m}m ${s}s`;
+        }
+
+        // ARRANQUE
+        window.addEventListener('resize', initStars);
+        window.onload = () => {
+            initStars();
+            animateStars();
+            typeWriter();
+            setInterval(updateClock, 1000);
+        };
+
+    </script>
+</body>
+</html>
