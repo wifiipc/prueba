@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LoveFlix ❤️</title>
     <style>
-        /* --- FUENTES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Bebas+Neue&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Bebas+Neue&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
-        /* --- RESET & BASE --- */
+        /* --- RESET Y BASE --- */
         body {
             margin: 0;
             background-color: #141414; /* Negro Netflix */
             color: white;
             font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* Evitar scroll global */
+            overflow: hidden; /* Evitar scroll */
             height: 100vh;
             width: 100vw;
         }
@@ -24,19 +23,19 @@
         .flex-center { display: flex; justify-content: center; align-items: center; }
         .full-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        /* --- 1. INTRO ANIMATION (TUDUM) --- */
+        /* --- 1. INTRO (TUDUM) --- */
         #splash-screen {
             background: black;
             z-index: 5000;
             flex-direction: column;
-            animation: fadeOut 1s ease 3s forwards; /* Desaparece a los 3s */
+            animation: fadeOut 0.5s ease 3.5s forwards; /* Desaparece a los 3.5s */
         }
         .netflix-logo {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 6rem;
             color: #E50914; /* Rojo Netflix */
             letter-spacing: 5px;
-            animation: zoomIn 2s ease;
+            animation: zoomIn 2.5s ease;
         }
 
         /* --- 2. PERFIL DE USUARIO --- */
@@ -46,159 +45,157 @@
             flex-direction: column;
             text-align: center;
         }
-        .profile-title { font-size: 2rem; margin-bottom: 30px; font-weight: 300; }
+        .profile-title { font-size: 2.5rem; margin-bottom: 30px; font-weight: 300; }
         .profile-box {
             cursor: pointer;
             transition: transform 0.2s;
+            display: flex; flex-direction: column; align-items: center;
         }
         .profile-box:hover { transform: scale(1.1); }
         .avatar {
-            width: 120px;
-            height: 120px;
-            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7e1n3n6w4qC8y4i8z2u8e8e8e8e8e8e8e8&s') center/cover; /* Placeholder avatar */
-            background-color: #333;
+            width: 150px; height: 150px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png') center/cover;
             border-radius: 10px;
-            margin: 0 auto 15px;
+            margin-bottom: 15px;
             border: 3px solid transparent;
         }
         .profile-box:hover .avatar { border-color: white; }
-        .profile-name { color: grey; font-size: 1.2rem; }
+        .profile-name { color: grey; font-size: 1.5rem; }
         .profile-box:hover .profile-name { color: white; }
 
-        /* --- 3. HOME (BROWSE) --- */
+        /* --- 3. HOME (MENÚ PRINCIPAL) --- */
         #browse-screen {
             background: #141414;
             z-index: 3000;
-            overflow-y: auto; /* Permitir scroll si es necesario */
-            padding-bottom: 50px;
+            overflow-y: auto;
         }
         
         /* Navbar */
         .navbar {
             position: fixed; top: 0; width: 100%; 
             padding: 20px 4%; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 10%, rgba(0,0,0,0));
             z-index: 3001;
-            display: flex; align-items: center;
+            display: flex; align-items: center; gap: 20px;
         }
-        .logo-small { font-family: 'Bebas Neue'; color: #E50914; font-size: 1.8rem; margin-right: 30px; cursor: pointer;}
+        .logo-small { font-family: 'Bebas Neue'; color: #E50914; font-size: 2rem; cursor: pointer;}
+        .nav-item { font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+        .nav-item:hover { color: #b3b3b3; }
 
-        /* Hero Section (Fondo Universo) */
+        /* Hero (Portada) */
         .hero {
             position: relative;
-            height: 70vh;
+            height: 80vh;
             width: 100%;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
         }
         .hero-bg {
             position: absolute; top:0; left:0; width:100%; height:100%; z-index: 0;
-            background: black;
+            background: black; /* Aquí irán las estrellas */
         }
         .hero-content {
-            position: absolute;
-            bottom: 35%; left: 4%;
+            position: relative;
             z-index: 10;
+            margin-left: 4%;
             max-width: 600px;
+            margin-top: 100px;
         }
         .hero-title {
             font-family: 'Bebas Neue';
-            font-size: 5rem;
-            line-height: 1;
+            font-size: 6rem;
+            line-height: 0.9;
             margin-bottom: 15px;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
         }
         .hero-desc {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 20px;
             text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+            line-height: 1.4;
         }
         .btn-play {
             background: white; color: black;
-            padding: 10px 25px; border-radius: 5px;
-            font-weight: bold; font-size: 1.1rem;
+            padding: 12px 30px; border-radius: 4px;
+            font-weight: bold; font-size: 1.2rem;
             border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
             transition: 0.2s;
         }
-        .btn-play:hover { background: #rgba(255,255,255,0.8); transform: scale(1.05); }
+        .btn-play:hover { background: rgba(255,255,255,0.75); }
 
-        /* Carrusel de Episodios */
+        /* Carrusel Episodios */
         .row-title {
-            margin-left: 4%; margin-top: -100px; margin-bottom: 10px;
-            font-weight: bold; font-size: 1.2rem; z-index: 20; position: relative;
+            margin-left: 4%; margin-top: -50px; margin-bottom: 15px;
+            font-weight: 700; font-size: 1.4rem; z-index: 20; position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         .carousel {
             display: flex; gap: 10px; padding: 0 4%;
             overflow-x: auto; scroll-behavior: smooth;
             z-index: 20; position: relative;
-            padding-bottom: 40px;
+            padding-bottom: 50px;
         }
         .carousel::-webkit-scrollbar { display: none; }
         
         .episode-card {
-            min-width: 250px; height: 140px;
+            min-width: 300px; height: 170px;
             background: #333; border-radius: 5px;
             position: relative; cursor: pointer;
             transition: transform 0.3s;
             overflow: hidden;
             border: 2px solid transparent;
         }
-        .episode-card:hover { transform: scale(1.05); border-color: white; z-index: 21;}
-        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.3s; }
-        .episode-card:hover .card-img { opacity: 0.3; }
-        .card-title {
+        .episode-card:hover { transform: scale(1.1); border-color: white; z-index: 100;}
+        
+        .card-bg { width: 100%; height: 100%; opacity: 0.6; transition: 0.3s; background-size: cover; background-position: center; }
+        .episode-card:hover .card-bg { opacity: 0.3; }
+        
+        .card-info {
             position: absolute; bottom: 10px; left: 10px;
-            font-weight: bold; font-size: 1rem; text-transform: uppercase;
         }
+        .card-title { font-weight: bold; font-size: 1.1rem; }
         .card-icon {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 2rem; opacity: 0; transition: 0.3s;
+            font-size: 3rem; opacity: 0; transition: 0.3s;
         }
         .episode-card:hover .card-icon { opacity: 1; }
 
         /* --- 4. VIEWER (REPRODUCTOR) --- */
         #viewer-screen {
             background: black;
-            z-index: 4000;
+            z-index: 5000;
         }
         .close-btn {
-            position: absolute; top: 30px; right: 30px;
+            position: absolute; top: 40px; right: 40px;
             font-size: 2rem; color: white; cursor: pointer;
-            z-index: 5000; background: rgba(0,0,0,0.5);
+            z-index: 6000; background: rgba(0,0,0,0.5);
             width: 50px; height: 50px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
             transition: 0.3s; border: 2px solid white;
         }
         .close-btn:hover { background: white; color: black; }
 
-        /* --- ESCENAS INTERNAS (Copiadas y adaptadas) --- */
-        #universo-canvas { position: absolute; top:0; left:0; width:100%; height:100%; }
-        
-        #jardin-container { background: linear-gradient(to bottom, #ff9a9e, #fecfef); flex-direction: column; }
-        #carta-container { background: linear-gradient(135deg, #667eea, #764ba2); flex-direction: column; }
-        #corazon-container { background: radial-gradient(circle, #1a0b14, #000000); flex-direction: column; }
-        #galeria-container { background: #000; overflow: hidden; perspective: 1000px; }
-
-        /* Estilos específicos de las escenas */
-        .mensaje-arbol { font-family: 'Pacifico'; font-size: 2rem; margin-top: 20px; color: white; text-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 10;}
+        /* --- ESTILOS DE LAS ESCENAS INTERNAS --- */
         
         /* Carta */
         .sobre-container { position: relative; width: 300px; height: 200px; cursor: pointer; transition: transform 0.3s; }
         .sobre-container:hover { transform: scale(1.05); }
         .sobre { position: absolute; width: 100%; height: 100%; background: #ff4d6d; border-radius: 10px; z-index: 5; }
         .solapa { position: absolute; top: 0; left: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-top: 100px solid #ff758c; transform-origin: top; transition: 0.6s; z-index: 6; }
-        .carta-papel { position: absolute; top: 10px; left: 10px; width: 280px; height: 180px; background: white; padding: 20px; font-family: 'Dancing Script'; font-size: 1.2rem; color: #333; text-align: center; transition: 0.6s; z-index: 4; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+        .carta-papel { position: absolute; top: 10px; left: 10px; width: 280px; height: 180px; background: white; padding: 20px; font-family: 'Dancing Script'; font-size: 1.3rem; color: #333; text-align: center; transition: 0.6s; z-index: 4; display: flex; align-items: center; justify-content: center; box-sizing: border-box; box-shadow: 0 -5px 10px rgba(0,0,0,0.1); }
         .abrir-sobre .solapa { transform: rotateX(180deg); z-index: 1; }
-        .abrir-sobre .carta-papel { transform: translateY(-120px); z-index: 10; }
+        .abrir-sobre .carta-papel { transform: translateY(-150px); z-index: 10; }
 
-        /* Carrusel */
+        /* Galería 3D */
         .carousel-3d { position: relative; width: 200px; height: 300px; transform-style: preserve-3d; animation: rotar 20s infinite linear; }
-        .foto-card { position: absolute; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; overflow: hidden; }
+        .foto-card { position: absolute; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; overflow: hidden; box-shadow: 0 0 20px rgba(255,77,109,0.5); }
         .foto-card img { width: 100%; height: 100%; object-fit: cover; }
-        @keyframes rotar { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-
-        /* Animaciones Intro */
-        @keyframes zoomIn { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); } }
+        
+        /* Animaciones Generales */
+        @keyframes rotar { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } }
+        @keyframes zoomIn { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.5); opacity: 1; } 100% { transform: scale(1); } }
         @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     </style>
 </head>
@@ -217,100 +214,135 @@
     </div>
 
     <div id="browse-screen" class="full-screen oculto">
+        
         <div class="navbar">
-            <div class="logo-small" onclick="closeViewer()">LOVEFLIX</div>
-            <div style="flex-grow:1"></div>
-            <div style="font-size: 0.9rem; margin-right: 15px;">Inicio</div>
-            <div style="font-size: 0.9rem;">Mi Lista</div>
+            <div class="logo-small" onclick="location.reload()">LOVEFLIX</div>
+            <div class="nav-item">Inicio</div>
+            <div class="nav-item">Series</div>
+            <div class="nav-item">Películas</div>
+            <div class="nav-item">Mi Lista</div>
         </div>
 
         <div class="hero">
-            <div class="hero-bg" id="hero-bg">
-                </div>
+            <div class="hero-bg" id="hero-bg"></div>
+            
             <div class="hero-content">
+                <div style="font-weight: bold; margin-bottom: 10px; color: #a3a3a3;"> N • PELÍCULA ORIGINAL</div>
                 <div class="hero-title">NUESTRA<br>HISTORIA</div>
-                <div class="hero-desc">Una serie original basada en hechos reales. Protagonizada por tú y yo. 98% de coincidencia.</div>
+                <div style="color: #46d369; font-weight: bold; margin-bottom: 10px;">98% de coincidencia <span style="color: #999; font-weight: normal; margin-left: 10px;">2025 • 1 Temporada • Romántico</span></div>
+                <div class="hero-desc">
+                    Una historia basada en hechos reales sobre dos personas destinadas a encontrarse.
+                    Protagonizada por ti y por mí.
+                </div>
+                
                 <button class="btn-play" onclick="openScene('universo')">
                     ▶ Reproducir
                 </button>
             </div>
         </div>
 
-        <div class="row-title">Ver de nuevo</div>
+        <div class="row-title">Episodios y Momentos</div>
         <div class="carousel">
+            
             <div class="episode-card" onclick="openScene('jardin')">
-                <div style="background: linear-gradient(to bottom, #ff9a9e, #fecfef); width:100%; height:100%;"></div>
+                <div class="card-bg" style="background: linear-gradient(to bottom, #ff9a9e, #fecfef);"></div>
                 <div class="card-icon">🌳</div>
-                <div class="card-title">Episodio 1: El Jardín</div>
+                <div class="card-info">
+                    <div class="card-title">1. El Jardín</div>
+                    <div style="font-size: 0.8rem; color: #ccc;">Nuestro amor crece</div>
+                </div>
             </div>
             
             <div class="episode-card" onclick="openScene('carta')">
-                <div style="background: linear-gradient(135deg, #667eea, #764ba2); width:100%; height:100%;"></div>
+                <div class="card-bg" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
                 <div class="card-icon">💌</div>
-                <div class="card-title">Episodio 2: La Carta</div>
+                <div class="card-info">
+                    <div class="card-title">2. La Carta</div>
+                    <div style="font-size: 0.8rem; color: #ccc;">Un mensaje secreto</div>
+                </div>
             </div>
 
             <div class="episode-card" onclick="openScene('corazon')">
-                <div style="background: #1a0b14; width:100%; height:100%;"></div>
+                <div class="card-bg" style="background: radial-gradient(circle, #33001b, #000);"></div>
                 <div class="card-icon">💖</div>
-                <div class="card-title">Episodio 3: Mi Corazón</div>
+                <div class="card-info">
+                    <div class="card-title">3. Mi Corazón</div>
+                    <div style="font-size: 0.8rem; color: #ccc;">Eres mi todo</div>
+                </div>
             </div>
 
             <div class="episode-card" onclick="openScene('galeria')">
-                <div style="background: #333; width:100%; height:100%;"></div>
+                <div class="card-bg" style="background: #333;"></div>
                 <div class="card-icon">📸</div>
-                <div class="card-title">Episodio 4: Recuerdos</div>
+                <div class="card-info">
+                    <div class="card-title">4. Recuerdos</div>
+                    <div style="font-size: 0.8rem; color: #ccc;">Galería de fotos</div>
+                </div>
             </div>
+
         </div>
     </div>
 
     <div id="viewer-screen" class="full-screen oculto">
         <div class="close-btn" onclick="closeViewer()">✕</div>
-        
+
         <div id="universo-container" class="full-screen oculto">
-            <div id="universo-canvas-placeholder"></div>
-            <div class="flex-center full-screen" style="pointer-events: none; z-index: 10; flex-direction: column;">
-                <h1 style="font-size: 3rem; text-shadow: 0 0 10px black;">Para ti</h1>
-                <div id="maquina-escribir" style="font-size: 1.5rem; margin-top: 20px;"></div>
+            <div class="full-screen flex-center" style="flex-direction: column; z-index: 10; pointer-events: none;">
+                <h1 style="font-size: 4rem; margin-bottom: 20px;">Para mi Amor</h1>
+                <div id="maquina-escribir" style="font-family: 'Montserrat'; font-weight: 300;"></div>
             </div>
         </div>
 
-        <div id="jardin-container" class="full-screen flex-center oculto">
-            <canvas id="arbolCanvas"></canvas>
-            <div class="mensaje-arbol">Nuestro Amor Florece</div>
+        <div id="jardin-container" class="full-screen flex-center oculto" style="background: linear-gradient(to bottom, #ff9a9e, #fecfef);">
+            <canvas id="arbolCanvas" style="position: absolute; z-index: 1;"></canvas>
+            <div class="mensaje-arbol" style="z-index: 10; color: white; font-family: 'Pacifico'; font-size: 2.5rem; text-shadow: 0 2px 5px rgba(0,0,0,0.3); margin-top: 350px;">
+                Nuestro Amor Florece
+            </div>
         </div>
 
-        <div id="carta-container" class="full-screen flex-center oculto">
-            <div class="sobre-container" id="sobre" onclick="this.classList.toggle('abrir-sobre')">
+        <div id="carta-container" class="full-screen flex-center oculto" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <div class="sobre-container" id="sobre" onclick="toggleCarta()">
                 <div class="sobre"></div>
                 <div class="solapa"></div>
                 <div class="carta-papel">
-                    "Gracias por ser la mejor parte de mi vida. <br> Te Amo."
+                    "Gracias por ser la mejor parte de mi vida.<br>Te amo con todo mi corazón."
                 </div>
             </div>
-            <div style="margin-top: 50px; opacity: 0.8;">(Toca el sobre)</div>
+            <div style="margin-top: 60px; font-size: 0.9rem; opacity: 0.8;">(Toca el sobre para abrir)</div>
         </div>
 
-        <div id="corazon-container" class="full-screen flex-center oculto">
-            <canvas id="heartCanvas"></canvas>
-            <div style="position: absolute; top: 10%; font-family: 'Pacifico'; font-size: 3rem; color: #ff99ac;">Eres mi Todo</div>
+        <div id="corazon-container" class="full-screen flex-center oculto" style="background: radial-gradient(circle, #1a0b14, #000);">
+            <canvas id="heartCanvas" style="position: absolute; z-index: 1;"></canvas>
+            <div style="position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 3rem; color: #ff99ac; z-index: 10; text-shadow: 0 0 20px #ff006e;">
+                Eres mi Todo
+            </div>
         </div>
 
-        <div id="galeria-container" class="full-screen flex-center oculto">
+        <div id="galeria-container" class="full-screen flex-center oculto" style="background: #000; perspective: 1000px;">
             <div class="carousel-3d" id="galeria-wrapper">
                 </div>
+            <div style="position: absolute; bottom: 10%; color: #999;">Girando en tus recuerdos...</div>
         </div>
 
     </div>
 
-    <canvas id="starCanvas" style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
+    <canvas id="starCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
 
     <audio id="bg-music" loop>
         <source src="tu_cancion.mp3" type="audio/mpeg">
     </audio>
-
     <script>
-        /* --- CONFIGURACIÓN --- */
+        /* =========================================
+           CONFIGURACIÓN (¡PERSONALIZA ESTO!)
+           ========================================= */
+        const FRASES = [
+            "Eres mi persona favorita.",
+            "Me haces mejor persona.",
+            "Te quiero hasta el infinito.",
+            "Gracias por existir."
+        ];
+        
+        /* Pon aquí los enlaces a tus fotos o nombres de archivo (ej: "foto1.jpg") */
         const FOTOS = [
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+1",
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+2",
@@ -318,179 +350,297 @@
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+4",
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+5"
         ];
-        const FRASES = ["Eres increíble.", "Te quiero.", "Siempre juntos."];
 
-        /* --- NAVEGACIÓN --- */
+        /* =========================================
+           NAVEGACIÓN Y LÓGICA DE NETFLIX
+           ========================================= */
+        
+        // 1. INTRO: Transición automática de Logo a Perfil
         setTimeout(() => {
             document.getElementById('splash-screen').classList.add('oculto');
             document.getElementById('profile-gate').classList.remove('oculto');
             document.getElementById('profile-gate').style.display = 'flex';
-        }, 3500); // Intro dura 3.5s
+        }, 3500);
 
+        // 2. ENTRAR A LA APP (HOME)
         function enterApp() {
             document.getElementById('profile-gate').classList.add('oculto');
             document.getElementById('browse-screen').classList.remove('oculto');
-            // Mover canvas al hero
+            
+            // Mover las estrellas al fondo del Hero (Portada)
             const canvas = document.getElementById('starCanvas');
             document.getElementById('hero-bg').appendChild(canvas);
-            canvas.style.position = 'absolute';
             
-            initStars(); animateStars(); // Arrancar estrellas
+            // Iniciar animaciones de fondo
+            initStars(); animateStars();
             
-            // Intentar reproducir música
-            document.getElementById('bg-music').play().catch(e => console.log("Audio requiere click"));
+            // Intentar reproducir música (requiere interacción usuario)
+            const audio = document.getElementById('bg-music');
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log("Audio bloqueado hasta clic"));
         }
 
+        // 3. ABRIR UN EPISODIO (ESCENA)
         function openScene(sceneName) {
             const viewer = document.getElementById('viewer-screen');
             viewer.classList.remove('oculto');
             
-            // Ocultar todas las escenas internas
-            document.querySelectorAll('#viewer-screen > div:not(.close-btn)').forEach(el => el.classList.add('oculto'));
+            // Ocultar todos los contenedores internos primero
+            document.getElementById('universo-container').classList.add('oculto');
+            document.getElementById('jardin-container').classList.add('oculto');
+            document.getElementById('carta-container').classList.add('oculto');
+            document.getElementById('corazon-container').classList.add('oculto');
+            document.getElementById('galeria-container').classList.add('oculto');
 
+            // Lógica específica para cada escena
             if (sceneName === 'universo') {
-                document.getElementById('universo-container').classList.remove('oculto');
-                // Mover canvas al viewer
-                const canvas = document.getElementById('starCanvas');
-                document.getElementById('universo-container').insertBefore(canvas, document.getElementById('universo-container').firstChild);
-                typeWriter();
-            }
+                const c = document.getElementById('universo-container');
+                c.classList.remove('oculto');
+                // Mover estrellas aquí
+                c.insertBefore(document.getElementById('starCanvas'), c.firstChild);
+                typeWriter(); // Iniciar texto
+            } 
             else if (sceneName === 'jardin') {
                 document.getElementById('jardin-container').classList.remove('oculto');
-                document.getElementById('jardin-container').style.display = 'flex';
-                initTree();
+                initTree(); // Iniciar árbol
             }
             else if (sceneName === 'carta') {
                 document.getElementById('carta-container').classList.remove('oculto');
-                document.getElementById('carta-container').style.display = 'flex';
             }
             else if (sceneName === 'corazon') {
                 document.getElementById('corazon-container').classList.remove('oculto');
-                document.getElementById('corazon-container').style.display = 'flex';
                 initHeart(); animateHeart();
             }
             else if (sceneName === 'galeria') {
                 document.getElementById('galeria-container').classList.remove('oculto');
-                document.getElementById('galeria-container').style.display = 'flex';
                 initGallery();
             }
         }
 
+        // 4. CERRAR VISOR
         function closeViewer() {
             document.getElementById('viewer-screen').classList.add('oculto');
-            // Devolver canvas al hero
-            const canvas = document.getElementById('starCanvas');
-            document.getElementById('hero-bg').appendChild(canvas);
+            // Devolver estrellas a la portada
+            document.getElementById('hero-bg').appendChild(document.getElementById('starCanvas'));
         }
 
-        /* --- 1. ESTRELLAS --- */
+        /* =========================================
+           A. ESTRELLAS (CANVAS 1)
+           ========================================= */
         const sCanvas = document.getElementById('starCanvas');
         const sCtx = sCanvas.getContext('2d');
         let stars = [];
+
         function initStars() {
-            sCanvas.width = window.innerWidth; sCanvas.height = window.innerHeight;
+            sCanvas.width = window.innerWidth;
+            sCanvas.height = window.innerHeight;
             stars = [];
-            for(let i=0; i<200; i++) stars.push({x:Math.random()*sCanvas.width, y:Math.random()*sCanvas.height, z:Math.random()*sCanvas.width});
+            for(let i=0; i<300; i++) {
+                stars.push({
+                    x: Math.random() * sCanvas.width,
+                    y: Math.random() * sCanvas.height,
+                    z: Math.random() * sCanvas.width
+                });
+            }
         }
+
         function animateStars() {
-            sCtx.fillStyle = "black"; sCtx.fillRect(0,0,sCanvas.width, sCanvas.height);
+            // Fondo transparente para que se vea el color de fondo del contenedor
+            sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
+            
             sCtx.fillStyle = "white";
             stars.forEach(s => {
-                s.z -= 2; if(s.z<=0) s.z=sCanvas.width;
-                let x = (s.x-sCanvas.width/2)*(sCanvas.width/s.z)+sCanvas.width/2;
-                let y = (s.y-sCanvas.height/2)*(sCanvas.width/s.z)+sCanvas.height/2;
-                if(x>0&&x<sCanvas.width&&y>0&&y<sCanvas.height){ sCtx.beginPath(); sCtx.arc(x,y,(1-s.z/sCanvas.width)*3,0,Math.PI*2); sCtx.fill(); }
+                s.z -= 2; // Velocidad
+                if (s.z <= 0) {
+                    s.z = sCanvas.width;
+                    s.x = Math.random() * sCanvas.width;
+                    s.y = Math.random() * sCanvas.height;
+                }
+                
+                const x = (s.x - sCanvas.width/2) * (sCanvas.width/s.z) + sCanvas.width/2;
+                const y = (s.y - sCanvas.height/2) * (sCanvas.width/s.z) + sCanvas.height/2;
+                const size = (1 - s.z/sCanvas.width) * 3;
+                
+                if (x > 0 && x < sCanvas.width && y > 0 && y < sCanvas.height) {
+                    sCtx.beginPath();
+                    sCtx.arc(x, y, size, 0, Math.PI*2);
+                    sCtx.fill();
+                }
             });
             requestAnimationFrame(animateStars);
         }
 
-        /* --- 2. ÁRBOL --- */
+        /* =========================================
+           B. ÁRBOL (CANVAS 2)
+           ========================================= */
         const tCanvas = document.getElementById('arbolCanvas');
         const tCtx = tCanvas.getContext('2d');
+        
         function initTree() {
-            tCanvas.width = window.innerWidth; tCanvas.height = window.innerHeight;
+            tCanvas.width = window.innerWidth;
+            tCanvas.height = window.innerHeight;
             tCtx.clearRect(0,0,tCanvas.width, tCanvas.height);
-            drawBranch(tCanvas.width/2, tCanvas.height, 120, -90, 20, 0);
-        }
-        function drawBranch(x, y, len, angle, width, depth) {
-            setTimeout(() => {
-                if(document.getElementById('jardin-container').classList.contains('oculto')) return;
-                tCtx.beginPath(); tCtx.moveTo(x, y);
-                const ex = x + len * Math.cos(angle*Math.PI/180);
-                const ey = y + len * Math.sin(angle*Math.PI/180);
-                tCtx.lineTo(ex, ey);
-                tCtx.strokeStyle = `hsl(25, ${70-depth*5}%, ${20+depth*2}%)`; tCtx.lineWidth = width; tCtx.lineCap="round"; tCtx.stroke();
-                
-                if(depth>6) {
-                    for(let i=0;i<3;i++){
-                        tCtx.fillStyle = `hsl(${340+Math.random()*20}, 100%, 60%)`;
-                        tCtx.font=`${10+Math.random()*10}px Arial`; 
-                        tCtx.fillText("❤️", ex+(Math.random()-0.5)*20, ey+(Math.random()-0.5)*20);
-                    }
-                }
-                if(depth<10) {
-                    drawBranch(ex, ey, len*0.75, angle-20-Math.random()*10, width*0.7, depth+1);
-                    drawBranch(ex, ey, len*0.75, angle+20+Math.random()*10, width*0.7, depth+1);
-                }
-            }, 50*depth);
+            // Dibujar árbol recursivo
+            drawBranch(tCanvas.width/2, tCanvas.height, 140, -90, 25, 0);
         }
 
-        /* --- 3. CORAZÓN --- */
+        function drawBranch(x, y, len, angle, width, depth) {
+            // Animación progresiva
+            setTimeout(() => {
+                // Si cerramos el visor, parar
+                if(document.getElementById('jardin-container').classList.contains('oculto')) return;
+
+                tCtx.beginPath();
+                tCtx.moveTo(x, y);
+                const endX = x + len * Math.cos(angle * Math.PI/180);
+                const endY = y + len * Math.sin(angle * Math.PI/180);
+                tCtx.lineTo(endX, endY);
+                
+                // Color marrón
+                tCtx.strokeStyle = `hsl(25, ${70 - depth*5}%, ${20 + depth*2}%)`;
+                tCtx.lineWidth = width;
+                tCtx.lineCap = "round";
+                tCtx.stroke();
+
+                // Hojas (Corazones)
+                if(depth > 6) {
+                    for(let i=0; i<3; i++) {
+                        tCtx.fillStyle = `hsl(${340 + Math.random()*20}, 100%, 60%)`;
+                        tCtx.font = `${10 + Math.random()*15}px Arial`;
+                        tCtx.fillText("❤️", endX + (Math.random()-0.5)*20, endY + (Math.random()-0.5)*20);
+                    }
+                }
+
+                // Recursividad
+                if(depth < 10) {
+                    drawBranch(endX, endY, len*0.75, angle - 20 - Math.random()*10, width*0.7, depth+1);
+                    drawBranch(endX, endY, len*0.75, angle + 20 + Math.random()*10, width*0.7, depth+1);
+                }
+            }, 50 * depth); // Retraso basado en profundidad
+        }
+
+        /* =========================================
+           C. CORAZÓN 3D (CANVAS 3)
+           ========================================= */
         const hCanvas = document.getElementById('heartCanvas');
         const hCtx = hCanvas.getContext('2d');
-        let hPoints = [], angY = 0;
+        let heartPoints = [];
+        let angleY = 0;
+
         function initHeart() {
-            hCanvas.width = window.innerWidth; hCanvas.height = window.innerHeight;
-            hPoints = [];
-            for(let i=0; i<1000; i++) {
-                let t = Math.random()*Math.PI*2, z = (Math.random()-0.5)*10;
-                let x = 16*Math.pow(Math.sin(t),3)*12;
-                let y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*12;
-                hPoints.push({x, y, z: z*12, color: `hsl(${330+Math.random()*30}, 90%, 60%)`});
+            hCanvas.width = window.innerWidth;
+            hCanvas.height = window.innerHeight;
+            heartPoints = [];
+            
+            // Generar puntos 3D
+            for (let i = 0; i < 1200; i++) {
+                let t = Math.random() * Math.PI * 2;
+                let x = 16 * Math.pow(Math.sin(t), 3);
+                let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                let z = (Math.random() - 0.5) * 10; 
+                
+                // Escalar
+                x *= 12; y *= 12; z *= 12;
+
+                heartPoints.push({
+                    x, y, z,
+                    color: `hsl(${330 + Math.random() * 40}, 90%, 60%)`
+                });
             }
         }
+
         function animateHeart() {
             if(document.getElementById('corazon-container').classList.contains('oculto')) return;
-            hCtx.clearRect(0,0,hCanvas.width, hCanvas.height);
-            angY += 0.015;
-            let cx = hCanvas.width/2, cy = hCanvas.height/2;
-            hPoints.forEach(p => {
-                let rx = p.x*Math.cos(angY) - p.z*Math.sin(angY);
-                let rz = p.x*Math.sin(angY) + p.z*Math.cos(angY);
-                let s = 500/(500+rz);
-                if(s>0) { hCtx.fillStyle=p.color; hCtx.beginPath(); hCtx.arc(rx*s+cx, p.y*s+cy, 2*s, 0, Math.PI*2); hCtx.fill(); }
+
+            hCtx.clearRect(0, 0, hCanvas.width, hCanvas.height);
+            angleY += 0.015;
+            
+            const cx = hCanvas.width / 2;
+            const cy = hCanvas.height / 2;
+
+            heartPoints.forEach(p => {
+                // Rotación Y
+                let rx = p.x * Math.cos(angleY) - p.z * Math.sin(angleY);
+                let rz = p.x * Math.sin(angleY) + p.z * Math.cos(angleY);
+                
+                // Perspectiva
+                let scale = 500 / (500 + rz);
+                
+                if (scale > 0) {
+                    hCtx.fillStyle = p.color;
+                    hCtx.beginPath();
+                    hCtx.arc(rx * scale + cx, p.y * scale + cy, 2 * scale, 0, Math.PI * 2);
+                    hCtx.fill();
+                }
             });
             requestAnimationFrame(animateHeart);
         }
 
-        /* --- 4. GALERÍA --- */
+        /* =========================================
+           D. GALERÍA
+           ========================================= */
         function initGallery() {
-            const wrap = document.getElementById('galeria-wrapper');
-            if(wrap.children.length > 0) return;
-            const step = 360/FOTOS.length;
+            const wrapper = document.getElementById('galeria-wrapper');
+            // Evitar duplicados
+            if (wrapper.children.length > 0) return;
+
+            const angleStep = 360 / FOTOS.length;
+            const radius = 300; // Radio del carrusel
+
             FOTOS.forEach((src, i) => {
-                const d = document.createElement('div');
-                d.className = 'foto-card';
-                d.style.transform = `rotateY(${i*step}deg) translateZ(300px)`;
-                d.innerHTML = `<img src="${src}">`;
-                wrap.appendChild(d);
+                const card = document.createElement('div');
+                card.className = 'foto-card';
+                // Posicionar en círculo 3D
+                card.style.transform = `rotateY(${i * angleStep}deg) translateZ(${radius}px)`;
+                card.innerHTML = `<img src="${src}" onerror="this.src='https://via.placeholder.com/200x300?text=Foto'">`;
+                wrapper.appendChild(card);
             });
         }
 
-        /* --- MAQUINA ESCRIBIR --- */
-        let tI=0, cI=0, isD=false;
+        /* =========================================
+           E. MÁQUINA DE ESCRIBIR
+           ========================================= */
+        let fraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
         function typeWriter() {
-            if(document.getElementById('universo-container').classList.contains('oculto')) return;
-            const txt = FRASES[tI];
-            const el = document.getElementById('maquina-escribir');
-            el.innerText = isD ? txt.substring(0, cI--) : txt.substring(0, cI++);
-            let spd = isD ? 50 : 100;
-            if(!isD && cI===txt.length+1){ spd=2000; isD=true; }
-            else if(isD && cI===0){ isD=false; tI=(tI+1)%FRASES.length; spd=500; }
-            setTimeout(typeWriter, spd);
+            if (document.getElementById('universo-container').classList.contains('oculto')) return;
+
+            const currentText = FRASES[fraseIndex];
+            const element = document.getElementById('maquina-escribir');
+
+            if (isDeleting) {
+                element.innerText = currentText.substring(0, charIndex--);
+            } else {
+                element.innerText = currentText.substring(0, charIndex++);
+            }
+
+            let speed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentText.length + 1) {
+                speed = 2000; // Esperar al final
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                fraseIndex = (fraseIndex + 1) % FRASES.length;
+                speed = 500;
+            }
+            setTimeout(typeWriter, speed);
         }
 
-        window.addEventListener('resize', () => { initStars(); initHeart(); });
+        // Utilidad carta
+        function toggleCarta() {
+            const sobre = document.getElementById('sobre');
+            sobre.classList.toggle('abrir-sobre');
+        }
+
+        // Init Resize
+        window.addEventListener('resize', () => {
+            initStars(); 
+            // Reiniciar canvas si es necesario
+        });
+
     </script>
 </body>
 </html>
