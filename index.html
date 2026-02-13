@@ -16,7 +16,7 @@
             color: white;
         }
 
-        /* --- BOTÓN --- */
+        /* --- BOTÓN DE CAMBIO --- */
         #btn-toggle {
             position: absolute;
             top: 20px;
@@ -37,42 +37,37 @@
             color: #ff4d6d;
         }
 
-        /* --- ESCENA UNIVERSO (Nave Espacial) --- */
+        /* --- ESCENA 1: EL UNIVERSO (OPTIMIZADO CON CSS) --- */
         #universo {
             position: absolute;
             width: 100%;
             height: 100vh;
+            /* La magia del 3D en CSS: */
+            perspective: 800px; 
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
             transition: opacity 1s;
-            overflow: hidden;
         }
 
-        /* El lienzo para el efecto de estrellas en movimiento */
-        #spaceCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0; /* Detrás del texto */
-        }
-
+        /* Contenedor del texto (fijo en el centro) */
         #contenido-universo {
-            position: relative;
-            z-index: 10; /* Delante de las estrellas */
-            /* Un fondo sutil para que el texto se lea bien sobre el movimiento */
-            background: radial-gradient(circle, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 70%);
-            padding: 40px;
-            border-radius: 50%;
+            position: absolute;
+            z-index: 10;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
             font-size: 3.5rem;
             color: #ff4d6d;
-            text-shadow: 0 0 15px #ff4d6d;
+            text-shadow: 0 0 20px #ff4d6d;
             margin: 0;
         }
 
@@ -84,13 +79,38 @@
             transition: opacity 0.5s;
         }
 
-        /* --- ESCENA JARDÍN --- */
+        /* LAS ESTRELLAS CSS */
+        .estrella {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            /* Empezamos lejos y transparentes */
+            transform: translateZ(-1000px); 
+            opacity: 0;
+        }
+
+        /* Animación pura de GPU */
+        @keyframes warpSpace {
+            0% {
+                opacity: 0;
+                transform: translateZ(-1000px);
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+                transform: translateZ(800px); /* Viene hacia la cámara */
+            }
+        }
+
+        /* --- ESCENA 2: JARDÍN --- */
         #jardin {
             position: absolute;
             width: 100%;
             height: 100vh;
             background: linear-gradient(to bottom, #fff0f3, #ffffff);
-            display: none; /* Oculto inicio */
+            display: none;
             opacity: 0;
             flex-direction: column;
             justify-content: center;
@@ -119,7 +139,6 @@
     <button id="btn-toggle" onclick="cambiarEscena()">Ir al Jardín 🌱</button>
 
     <div id="universo">
-        <canvas id="spaceCanvas"></canvas>
         <div id="contenido-universo">
             <h1>Viajando hacia ti ❤️</h1>
             <div id="frase">Eres mi destino favorito.</div>
@@ -153,7 +172,7 @@
         ];
 
         // --- VARIABLES GLOBALES ---
-        let escena = 1; // 1=Universo, 2=Jardin
+        let escena = 1; 
         let indiceFrase = 0;
         const divUniverso = document.getElementById('universo');
         const divJardin = document.getElementById('jardin');
@@ -162,82 +181,46 @@
 
         // --- AL CARGAR ---
         window.onload = function() {
-            initSpace(); // Iniciar efecto espacial
+            crearEstrellasCSS(); // Nueva función optimizada
             setInterval(cambiarFrase, 4000);
             setInterval(actualizarReloj, 1000);
         };
 
-        window.addEventListener('resize', function() {
-            // Reajustar el canvas si se cambia el tamaño de la ventana
-            if(escena === 1) initSpace();
-        });
+        // --- 1. LÓGICA DE ESTRELLAS CSS (MÁS EFICIENTE) ---
+        function crearEstrellasCSS() {
+            const cantidadEstrellas = 200; // Número de estrellas
+            const contenedor = document.getElementById('universo');
 
-
-        // ==========================================
-        // LÓGICA DEL ESPACIO (WARP SPEED)
-        // ==========================================
-        const spaceCanvas = document.getElementById('spaceCanvas');
-        const sCtx = spaceCanvas.getContext('2d');
-        let sWidth, sHeight;
-        let stars = [];
-        const numStars = 400; // Cantidad de estrellas
-        const speed = 5;      // Velocidad del viaje
-
-        function initSpace() {
-            sWidth = spaceCanvas.width = window.innerWidth;
-            sHeight = spaceCanvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < numStars; i++) {
-                stars.push({
-                    x: (Math.random() - 0.5) * sWidth * 2, // Posición X amplia
-                    y: (Math.random() - 0.5) * sHeight * 2, // Posición Y amplia
-                    z: Math.random() * sWidth // Profundidad inicial
-                });
-            }
-            animateSpace();
-        }
-
-        function animateSpace() {
-            if (escena !== 1) return; // Detener si no estamos en el universo
-
-            // Fondo negro con un poco de rastro para el efecto de velocidad
-            sCtx.fillStyle = "rgba(0, 0, 0, 0.7)"; 
-            sCtx.fillRect(0, 0, sWidth, sHeight);
-
-            sCtx.fillStyle = "white";
-            stars.forEach(star => {
-                star.z -= speed; // Mover estrella hacia la pantalla
-
-                // Si la estrella pasa la pantalla, resetearla al fondo
-                if (star.z <= 0) {
-                    star.z = sWidth;
-                    star.x = (Math.random() - 0.5) * sWidth * 2;
-                    star.y = (Math.random() - 0.5) * sHeight * 2;
-                }
-
-                // Matemáticas de perspectiva 3D
-                // Calcular dónde se dibuja la estrella en 2D basado en su profundidad (z)
-                const x2d = (star.x / star.z) * (sWidth / 2) + sWidth / 2;
-                const y2d = (star.y / star.z) * (sHeight / 2) + sHeight / 2;
+            for (let i = 0; i < cantidadEstrellas; i++) {
+                let estrella = document.createElement('div');
+                estrella.className = 'estrella';
                 
-                // El tamaño crece cuanto más cerca está (menor z)
-                const size = (1 - star.z / sWidth) * 4; 
+                // Posición aleatoria en la pantalla (X, Y)
+                // Usamos 'vw' y 'vh' para que se adapte al móvil
+                const x = (Math.random() - 0.5) * 200; // -100vw a 100vw
+                const y = (Math.random() - 0.5) * 200; // -100vh a 100vh
+                
+                estrella.style.left = `50%`; 
+                estrella.style.top = `50%`;
+                // Usamos translate3d para activar la GPU del móvil
+                estrella.style.transform = `translate3d(${x}vw, ${y}vh, -1000px)`;
+                
+                // Tamaño aleatorio
+                const tamano = Math.random() * 3 + 1;
+                estrella.style.width = `${tamano}px`;
+                estrella.style.height = `${tamano}px`;
 
-                // Dibujar solo si está dentro de la pantalla
-                if (x2d > 0 && x2d < sWidth && y2d > 0 && y2d < sHeight) {
-                    sCtx.beginPath();
-                    sCtx.arc(x2d, y2d, size < 0 ? 0 : size, 0, Math.PI * 2);
-                    sCtx.fill();
-                }
-            });
-            requestAnimationFrame(animateSpace);
+                // Animación: Duración y retraso aleatorios para que no vayan todas a la vez
+                const duracion = Math.random() * 2 + 1; // Entre 1 y 3 segundos
+                estrella.style.animation = `warpSpace ${duracion}s linear infinite`;
+                // Retraso negativo para que ya haya estrellas moviéndose al abrir la página
+                estrella.style.animationDelay = `-${Math.random() * 3}s`;
+
+                contenedor.appendChild(estrella);
+            }
         }
 
-
-        // ==========================================
-        // LÓGICA GENERAL Y JARDÍN
-        // ==========================================
-
+        // --- 2. RESTO DE FUNCIONES (FRASES Y ESCENAS) ---
         function cambiarFrase() {
             if (escena !== 1) return;
             txtFrase.style.opacity = 0;
@@ -273,17 +256,15 @@
                     btn.style.borderColor = "white";
                     btn.style.color = "white";
                     escena = 1;
-                    initSpace(); // Reiniciar animación espacial
                 }, 500);
             }
         }
 
-        // --- ÁRBOL (Igual que antes) ---
+        // --- 3. ÁRBOL ---
         function dibujarArbol() {
             const canvas = document.getElementById('arbolCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, 350, 400);
-
             let crecimiento = 0;
             
             function animar() {
@@ -321,7 +302,7 @@
             animar();
         }
 
-        // --- RELOJ ---
+        // --- 4. RELOJ ---
         function actualizarReloj() {
             const diff = new Date() - fechaInicio;
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
