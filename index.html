@@ -2,374 +2,223 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mundo Mágico ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jardín Mágico</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Dancing+Script:wght@700&display=swap');
+        /* --- CSS ESTÁNDAR (Convertido de SCSS) --- */
+        *, *::after, *::before {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
 
         :root {
-            --dark-color: #030308;
-            --flower-color: #6bf0ff;
-            --accent-color: #ff4d6d;
+            --dark-color: #000;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            min-height: 100vh;
             background-color: var(--dark-color);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* El scroll lo manejaremos internamente */
-            height: 100vh;
-            width: 100vw;
+            overflow: hidden;
+            perspective: 1000px;
         }
 
-        /* --- CONTENEDOR DEL MUNDO (EL CAMPO) --- */
-        #world {
-            position: relative;
-            width: 300vw; /* Tres veces el ancho de pantalla para desplazarnos */
-            height: 100vh;
-            display: flex;
-            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            will-change: transform;
-        }
-
-        /* --- FONDO FIJO (CIELO) --- */
-        .night-sky {
+        .night {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-            z-index: -1;
-        }
-
-        /* --- ESTRELLAS --- */
-        #starCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* --- ELEMENTOS DE LA PRADERA --- */
-        .section {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .grass-layer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 40vh;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /* --- INTERFAZ DE NAVEGACIÓN --- */
-        .nav-ui {
-            position: fixed;
-            bottom: 30px;
             left: 50%;
+            top: 0;
             transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            gap: 20px;
+            width: 100%;
+            height: 100%;
+            filter: blur(0.1vmin);
+            background-image: radial-gradient(ellipse at top, transparent 0%, var(--dark-color)),
+                radial-gradient(ellipse at bottom, var(--dark-color), rgba(145, 233, 255, 0.2)),
+                repeating-linear-gradient(220deg, black 0px, black 19px, transparent 19px, transparent 22px),
+                repeating-linear-gradient(189deg, black 0px, black 19px, transparent 19px, transparent 22px),
+                repeating-linear-gradient(148deg, black 0px, black 19px, transparent 19px, transparent 22px),
+                linear-gradient(90deg, rgb(0, 255, 250), rgb(240, 240, 240));
         }
 
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .flowers {
+            position: relative;
+            transform: scale(0.9);
         }
 
-        .nav-btn.active {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px var(--accent-color);
-        }
-
-        /* --- FLORES ANIMADAS (CSS PURO) --- */
-        .flower-container {
+        .flower {
             position: absolute;
-            bottom: 0;
+            bottom: 10vmin;
             transform-origin: bottom center;
-            animation: sway 4s ease-in-out infinite alternate;
+            z-index: 10;
+            --fl-speed: 0.8s;
         }
 
-        .stem {
-            width: 2px;
-            height: 80px;
-            background: linear-gradient(to top, #0f2a0f, #23f0ff);
-            margin: 0 auto;
+        /* Flower 1 */
+        .flower--1 { animation: moving-flower-1 4s linear infinite; }
+        .flower--1 .flower__line { height: 70vmin; animation-delay: 0.3s; }
+        .flower--1 .flower__line__leaf--1 { animation: blooming-leaf-right var(--fl-speed) 1.6s backwards; }
+        .flower--1 .flower__line__leaf--2 { animation: blooming-leaf-right var(--fl-speed) 1.4s backwards; }
+        .flower--1 .flower__line__leaf--3 { animation: blooming-leaf-left var(--fl-speed) 1.2s backwards; }
+        .flower--1 .flower__line__leaf--4 { animation: blooming-leaf-left var(--fl-speed) 1s backwards; }
+        .flower--1 .flower__line__leaf--5 { animation: blooming-leaf-right var(--fl-speed) 1.8s backwards; }
+        .flower--1 .flower__line__leaf--6 { animation: blooming-leaf-left var(--fl-speed) 2s backwards; }
+
+        /* Flower 2 */
+        .flower--2 { left: 50%; transform: rotate(20deg); animation: moving-flower-2 4s linear infinite; }
+        .flower--2 .flower__line { height: 60vmin; animation-delay: 0.6s; }
+        .flower--2 .flower__line__leaf--1 { animation: blooming-leaf-right var(--fl-speed) 1.9s backwards; }
+        .flower--2 .flower__line__leaf--2 { animation: blooming-leaf-right var(--fl-speed) 1.7s backwards; }
+        .flower--2 .flower__line__leaf--3 { animation: blooming-leaf-left var(--fl-speed) 1.5s backwards; }
+        .flower--2 .flower__line__leaf--4 { animation: blooming-leaf-left var(--fl-speed) 1.3s backwards; }
+
+        /* Flower 3 */
+        .flower--3 { left: 50%; transform: rotate(-15deg); animation: moving-flower-3 4s linear infinite; }
+        .flower--3 .flower__line { animation-delay: 0.9s; }
+        .flower--3 .flower__line__leaf--1 { animation: blooming-leaf-right var(--fl-speed) 2.5s backwards; }
+        .flower--3 .flower__line__leaf--2 { animation: blooming-leaf-right var(--fl-speed) 2.3s backwards; }
+        .flower--3 .flower__line__leaf--3 { animation: blooming-leaf-left var(--fl-speed) 2.1s backwards; }
+        .flower--3 .flower__line__leaf--4 { animation: blooming-leaf-left var(--fl-speed) 1.9s backwards; }
+
+        .flower__leafs {
+            position: relative;
+            animation: blooming-flower 2s backwards;
         }
 
-        .glow-bloom {
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            filter: blur(2px);
-            box-shadow: 0 0 15px var(--flower-color), 0 0 30px var(--flower-color);
-        }
+        .flower__leafs--1 { animation-delay: 1.1s; }
+        .flower__leafs--2 { animation-delay: 1.4s; }
+        .flower__leafs--3 { animation-delay: 1.7s; }
 
-        @keyframes sway {
-            0% { transform: rotate(-3deg) translateX(-2px); }
-            100% { transform: rotate(3deg) translateX(2px); }
-        }
-
-        /* --- PANTALLAS DE CONTENIDO (OVERLAYS) --- */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 2000;
-            display: none;
-            opacity: 0;
-            transition: 0.5s;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .overlay.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .close-btn {
+        .flower__leafs::after {
+            content: "";
             position: absolute;
-            top: 30px; right: 30px;
-            font-size: 2rem;
-            cursor: pointer;
+            left: 0; top: 0;
+            transform: translate(-50%, -100%);
+            width: 8vmin; height: 8vmin;
+            background-color: #6bf0ff;
+            filter: blur(10vmin);
+        }
+
+        .flower__leaf {
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 8vmin; height: 11vmin;
+            border-radius: 51% 49% 47% 53% / 44% 45% 55% 69%;
+            background-color: #a7ffee;
+            background-image: linear-gradient(to top, #54b8aa, #a7ffee);
+            transform-origin: bottom center;
+            opacity: 0.9;
+            box-shadow: inset 0 0 2vmin rgba(255, 255, 255, 0.5);
+        }
+
+        .flower__leaf--1 { transform: translate(-10%, 1%) rotateY(40deg) rotateX(-50deg); }
+        .flower__leaf--2 { transform: translate(-50%, -4%) rotateX(40deg); }
+        .flower__leaf--3 { transform: translate(-90%, 0%) rotateY(45deg) rotateX(50deg); }
+        .flower__leaf--4 {
+            width: 8vmin; height: 8vmin;
+            transform-origin: bottom left;
+            border-radius: 4vmin 10vmin 4vmin 4vmin;
+            transform: translate(-0%, 18%) rotateX(70deg) rotate(-43deg);
+            background-image: linear-gradient(to top, #39c6d6, #a7ffee);
+            z-index: 1; opacity: 0.8;
+        }
+
+        .flower__white-circle {
+            position: absolute;
+            left: -3.5vmin; top: -3vmin;
+            width: 9vmin; height: 4vmin;
+            border-radius: 50%;
+            background-color: #fff;
+        }
+
+        .flower__line {
+            height: 55vmin; width: 1.5vmin;
+            background-image: linear-gradient(to left, rgba(0,0,0,0.2), transparent, rgba(255,255,255,0.2)),
+                              linear-gradient(to top, transparent 10%, #14757a, #39c6d6);
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
+            animation: grow-flower-tree 4s backwards;
+        }
+
+        .flower__line__leaf {
+            --w: 7vmin;
+            --h: calc(var(--w) + 2vmin);
+            position: absolute;
+            top: 20%; left: 90%;
+            width: var(--w); height: var(--h);
+            border-top-right-radius: var(--h);
+            border-bottom-left-radius: var(--h);
+            background-image: linear-gradient(to top, rgba(20, 117, 122, 0.4), #39c6d6);
+        }
+
+        /* --- Keyframes --- */
+        @keyframes moving-flower-1 { 0%, 100% { transform: rotate(2deg); } 50% { transform: rotate(-2deg); } }
+        @keyframes moving-flower-2 { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(14deg); } }
+        @keyframes moving-flower-3 { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(-20deg) rotateY(-10deg); } }
+        @keyframes blooming-flower { 0% { transform: scale(0); } }
+        @keyframes grow-flower-tree { 0% { height: 0; border-radius: 1vmin; } }
+        @keyframes blooming-leaf-right { 0% { transform-origin: left; transform: rotate(70deg) rotateY(30deg) scale(0); } }
+        @keyframes blooming-leaf-left { 0% { transform-origin: right; transform: rotate(-70deg) rotateY(30deg) scale(0); } }
+        @keyframes grow-ans { 0% { transform: scale(0); opacity: 0; } }
+
+        /* Estado inicial antes de cargar */
+        .not-loaded * {
+            animation-play-state: paused !important;
         }
     </style>
 </head>
-    <body>
-
-    <div class="night-sky"></div>
-    <canvas id="starCanvas"></canvas>
-
-    <div class="nav-ui">
-        <div class="nav-btn active" onclick="moveWorld(0)">Inicio</div>
-        <div class="nav-btn" onclick="moveWorld(1)">Galería</div>
-        <div class="nav-btn" onclick="moveWorld(2)">Carta</div>
-    </div>
-
-    <div id="world">
-        
-        <section class="section">
-            <h1 style="font-family: 'Dancing Script'; font-size: 4rem; text-shadow: 0 0 20px var(--flower-color);">
-                Mundo de Flores
-            </h1>
-            <p style="opacity: 0.7; margin-top: 10px;">Desliza para explorar nuestro jardín...</p>
-            <div id="grass-1" class="grass-layer"></div>
-        </section>
-
-        <section class="section">
-            <div class="station-icon" onclick="openOverlay('gallery-overlay')" style="cursor:pointer; text-align: center;">
-                <div class="glow-bloom" style="width: 80px; height: 80px; margin-bottom: 20px; animation: pulse 2s infinite;"></div>
-                <h2>Nuestros Recuerdos</h2>
-                <p>(Toca para abrir)</p>
+<body class="not-loaded">
+    <div class="night"></div>
+    <div class="flowers">
+        <div class="flower flower--1">
+            <div class="flower__leafs flower__leafs--1">
+                <div class="flower__leaf flower__leaf--1"></div>
+                <div class="flower__leaf flower__leaf--2"></div>
+                <div class="flower__leaf flower__leaf--3"></div>
+                <div class="flower__leaf flower__leaf--4"></div>
+                <div class="flower__white-circle"></div>
             </div>
-            <div id="grass-2" class="grass-layer"></div>
-        </section>
-
-        <section class="section">
-            <div class="station-icon" onclick="openOverlay('letter-overlay')" style="cursor:pointer; text-align: center;">
-                <div class="glow-bloom" style="width: 80px; height: 80px; margin-bottom: 20px; background: var(--accent-color); box-shadow: 0 0 30px var(--accent-color);"></div>
-                <h2>Una Carta para ti</h2>
-                <p>(Toca para leer)</p>
+            <div class="flower__line">
+                <div class="flower__line__leaf flower__line__leaf--1"></div>
+                <div class="flower__line__leaf flower__line__leaf--2"></div>
             </div>
-            <div id="grass-3" class="grass-layer"></div>
-        </section>
+        </div>
 
-    </div>
+        <div class="flower flower--2">
+            <div class="flower__leafs flower__leafs--2">
+                <div class="flower__leaf flower__leaf--1"></div>
+                <div class="flower__leaf flower__leaf--2"></div>
+                <div class="flower__leaf flower__leaf--3"></div>
+                <div class="flower__leaf flower__leaf--4"></div>
+                <div class="flower__white-circle"></div>
+            </div>
+            <div class="flower__line">
+                <div class="flower__line__leaf flower__line__leaf--1"></div>
+                <div class="flower__line__leaf flower__line__leaf--2"></div>
+            </div>
+        </div>
 
-    <div style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
-        <button class="nav-btn" onclick="toggleMusic()" id="music-btn">🎵 Play Playlist</button>
-        <audio id="bg-music" loop>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        </audio>
-    </div>
-
-    <div id="gallery-overlay" class="overlay">
-        <div class="close-btn" onclick="closeOverlay('gallery-overlay')">✕</div>
-        <h2 style="margin-bottom: 30px; font-family: 'Pacifico';">Nuestra Galería</h2>
-        <div style="display: flex; gap: 15px; overflow-x: auto; width: 90%; padding: 20px;">
-            <img src="https://via.placeholder.com/200x300/6bf0ff/fff?text=Foto+1" style="border-radius: 15px; box-shadow: 0 0 20px var(--flower-color);">
-            <img src="https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+2" style="border-radius: 15px; box-shadow: 0 0 20px var(--accent-color);">
-            <img src="https://via.placeholder.com/200x300/6bf0ff/fff?text=Foto+3" style="border-radius: 15px; box-shadow: 0 0 20px var(--flower-color);">
+        <div class="flower flower--3">
+            <div class="flower__leafs flower__leafs--3">
+                <div class="flower__leaf flower__leaf--1"></div>
+                <div class="flower__leaf flower__leaf--2"></div>
+                <div class="flower__leaf flower__leaf--3"></div>
+                <div class="flower__leaf flower__leaf--4"></div>
+                <div class="flower__white-circle"></div>
+            </div>
+            <div class="flower__line">
+                <div class="flower__line__leaf flower__line__leaf--1"></div>
+                <div class="flower__line__leaf flower__line__leaf--2"></div>
+            </div>
         </div>
     </div>
 
-    <div id="letter-overlay" class="overlay">
-        <div class="close-btn" onclick="closeOverlay('letter-overlay')">✕</div>
-        <div style="background: white; color: #333; padding: 40px; border-radius: 5px; width: 80%; max-width: 500px; font-family: 'Dancing Script'; font-size: 1.5rem; text-align: center; box-shadow: 0 0 50px rgba(255,255,255,0.2);">
-            <p>"Eres la flor más bella de este jardín.<br>Gracias por caminar a mi lado en este universo infinito."</p>
-            <br>
-            <p style="font-size: 1rem; font-family: 'Montserrat'; color: var(--accent-color);">Te amo ❤️</p>
-        </div>
-    </div>
-
-    <style>
-        /* Estilos extra para las estaciones */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px var(--flower-color); }
-            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 30px var(--flower-color); }
-            100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px var(--flower-color); }
-        }
-    </style>
-        <script>
-        /* =========================================
-           1. GENERADOR DE FLORES Y HIERBA
-           ========================================= */
-        function initMeadow() {
-            // Generamos flores para las 3 secciones de la pradera
-            for (let s = 1; s <= 3; s++) {
-                const container = document.getElementById(`grass-${s}`);
-                const flowerCount = 40; // Cantidad de flores por sección
-
-                for (let i = 0; i < flowerCount; i++) {
-                    createFlower(container);
-                }
-            }
-        }
-
-        function createFlower(container) {
-            const flower = document.createElement('div');
-            flower.className = 'flower-container';
-            
-            // Posición aleatoria
-            const x = Math.random() * 100;
-            const y = Math.random() * 50; // Variación en profundidad visual
-            
-            flower.style.left = `${x}%`;
-            flower.style.bottom = `${y}px`;
-            
-            // Variación de tamaño y velocidad de balanceo
-            const scale = 0.5 + Math.random() * 0.8;
-            const delay = Math.random() * -5;
-            const duration = 3 + Math.random() * 3;
-            
-            flower.style.transform = `scale(${scale})`;
-            flower.style.animationDelay = `${delay}s`;
-            flower.style.animationDuration = `${duration}s`;
-
-            // Color aleatorio entre azul neón y rosa neón
-            const isPink = Math.random() > 0.7;
-            const color = isPink ? 'var(--accent-color)' : 'var(--flower-color)';
-
-            flower.innerHTML = `
-                <div class="glow-bloom" style="box-shadow: 0 0 15px ${color}, 0 0 30px ${color}; background: ${isPink ? '#fff' : '#fff'}"></div>
-                <div class="stem" style="height: ${60 + Math.random() * 60}px; background: linear-gradient(to top, #0f2a0f, ${color})"></div>
-            `;
-
-            container.appendChild(flower);
-        }
-
-        /* =========================================
-           2. SISTEMA DE NAVEGACIÓN (MOVE WORLD)
-           ========================================= */
-        function moveWorld(index) {
-            const world = document.getElementById('world');
-            const btns = document.querySelectorAll('.nav-btn');
-            
-            // Desplazar el contenedor principal
-            world.style.transform = `translateX(-${index * 100}vw)`;
-            
-            // Actualizar botones de navegación
-            btns.forEach((btn, i) => {
-                if(i === index) btn.classList.add('active');
-                else btn.classList.remove('active');
-            });
-        }
-
-        /* =========================================
-           3. ESTRELLAS DE FONDO (CANVAS)
-           ========================================= */
-        const canvas = document.getElementById('starCanvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-
-        function initStars() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < 200; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 1.5,
-                    opacity: Math.random(),
-                    speed: 0.01 + Math.random() * 0.03
-                });
-            }
-        }
-
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            stars.forEach(s => {
-                s.opacity += s.speed;
-                if (s.opacity > 1 || s.opacity < 0) s.speed *= -1;
-                ctx.globalAlpha = Math.abs(s.opacity);
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            requestAnimationFrame(drawStars);
-        }
-
-        /* =========================================
-           4. LÓGICA DE INTERFAZ (MODALES Y MÚSICA)
-           ========================================= */
-        function openOverlay(id) {
-            document.getElementById(id).style.display = 'flex';
-            setTimeout(() => document.getElementById(id).classList.add('show'), 10);
-        }
-
-        function closeOverlay(id) {
-            document.getElementById(id).classList.remove('show');
-            setTimeout(() => document.getElementById(id).style.display = 'none', 500);
-        }
-
-        function toggleMusic() {
-            const audio = document.getElementById('bg-music');
-            const btn = document.getElementById('music-btn');
-            if (audio.paused) {
-                audio.play();
-                btn.innerText = "⏸ Pause Playlist";
-            } else {
-                audio.pause();
-                btn.innerText = "🎵 Play Playlist";
-            }
-        }
-
-        // Eventos al cargar
+    <script>
         window.onload = () => {
-            initMeadow();
-            initStars();
-            drawStars();
+            setTimeout(() => {
+                document.body.classList.remove("not-loaded");
+            }, 1000);
         };
-
-        // Re-ajustar estrellas si cambia el tamaño de pantalla
-        window.onresize = initStars;
-
     </script>
 </body>
 </html>
