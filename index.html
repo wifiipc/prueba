@@ -8,131 +8,94 @@
         /* --- FUENTES --- */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
-        /* --- RESET Y BASE --- */
+        /* --- BASE --- */
         *, *::after, *::before { padding: 0; margin: 0; box-sizing: border-box; }
-        :root { --dark-color: #000; --accent: #ff4d6d; }
+        :root { --dark-color: #000; --accent: #ff4d6d; --glass: rgba(255, 255, 255, 0.1); }
 
         body {
             display: flex; align-items: flex-end; justify-content: center;
             min-height: 100vh; background-color: var(--dark-color);
             overflow: hidden; perspective: 1000px;
             font-family: 'Montserrat', sans-serif; color: white;
-            -webkit-user-select: none; user-select: none; /* Mejor experiencia móvil */
+            -webkit-user-select: none; user-select: none;
         }
 
-        /* --- POP-UP MÚSICA (RESPONSIVE) --- */
-        #music-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); z-index: 20000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px); transition: opacity 0.8s ease;
-        }
-        
-        .music-card {
-            background: #121212; padding: 30px; border-radius: 20px;
-            box-shadow: 0 0 50px rgba(255, 77, 109, 0.2);
-            text-align: center; max-width: 400px; width: 85%;
-            border: 1px solid #333;
-        }
-
-        .music-card h2 {
-            font-family: 'Pacifico', cursive; color: var(--accent);
-            margin-bottom: 10px; font-size: 1.8rem;
-        }
-
-        .song-list { display: flex; flex-direction: column; gap: 10px; max-height: 50vh; overflow-y: auto; }
-
-        .song-btn {
-            background: #282828; color: white; border: none;
-            padding: 12px; border-radius: 10px; cursor: pointer;
-            display: flex; align-items: center; gap: 15px;
-            transition: 0.2s; text-align: left;
-        }
-        .song-btn:active { background: #444; } /* Feedback táctil */
-
-        /* --- CONTROLES MÓVILES --- */
-        .controls {
+        /* --- BOTÓN DE ESCENA (Top Right) --- */
+        .scene-nav {
             position: absolute; top: 20px; right: 20px; z-index: 10000;
-            display: flex; gap: 8px; opacity: 0; transition: 1s;
         }
         .btn-glass {
-            padding: 8px 16px; background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px; background: var(--glass);
             border: 1px solid rgba(255, 255, 255, 0.2); color: white;
             border-radius: 30px; cursor: pointer; backdrop-filter: blur(5px);
             transition: 0.3s; font-weight: bold; font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .btn-glass:active { transform: scale(0.95); background: var(--accent); }
 
-        /* --- ESCENAS --- */
-        .escena {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; pointer-events: none; transition: opacity 1s ease;
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column;
+        /* --- SPOTIFY PLAYER (Bottom) --- */
+        .spotify-player {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; height: 70px;
+            background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 15px; z-index: 20000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: opacity 1s, transform 0.5s;
+            opacity: 0; pointer-events: none; /* Oculto al inicio */
         }
+        .spotify-player.visible { opacity: 1; pointer-events: all; }
+
+        .track-info { display: flex; flex-direction: column; justify-content: center; flex-grow: 1; overflow: hidden; margin-right: 10px; }
+        .track-title { font-weight: bold; font-size: 0.9rem; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-artist { font-size: 0.75rem; color: #b3b3b3; }
+
+        .controls { display: flex; align-items: center; gap: 15px; }
+        .control-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .control-btn:active { transform: scale(0.9); color: var(--accent); }
+        .play-btn { width: 35px; height: 35px; background: white; color: black; border-radius: 50%; font-size: 1rem; padding-left: 2px; } /* Botón play circular */
+
+        /* Barra de progreso visual */
+        .progress-bar {
+            position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent);
+            width: 0%; border-radius: 0 0 0 12px; transition: width 0.1s linear;
+        }
+
+        /* --- POP-UP INICIAL --- */
+        #music-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 30000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
+        }
+        .music-card {
+            background: #121212; padding: 30px; border-radius: 20px;
+            box-shadow: 0 0 50px rgba(255, 77, 109, 0.2); text-align: center; width: 85%; max-width: 350px;
+        }
+        .song-list { display: flex; flex-direction: column; gap: 10px; max-height: 40vh; overflow-y: auto; margin-top: 20px; }
+        .song-select-btn {
+            background: #282828; color: white; border: none; padding: 12px; border-radius: 8px;
+            cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; text-align: left;
+        }
+        .song-select-btn:active { background: #333; }
+
+        /* --- ESCENAS (Igual que antes) --- */
+        .escena { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 1s ease; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .activa { opacity: 1; pointer-events: all; }
 
-        /* --- ESCENA 1: UNIVERSO --- */
         #universo { background: black; }
         #starCanvas { position: absolute; z-index: 1; top:0; left:0; width:100%; height:100%; }
-        #contenido-texto {
-            position: relative; z-index: 10; text-align: center;
-            background: rgba(0, 0, 0, 0.4); padding: 30px;
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            width: 90%; max-width: 600px;
-        }
+        #contenido-texto { position: relative; z-index: 10; text-align: center; background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 600px; }
         h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff4d6d; text-shadow: 0 0 20px #ff4d6d; margin: 0; line-height: 1.1; }
 
-        /* --- ESCENA 2: JARDÍN --- */
         #jardin { width: 100%; height: 100%; }
-        .night {
-            position: fixed; left: 50%; top: 0; transform: translateX(-50%);
-            width: 100%; height: 100%; filter: blur(0.1vmin);
-            background-image: radial-gradient(ellipse at top, transparent 0%, var(--dark-color)), radial-gradient(ellipse at bottom, var(--dark-color), rgba(145, 233, 255, 0.2)), repeating-linear-gradient(220deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), repeating-linear-gradient(189deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), repeating-linear-gradient(148deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), linear-gradient(90deg, rgb(0, 255, 250), rgb(240, 240, 240)); z-index: 0;
-        }
-
+        .night { position: fixed; left: 50%; top: 0; transform: translateX(-50%); width: 100%; height: 100%; filter: blur(0.1vmin); background: radial-gradient(ellipse at bottom, #020202 0%, #000000 100%); z-index: 0; }
+        
         .flowers-container { position: absolute; bottom: -5vmin; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         .flower-wrapper { position: absolute; bottom: 0; transform-origin: bottom center; }
 
-        /* TEXTOS ADAPTADOS */
-        .mensaje-poema {
-            position: absolute; top: 15%; z-index: 100; text-align: center; width: 90%;
-            font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #fff;
-            text-shadow: 0 0 10px rgba(0, 255, 250, 0.8);
-            animation: aparecer 3s ease-in forwards;
-        }
-        .contador-dias {
-            position: absolute; top: 28%; width: 100%; text-align: center;
-            font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: bold;
-            color: #ff99ac; text-shadow: 0 2px 5px rgba(0,0,0,0.8); z-index: 100;
-            letter-spacing: 1px; padding: 0 10px;
-        }
-
-        /* --- ESCENA 3 & 4 --- */
-        #corazon-scene { background: radial-gradient(circle, #1a0b14 0%, #000 100%); }
-        #heartCanvas { position: absolute; z-index: 1; }
-        .titulo-flotante {
-            position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 2.5rem;
-            color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10;
-            animation: flotar 3s infinite; text-align: center; width: 100%;
-        }
-        
-        #galeria { background: #000; overflow: hidden; }
-        .carousel-container {
-            position: relative; width: 140px; height: 200px;
-            transform-style: preserve-3d; animation: rotarCarrusel 20s infinite linear;
-            margin-top: 40px;
-        }
-        .foto-card {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d;
-            border-radius: 10px; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 15px rgba(255,77,109,0.5);
-        }
-        .foto-card img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* --- FLORES CSS --- */
+        /* --- FLORES Y HIERBA CSS --- */
         .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; --fl-speed: 0.8s; }
         .flower--1 { animation: moving-flower-1 4s linear infinite; } .flower--2 { left: 50%; transform: rotate(20deg); animation: moving-flower-2 4s linear infinite; } .flower--3 { left: 50%; transform: rotate(-15deg); animation: moving-flower-3 4s linear infinite; }
         .flower__line { height: 55vmin; width: 1.5vmin; background-image: linear-gradient(to left, rgba(0,0,0,0.2), transparent, rgba(255,255,255,0.2)), linear-gradient(to top, transparent 10%, #14757a, #39c6d6); box-shadow: inset 0 0 2px rgba(0,0,0,0.5); animation: grow-flower-tree 4s backwards; }
@@ -148,15 +111,12 @@
         .flower__light { position: absolute; bottom: 0vmin; width: 1vmin; height: 1vmin; background-color: rgb(255, 251, 0); border-radius: 50%; filter: blur(0.2vmin); animation: light-ans 4s linear infinite backwards; }
         .flower__light:nth-child(odd) { background-color: #23f0ff; }
         .flower__light--1 { left: -2vmin; animation-delay: 1s; } .flower__light--2 { left: 3vmin; animation-delay: 0.5s; } .flower__light--3 { left: -6vmin; animation-delay: 0.3s; } .flower__light--4 { left: 6vmin; animation-delay: 0.9s; } .flower__light--5 { left: -1vmin; animation-delay: 1.5s; } .flower__light--6 { left: -4vmin; animation-delay: 3s; } .flower__light--7 { left: 3vmin; animation-delay: 2s; } .flower__light--8 { left: -6vmin; animation-delay: 3.5s; }
-
-        /* HIERBA */
         .flower__grass { --c: #159faa; --line-w: 1.5vmin; position: absolute; bottom: 12vmin; left: -7vmin; display: flex; flex-direction: column; align-items: flex-end; z-index: 20; transform-origin: bottom center; transform: rotate(-48deg) rotateY(40deg); }
         .flower__grass--1 { animation: moving-grass 2s linear infinite; } .flower__grass--2 { left: 2vmin; bottom: 10vmin; transform: scale(0.5) rotate(75deg) rotateX(10deg) rotateY(-200deg); opacity: 0.8; z-index: 0; animation: moving-grass--2 1.5s linear infinite; } .flower__grass--top { width: 7vmin; height: 10vmin; border-top-right-radius: 100%; border-right: var(--line-w) solid var(--c); transform-origin: bottom center; transform: rotate(-2deg); } .flower__grass--bottom { margin-top: -2px; width: var(--line-w); height: 25vmin; background-image: linear-gradient(to top, transparent, var(--c)); } .flower__grass__leaf { --size: 10vmin; position: absolute; width: calc(var(--size) * 2.1); height: var(--size); border-top-left-radius: var(--size); border-top-right-radius: var(--size); background-image: linear-gradient(to top, transparent, transparent 30%, var(--c)); z-index: 100; }
         .flower__grass__leaf--1 { top: -6%; left: 30%; --size: 6vmin; transform: rotate(-20deg); animation: growing-grass-ans--1 2s 2.6s backwards; } .flower__grass__leaf--2 { top: -5%; left: -110%; --size: 6vmin; transform: rotate(10deg); animation: growing-grass-ans--2 2s 2.4s linear backwards; }
         .flower__grass__overlay { position: absolute; top: -10%; right: 0%; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); filter: blur(1.5vmin); z-index: 100; }
         .long-g { position: absolute; bottom: 25vmin; left: -42vmin; transform-origin: bottom left; } .long-g--1 { bottom: 0vmin; transform: scale(0.8) rotate(-5deg); } .long-g--1 .leaf { -webkit-mask-image: linear-gradient(to top, transparent 40%, #079097 80%) !important; } .long-g--1 .leaf--1 { --w: 5vmin; --h: 60vmin; left: -2vmin; transform: rotate(3deg) rotateY(-180deg); } .long-g--2, .long-g--3 { bottom: -3vmin; left: -35vmin; transform-origin: center; transform: scale(0.6) rotateX(60deg); } .long-g--2 .leaf, .long-g--3 .leaf { -webkit-mask-image: linear-gradient(to top, transparent 50%, #079097 80%) !important; } .long-g--2 .leaf--1 { left: -1vmin; transform: rotateY(-180deg); } .long-g--3 { left: -17vmin; bottom: 0vmin; } .long-g--5 { left: 42vmin; bottom: 0vmin; transform: scale(0.8) rotate(2deg); } .long-g .leaf { --w: 15vmin; --h: 40vmin; --c: #1aaa15; position: absolute; bottom: 0; width: var(--w); height: var(--h); border-top-left-radius: 100%; border-left: 2vmin solid var(--c); -webkit-mask-image: linear-gradient(to top, transparent 20%, var(--dark-color)); transform-origin: bottom center; } .long-g .leaf--0 { left: 2vmin; animation: leaf-ans-1 4s linear infinite; } .long-g .leaf--1 { --w: 5vmin; --h: 60vmin; animation: leaf-ans-1 4s linear infinite; }
 
-        /* ANIMACIONES */
         @keyframes moving-flower-1 { 0%, 100% { transform: rotate(2deg); } 50% { transform: rotate(-2deg); } } @keyframes moving-flower-2 { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(14deg); } } @keyframes moving-flower-3 { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(-20deg) rotateY(-10deg); } } @keyframes blooming-flower { 0% { transform: scale(0); } } @keyframes grow-flower-tree { 0% { height: 0; border-radius: 1vmin; } } @keyframes blooming-leaf-right { 0% { transform-origin: left; transform: rotate(70deg) rotateY(30deg) scale(0); } } @keyframes blooming-leaf-left { 0% { transform-origin: right; transform: rotate(-70deg) rotateY(30deg) scale(0); } } @keyframes light-ans { 0% { opacity: 0; transform: translateY(0vmin); } 25% { opacity: 1; transform: translateY(-5vmin) translateX(-2vmin); } 50% { opacity: 1; transform: translateY(-15vmin) translateX(2vmin); filter: blur(0.2vmin); } 75% { transform: translateY(-20vmin) translateX(-2vmin); filter: blur(0.2vmin); } 100% { transform: translateY(-30vmin); opacity: 0; filter: blur(1vmin); } }
         @keyframes moving-grass { 0%, 100% { transform: rotate(-48deg) rotateY(40deg); } 50% { transform: rotate(-50deg) rotateY(40deg); } }
         @keyframes moving-grass--2 { 0%, 100% { transform: scale(0.5) rotate(75deg) rotateX(10deg) rotateY(-200deg); } 50% { transform: scale(0.5) rotate(79deg) rotateX(10deg) rotateY(-200deg); } }
@@ -168,7 +128,19 @@
         @keyframes aparecer { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* Ajustes Mobile */
+        /* TEXTOS */
+        .mensaje-poema { position: absolute; top: 15%; z-index: 100; text-align: center; width: 100%; font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: #fff; text-shadow: 0 0 10px rgba(0, 255, 250, 0.8); animation: aparecer 3s ease-in forwards; }
+        .contador-dias { position: absolute; top: 25%; width: 100%; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: bold; color: #ff99ac; text-shadow: 0 2px 5px rgba(0,0,0,0.8); z-index: 100; letter-spacing: 2px; }
+
+        /* OTROS */
+        #corazon-scene { background: radial-gradient(circle, #1a0b14 0%, #000 100%); flex-direction: column; overflow: hidden; }
+        #heartCanvas { position: absolute; z-index: 1; }
+        .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 3rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 3s infinite; }
+        #galeria { background: #000; overflow: hidden; }
+        .carousel-container { position: relative; width: 200px; height: 300px; transform-style: preserve-3d; animation: rotarCarrusel 20s infinite linear; }
+        .foto-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255,77,109,0.5); }
+        .foto-card img { width: 100%; height: 100%; object-fit: cover; }
+
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .mensaje-poema { font-size: 1.4rem; top: 12%; }
@@ -176,6 +148,7 @@
             .flowers-container { transform: scale(0.85) translateY(5%); }
             .carousel-container { width: 120px; height: 180px; }
             .titulo-flotante { font-size: 2rem; top: 10%; }
+            .spotify-player { bottom: 10px; width: 95%; height: 65px; } /* Ajuste reproductor */
         }
 
         .not-loaded * { animation-play-state: paused !important; }
@@ -185,18 +158,31 @@
 
     <div id="music-overlay">
         <div class="music-card">
-            <h2>Nuestra Playlist 🎵</h2>
-            <p>Elige la banda sonora de nuestra historia...</p>
-            <div class="song-list" id="song-list"></div>
+            <h2 style="font-family:'Pacifico'; color:#ff4d6d; font-size:2rem;">Nuestra Playlist 🎵</h2>
+            <p style="color:#aaa; margin-bottom:20px;">Elige nuestra banda sonora...</p>
+            <div class="song-list" id="song-list">
+                </div>
         </div>
     </div>
 
-    <div class="controls" id="controls">
-        <button id="btn-music" class="btn-glass" onclick="toggleMusic()">🎵 Pausa</button>
-        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button>
+    <div class="scene-nav">
+        <button class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button>
     </div>
 
-    <audio id="bg-music"></audio>
+    <div class="spotify-player" id="spotify-player">
+        <div class="track-info">
+            <div class="track-title" id="track-title">Selecciona una canción</div>
+            <div class="track-artist" id="track-artist">...</div>
+        </div>
+        <div class="controls">
+            <button class="control-btn" onclick="prevSong()">⏮</button>
+            <button class="control-btn play-btn" onclick="togglePlayPause()" id="play-btn">▶</button>
+            <button class="control-btn" onclick="nextSong()">⏭</button>
+        </div>
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <audio id="audio-player"></audio>
 
     <div id="universo" class="escena activa">
         <canvas id="starCanvas"></canvas>
@@ -239,62 +225,90 @@
         const FOTOS = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
         const FECHA_INICIO = new Date("2025-10-25T00:00:00");
         const PLAYLIST = [
-            { titulo: "Canción 1", artista: "Artista", archivo: "cancion1.mp3" },
-            { titulo: "Canción 2", artista: "Artista", archivo: "cancion2.mp3" },
-            { titulo: "Canción 3", artista: "Artista", archivo: "cancion3.mp3" },
-            { titulo: "Canción 4", artista: "Artista", archivo: "cancion4.mp3" }
+            { titulo: "Canción 1", artista: "Artista 1", archivo: "cancion1.mp3" },
+            { titulo: "Canción 2", artista: "Artista 2", archivo: "cancion2.mp3" },
+            { titulo: "Canción 3", artista: "Artista 3", archivo: "cancion3.mp3" },
+            { titulo: "Canción 4", artista: "Artista 4", archivo: "cancion4.mp3" }
         ];
 
         let escenaActual = 0;
         let currentSongIndex = 0;
         const escenasIds = ['universo', 'jardin', 'corazon-scene', 'galeria'];
+        const audio = document.getElementById('audio-player');
 
+        // --- INICIALIZAR PLAYLIST ---
         function initPlaylist() {
             const list = document.getElementById('song-list');
             PLAYLIST.forEach((song, index) => {
                 const btn = document.createElement('div');
-                btn.className = 'song-btn';
-                btn.innerHTML = `<div style="font-size:1.5rem">▶</div><div><div style="font-weight:bold">${song.titulo}</div><div style="font-size:0.8rem;color:#ccc">${song.artista}</div></div>`;
-                btn.onclick = () => selectSong(index);
+                btn.className = 'song-select-btn';
+                btn.innerHTML = `<span style="font-size:1.2rem;color:var(--accent)">▶</span>
+                                 <div><div style="font-weight:bold;font-size:0.9rem">${song.titulo}</div>
+                                 <div style="font-size:0.75rem;color:#aaa">${song.artista}</div></div>`;
+                btn.onclick = () => startExperience(index);
                 list.appendChild(btn);
             });
         }
 
-        function selectSong(index) {
-            currentSongIndex = index;
-            const audio = document.getElementById('bg-music');
-            audio.src = PLAYLIST[index].archivo;
-            
+        // --- REPRODUCTOR LOGICA ---
+        function startExperience(index) {
+            loadSong(index);
+            // Ocultar Overlay
             document.getElementById('music-overlay').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('music-overlay').style.display = 'none';
-                document.getElementById('controls').style.opacity = '1';
+                document.getElementById('spotify-player').classList.add('visible'); // Mostrar mini-player
             }, 800);
-
-            audio.play();
+            
+            // Iniciar animaciones
             document.body.classList.remove('not-loaded');
             initStars(); animateStars(); typeWriter();
             actualizarContador(); setInterval(actualizarContador, 60000);
         }
 
-        // LÓGICA DE AUTOPLAY
-        const audio = document.getElementById('bg-music');
-        audio.onended = () => {
-            currentSongIndex = (currentSongIndex + 1) % PLAYLIST.length;
-            audio.src = PLAYLIST[currentSongIndex].archivo;
-            audio.play();
-        };
-
-        function toggleMusic() {
-            if (audio.paused) { audio.play(); document.getElementById('btn-music').innerText = "🎵 Pausa"; }
-            else { audio.pause(); document.getElementById('btn-music').innerText = "🎵 Play"; }
+        function loadSong(index) {
+            currentSongIndex = index;
+            const song = PLAYLIST[currentSongIndex];
+            audio.src = song.archivo;
+            document.getElementById('track-title').innerText = song.titulo;
+            document.getElementById('track-artist').innerText = song.artista;
+            audio.play().then(() => updatePlayIcon(true)).catch(e => console.log("Interacción requerida"));
         }
 
-        // SWIPE
-        let touchstartX = 0; let touchendX = 0;
-        document.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX);
-        document.addEventListener('touchend', e => { touchendX = e.changedTouches[0].screenX; if(touchendX < touchstartX - 50) siguienteEscena(); });
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play();
+                updatePlayIcon(true);
+            } else {
+                audio.pause();
+                updatePlayIcon(false);
+            }
+        }
 
+        function updatePlayIcon(isPlaying) {
+            const btn = document.getElementById('play-btn');
+            btn.innerText = isPlaying ? "⏸" : "▶";
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % PLAYLIST.length;
+            loadSong(currentSongIndex);
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
+            loadSong(currentSongIndex);
+        }
+
+        // --- BARRA DE PROGRESO & AUTOPLAY ---
+        audio.ontimeupdate = () => {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        };
+
+        audio.onended = () => nextSong(); // Autoplay Siguiente
+
+        // --- NAVEGACIÓN ESCENAS ---
         function siguienteEscena() {
             document.getElementById(escenasIds[escenaActual]).classList.remove('activa');
             escenaActual = (escenaActual + 1) % escenasIds.length;
@@ -309,7 +323,7 @@
             document.getElementById('contador-dias').innerText = `Juntos desde el 25 Oct 2025 (${dias} días)`;
         }
 
-        // CANVAS Y ANIMACIONES
+        // --- CANVAS (Stars & Heart) ---
         const starCanvas = document.getElementById('starCanvas'); const sCtx = starCanvas.getContext('2d'); let stars = [];
         function initStars() { starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight; stars = []; for(let i=0; i<300; i++) stars.push({x:Math.random()*starCanvas.width, y:Math.random()*starCanvas.height, z:Math.random()*starCanvas.width}); }
         function animateStars() { if(!document.getElementById('universo').classList.contains('activa')) return; sCtx.fillStyle = "black"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height); sCtx.fillStyle = "white"; stars.forEach(s => { s.z -= 2; if(s.z <= 0) s.z = starCanvas.width; let x = (s.x-starCanvas.width/2)*(starCanvas.width/s.z)+starCanvas.width/2; let y = (s.y-starCanvas.height/2)*(starCanvas.width/s.z)+starCanvas.height/2; let size = (1-s.z/starCanvas.width)*2; if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,size,0,Math.PI*2); sCtx.fill(); } }); requestAnimationFrame(animateStars); }
