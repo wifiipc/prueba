@@ -3,172 +3,470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campo de Flores Mágicas</title>
+    <title>Para ti ❤️</title>
     <style>
-        *, *::after, *::before {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
+        /* --- FUENTES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
-        :root {
-            --dark-color: #000;
-        }
-
+        /* --- ESTILOS GENERALES --- */
         body {
-            background-color: var(--dark-color);
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            min-height: 100vh;
+            margin: 0;
             overflow: hidden;
+            background-color: #000;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            height: 100vh;
+            width: 100vw;
             perspective: 1000px;
         }
 
-        .night {
-            position: fixed;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-image: radial-gradient(ellipse at top, transparent 0%, var(--dark-color)),
-                radial-gradient(ellipse at bottom, var(--dark-color), rgba(145, 233, 255, 0.2)),
-                linear-gradient(90deg, #001a1a, #000);
-            z-index: -1;
+        /* --- BOTONES --- */
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
         }
 
-        .flowers {
-            position: relative;
+        .btn-glass {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+        }
+        
+        .btn-glass:hover {
+            background: #ff4d6d;
+            border-color: #ff4d6d;
+            box-shadow: 0 0 20px #ff4d6d;
+            transform: scale(1.05);
+        }
+
+        /* --- ESCENAS --- */
+        .escena {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease, transform 1s ease;
             display: flex;
             justify-content: center;
-            align-items: flex-end;
-            z-index: 10;
-        }
-
-        /* Estructura Base de la Flor */
-        .flower {
-            position: absolute;
-            bottom: -5vmin;
-            transform-origin: bottom center;
-            z-index: 10;
-            --fl-speed: 0.8s;
-            display: flex;
-            flex-direction: column;
             align-items: center;
+            transform: scale(1.2);
         }
 
-        .flower__line {
-            width: 1.2vmin;
-            height: 40vmin;
-            background-image: linear-gradient(to top, #000, #14757a, #39c6d6);
-            box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
-            animation: grow-flower-tree 4s backwards;
+        .activa {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1);
         }
 
-        .flower__leafs {
+        /* --- ESCENA 1: UNIVERSO --- */
+        #universo { background: black; }
+        #starCanvas { position: absolute; z-index: 1; }
+        #contenido-texto {
             position: relative;
-            animation: blooming-flower 2s backwards;
-            width: 2vmin;
-            height: 2vmin;
+            z-index: 10;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #ff4d6d;
+            text-shadow: 0 0 20px #ff4d6d;
+            margin: 0;
+        }
+        #maquina-escribir {
+            font-size: 1.5rem;
+            color: #eee;
+            min-height: 1.5em;
         }
 
-        .flower__leaf {
+        /* --- ESCENA 2: PRADERA CON FLORES Y ÁRBOL --- */
+        #jardin {
+            /* Fondo de cielo azul claro con nubes suaves (gradiente) */
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 80%, #90EE90 80%, #228B22 100%); 
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        canvas#arbolCanvas { 
             position: absolute;
-            bottom: 0; left: 50%;
-            width: 8vmin; height: 11vmin;
-            border-radius: 51% 49% 47% 53% / 44% 45% 55% 69%;
-            background-image: linear-gradient(to top, #54b8aa, #a7ffee);
-            transform-origin: bottom center;
-            opacity: 0.9;
-            box-shadow: inset 0 0 2vmin rgba(255, 255, 255, 0.5);
+            top: 0;
+            left: 0;
+            z-index: 2; 
         }
-
-        .flower__leaf--1 { transform: translate(-10%, 1%) rotateY(40deg) rotateX(-50deg); }
-        .flower__leaf--2 { transform: translate(-50%, -4%) rotateX(40deg); }
-        .flower__leaf--3 { transform: translate(-90%, 0%) rotateY(45deg) rotateX(50deg); }
-
-        .flower__white-circle {
+        .mensaje-arbol {
             position: absolute;
-            left: -3vmin; top: -2vmin;
-            width: 7vmin; height: 3vmin;
-            border-radius: 50%;
-            background-color: #fff;
-            z-index: 2;
+            top: 20%; /* Posición para el poema en el cielo */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.5rem; /* Tamaño ajustable */
+            color: #ff69b4; /* Rosa fuerte para resaltar */
+            text-shadow: 1px 1px 2px white, 0 0 10px rgba(255,255,255,0.8); /* Borde blanco para legibilidad */
+            opacity: 0;
+            animation: aparecer 2s ease-in 4s forwards; 
+            width: 80%; /* Ancho máximo */
+            max-width: 600px;
         }
 
-        /* Luces flotantes */
-        .light {
+        /* --- ESCENA 3: CORAZÓN 3D --- */
+        #corazon-scene {
+            background: radial-gradient(circle, #1a0b14 0%, #000000 100%);
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #heartCanvas { position: absolute; z-index: 1; }
+        .titulo-flotante {
             position: absolute;
-            width: 1vmin; height: 1vmin;
-            background-color: #fffb00;
-            border-radius: 50%;
-            filter: blur(0.2vmin);
-            animation: light-ans 4s linear infinite;
+            top: 15%;
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            color: #ff99ac;
+            text-shadow: 0 0 20px #ff006e;
+            z-index: 10;
+            animation: flotar 3s ease-in-out infinite;
         }
 
-        @keyframes grow-flower-tree { 0% { height: 0; } }
-        @keyframes blooming-flower { 0% { transform: scale(0); } }
-        @keyframes light-ans {
-            0% { opacity: 0; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-20vmin) translateX(5vmin); }
-            100% { opacity: 0; transform: translateY(-40vmin); }
+        /* --- ESCENA 4: CARRUSEL --- */
+        #galeria {
+            background: #000;
+            overflow: hidden;
         }
+        .carousel-container {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            transform-style: preserve-3d;
+            animation: rotarCarrusel 20s infinite linear;
+        }
+        .carousel-container:hover { animation-play-state: paused; }
+        .foto-card {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #ff4d6d;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.5);
+        }
+        .foto-card img { width: 100%; height: 100%; object-fit: cover; }
 
-        @keyframes swaying {
-            0%, 100% { transform: rotate(-2deg); }
-            50% { transform: rotate(2deg); }
-        }
+        /* ANIMACIONES */
+        @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } }
+        @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes aparecer { from { opacity: 0; transform: translateY(20px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
+        .cursor { display: inline-block; width: 2px; height: 1.2em; background: white; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        .not-loaded * {
-            animation-play-state: paused !important;
-        }
     </style>
 </head>
-<body class="not-loaded">
-    <div class="night"></div>
-    <div class="flowers" id="garden">
+<body>
+
+    <div class="controls">
+        <button id="btn-music" class="btn-glass" onclick="toggleMusic()">🎵 Música</button>
+        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ✨</button>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="tu_cancion.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="universo" class="escena activa">
+        <canvas id="starCanvas"></canvas>
+        <div id="contenido-texto">
+            <h1>Para mi Amor</h1>
+            <div><span id="maquina-escribir"></span><span class="cursor"></span></div>
         </div>
+    </div>
+
+    <div id="jardin" class="escena">
+        <canvas id="arbolCanvas"></canvas>
+        <div class="mensaje-arbol">
+            En el jardín de mi vida,<br>
+            tú eres la flor más bella,<br>
+            la luz que mi alma guía,<br>
+            mi más brillante estrella.
+        </div>
+    </div>
+
+    <div id="corazon-scene" class="escena">
+        <div class="titulo-flotante">Eres mi Todo</div>
+        <canvas id="heartCanvas"></canvas>
+    </div>
+
+    <div id="galeria" class="escena">
+        <div class="titulo-flotante" style="top: 10%; font-size: 2.5rem;">Nuestros Recuerdos</div>
+        <div class="carousel-container" id="carousel">
+            </div>
+    </div>
 
     <script>
-        const garden = document.getElementById('garden');
-        const flowerCount = 30; // Ajusta cuántas flores quieres en el campo
+        /* =========================================
+           CONFIGURACIÓN
+           ========================================= */
+        const FRASES = ["Eres mi universo.", "Mi casualidad favorita.", "Te amo infinito."];
+        const FOTOS = [
+            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+1",
+            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+2",
+            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+3",
+            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+4",
+            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+5"
+        ];
 
-        for (let i = 0; i < flowerCount; i++) {
-            createFlower();
+        let escenaActual = 0;
+        const escenasIds = ['universo', 'jardin', 'corazon-scene', 'galeria'];
+
+        function siguienteEscena() {
+            document.getElementById(escenasIds[escenaActual]).classList.remove('activa');
+            escenaActual = (escenaActual + 1) % escenasIds.length;
+            const nueva = document.getElementById(escenasIds[escenaActual]);
+            nueva.classList.add('activa');
+            
+            // Iniciar animaciones según escena
+            if(escenaActual === 0) { initStars(); animateStars(); }
+            else if(escenaActual === 1) { initTree(); } 
+            else if(escenaActual === 2) { initHeart(); animateHeart(); }
+            else { crearCarrusel(); }
         }
 
-        function createFlower() {
-            const flower = document.createElement('div');
-            flower.className = 'flower';
-            
-            // Posición aleatoria
-            const randomX = Math.floor(Math.random() * 100); 
-            const randomDelay = (Math.random() * 3).toFixed(2);
-            const randomScale = (0.5 + Math.random() * 0.8).toFixed(2);
-            
-            flower.style.left = `${randomX}%`;
-            flower.style.animation = `swaying 4s ${randomDelay}s ease-in-out infinite`;
-            flower.style.transform = `scale(${randomScale})`;
-            flower.style.zIndex = Math.floor(randomScale * 10);
-
-            flower.innerHTML = `
-                <div class="flower__leafs">
-                    <div class="flower__leaf flower__leaf--1"></div>
-                    <div class="flower__leaf flower__leaf--2"></div>
-                    <div class="flower__leaf flower__leaf--3"></div>
-                    <div class="flower__white-circle"></div>
-                    <div class="light"></div>
-                </div>
-                <div class="flower__line"></div>
-            `;
-            
-            garden.appendChild(flower);
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            audio.paused ? audio.play() : audio.pause();
         }
 
-        window.onload = () => {
+        /* =========================================
+           1. UNIVERSO
+           ========================================= */
+        const starCanvas = document.getElementById('starCanvas');
+        const sCtx = starCanvas.getContext('2d');
+        let stars = [];
+
+        function initStars() {
+            starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight;
+            stars = [];
+            for(let i=0; i<300; i++) stars.push({x:Math.random()*starCanvas.width, y:Math.random()*starCanvas.height, z:Math.random()*starCanvas.width});
+        }
+        function animateStars() {
+            if(!document.getElementById('universo').classList.contains('activa')) return;
+            sCtx.fillStyle = "black"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height);
+            sCtx.fillStyle = "white";
+            stars.forEach(s => {
+                s.z -= 2; if(s.z <= 0) s.z = starCanvas.width;
+                let x = (s.x-starCanvas.width/2)*(starCanvas.width/s.z)+starCanvas.width/2;
+                let y = (s.y-starCanvas.height/2)*(starCanvas.width/s.z)+starCanvas.height/2;
+                if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,(1-s.z/starCanvas.width)*3,0,Math.PI*2); sCtx.fill(); }
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        /* =========================================
+           2. PRADERA CON FLORES Y ÁRBOL
+           ========================================= */
+        const treeCanvas = document.getElementById('arbolCanvas');
+        const tCtx = treeCanvas.getContext('2d');
+        let treeW, treeH;
+        let fallingLeaves = [];
+
+        function initTree() {
+            treeW = treeCanvas.width = window.innerWidth;
+            treeH = treeCanvas.height = window.innerHeight;
+            fallingLeaves = [];
+            
+            tCtx.clearRect(0,0,treeW,treeH);
+            
+            // Dibujar el suelo (pradera) con flores
+            drawMeadow();
+
+            // Dibujar árbol recursivo desde abajo
+            // Ajustamos posición base para que salga del "suelo" verde (80% altura)
+            drawBranch(treeW/2, treeH * 0.85, 120, -90, 20, 0); 
+            
+            animateFallingLeaves();
+        }
+
+        function drawMeadow() {
+             // Ya el fondo CSS hace el cielo y el suelo base. Aquí añadimos detalles
+             // Dibujar muchas flores en la parte inferior (suelo)
+             for(let i=0; i<200; i++) {
+                 let x = Math.random() * treeW;
+                 let y = (treeH * 0.8) + Math.random() * (treeH * 0.2); // Solo en el 20% inferior
+                 
+                 // Tallo
+                 tCtx.beginPath();
+                 tCtx.moveTo(x, y);
+                 tCtx.lineTo(x, y - (5 + Math.random()*10));
+                 tCtx.strokeStyle = "green";
+                 tCtx.lineWidth = 1;
+                 tCtx.stroke();
+
+                 // Flor
+                 tCtx.beginPath();
+                 tCtx.arc(x, y - (5 + Math.random()*10), 3 + Math.random()*3, 0, Math.PI*2);
+                 tCtx.fillStyle = `hsl(${Math.random()*360}, 70%, 60%)`; // Colores variados
+                 tCtx.fill();
+             }
+        }
+
+        function drawBranch(x, y, len, angle, width, depth) {
+            // Animación de crecimiento: setTimeout para cada rama
             setTimeout(() => {
-                document.body.classList.remove("not-loaded");
-            }, 500);
-        };
+                if(!document.getElementById('jardin').classList.contains('activa')) return;
+                
+                tCtx.beginPath();
+                tCtx.moveTo(x, y);
+                // Calcular fin de la rama
+                const endX = x + len * Math.cos(angle * Math.PI/180);
+                const endY = y + len * Math.sin(angle * Math.PI/180);
+                
+                tCtx.lineTo(endX, endY);
+                // Color tronco (marrón oscuro a claro)
+                tCtx.strokeStyle = `hsl(25, ${80-depth*5}%, ${20+depth*5}%)`;
+                tCtx.lineWidth = width;
+                tCtx.lineCap = "round";
+                tCtx.stroke();
+
+                // Si es el final (hojas)
+                if (depth > 8 || len < 10) {
+                    // Dibujar corazón
+                    tCtx.beginPath();
+                    tCtx.fillStyle = `hsl(${330 + Math.random()*30}, 100%, 60%)`; // Rosas variados
+                    tCtx.font = `${10 + Math.random()*15}px Arial`;
+                    tCtx.fillText("❤️", endX-6, endY+6);
+                    
+                    // A veces soltar una hoja
+                    if(Math.random() > 0.9) {
+                        fallingLeaves.push({x: endX, y: endY, speed: 1 + Math.random()*2, sway: Math.random()*0.1});
+                    }
+                    return;
+                }
+
+                // Recursividad: 2 ramas nuevas
+                // Ángulo aleatorio para realismo
+                const subLen = len * 0.75;
+                const subWidth = width * 0.7;
+                drawBranch(endX, endY, subLen, angle - 20 - Math.random()*10, subWidth, depth + 1);
+                drawBranch(endX, endY, subLen, angle + 20 + Math.random()*10, subWidth, depth + 1);
+
+            }, 100 * depth); // El retraso crea la animación de crecimiento
+        }
+
+        function animateFallingLeaves() {
+            if(!document.getElementById('jardin').classList.contains('activa')) return;
+            // No limpiamos todo el canvas para que el árbol se quede, 
+            // pero necesitamos limpiar las hojas viejas... 
+            // Truco: redibujar hojas cayendo sobre el lienzo existente
+            
+            // Para simplificar sin borrar el árbol, solo añadimos corazones cayendo encima
+            fallingLeaves.forEach((leaf, i) => {
+                // Borrar rastro hoja anterior (chapuza visual pero efectiva en fondo negro, aquí en cielo puede notarse un poco)
+                // En lugar de borrar, simplemente dibujamos encima. Si se acumulan muchas, podemos limpiar el canvas y redibujar todo (árbol + pradera)
+                // Para mantenerlo simple y performante, dejamos que caigan.
+               
+                // Para evitar rastro feo en fondo claro, idealmente redibujaríamos todo cada frame. 
+                // Dado que el árbol es recursivo y costoso, vamos a dejar que las hojas se "acumulen" en el suelo o desaparezcan.
+                
+                // Si queremos animación fluida sin rastro en canvas único:
+                // Lo ideal sería tener 2 canvas: uno para el árbol estático y otro para las hojas cayendo.
+                // Como estamos editando este código, vamos a hacer que las hojas caigan y desaparezcan al tocar el suelo.
+
+                // NOTA: Con este método simple en un solo canvas sobre fondo complejo, mover cosas deja rastro.
+                // Si quieres animación perfecta de caída, avísame para separar en capas.
+                // Por ahora, dibujamos nuevas hojas cayendo.
+
+                leaf.y += leaf.speed;
+                leaf.x += Math.sin(leaf.y * 0.05) * 2; // Oscilación
+                
+                tCtx.font = "16px Arial";
+                tCtx.fillStyle = "#ff4d6d";
+                tCtx.fillText("❤️", leaf.x, leaf.y);
+
+                if(leaf.y > treeH * 0.9) fallingLeaves.splice(i, 1); // Desaparecen al llegar al suelo
+            });
+            requestAnimationFrame(animateFallingLeaves);
+        }
+
+        /* =========================================
+           3. CORAZÓN 3D
+           ========================================= */
+        const hCanvas = document.getElementById('heartCanvas');
+        const hCtx = hCanvas.getContext('2d');
+        let hPoints = []; let angleY = 0;
+
+        function initHeart() {
+            hCanvas.width = window.innerWidth; hCanvas.height = window.innerHeight;
+            hPoints = [];
+            for(let i=0; i<1500; i++) {
+                let t = Math.random()*Math.PI*2, x = 16*Math.pow(Math.sin(t),3), y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+                let z = (Math.random()-0.5)*10;
+                hPoints.push({x:x*12, y:y*12, z:z*12, color: `hsl(${330+Math.random()*40}, 90%, 60%)`});
+            }
+        }
+        function animateHeart() {
+            if(!document.getElementById('corazon-scene').classList.contains('activa')) return;
+            hCtx.fillStyle = "rgba(0,0,0,0.2)"; hCtx.fillRect(0,0,hCanvas.width, hCanvas.height);
+            angleY += 0.01;
+            let cx = hCanvas.width/2, cy = hCanvas.height/2;
+            hPoints.forEach(p => {
+                let rx = p.x*Math.cos(angleY) - p.z*Math.sin(angleY);
+                let rz = p.x*Math.sin(angleY) + p.z*Math.cos(angleY);
+                let scale = 500/(500+rz);
+                if(scale>0) {
+                    hCtx.fillStyle = p.color; hCtx.beginPath(); hCtx.arc(rx*scale+cx, p.y*scale+cy, 2*scale, 0, Math.PI*2); hCtx.fill();
+                }
+            });
+            requestAnimationFrame(animateHeart);
+        }
+
+        /* =========================================
+           4. CARRUSEL
+           ========================================= */
+        function crearCarrusel() {
+            const container = document.getElementById('carousel');
+            if(container.children.length > 0) return;
+            const angleStep = 360/FOTOS.length;
+            FOTOS.forEach((src, i) => {
+                const div = document.createElement('div');
+                div.className = 'foto-card';
+                div.style.transform = `rotateY(${i*angleStep}deg) translateZ(300px)`;
+                div.innerHTML = `<img src="${src}">`;
+                container.appendChild(div);
+            });
+        }
+
+        /* INIT */
+        let tIdx=0, cIdx=0, isDel=false;
+        function typeWriter() {
+            const txt = FRASES[tIdx];
+            const el = document.getElementById('maquina-escribir');
+            el.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++);
+            let spd = isDel ? 50 : 100;
+            if(!isDel && cIdx === txt.length+1) { spd = 2000; isDel = true; }
+            else if(isDel && cIdx === 0) { isDel = false; tIdx = (tIdx+1)%FRASES.length; spd = 500; }
+            setTimeout(typeWriter, spd);
+        }
+        window.onload = () => { initStars(); animateStars(); typeWriter(); };
+        window.addEventListener('resize', () => { initStars(); initHeart(); });
     </script>
 </body>
 </html>
