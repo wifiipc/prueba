@@ -2,308 +2,315 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para ti ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LoveFlix ❤️</title>
     <style>
         /* --- FUENTES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Bebas+Neue&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
-        /* --- ESTILOS GENERALES --- */
+        /* --- RESET & BASE --- */
         body {
             margin: 0;
-            overflow: hidden;
-            background-color: #000;
-            font-family: 'Montserrat', sans-serif;
+            background-color: #141414; /* Negro Netflix */
             color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Evitar scroll global */
             height: 100vh;
             width: 100vw;
-            perspective: 1000px;
         }
 
-        /* --- BOTONES --- */
-        .controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            gap: 10px;
-        }
+        /* --- UTILIDADES --- */
+        .oculto { display: none !important; }
+        .flex-center { display: flex; justify-content: center; align-items: center; }
+        .full-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        .btn-glass {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            color: white;
-            border-radius: 30px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            font-size: 0.9rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        .btn-glass:hover {
-            background: #ff4d6d;
-            border-color: #ff4d6d;
-            transform: scale(1.05);
-        }
-
-        /* --- ESCENAS --- */
-        .escena {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease, transform 1s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform: scale(1.2);
-        }
-
-        .activa {
-            opacity: 1;
-            pointer-events: all;
-            transform: scale(1);
-        }
-
-        /* --- ESCENA 1: UNIVERSO --- */
-        #universo { background: black; }
-        #starCanvas { position: absolute; z-index: 1; }
-        #contenido-texto {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4rem;
-            color: #ff4d6d;
-            text-shadow: 0 0 20px #ff4d6d;
-            margin: 0;
-        }
-        #maquina-escribir {
-            font-size: 1.5rem;
-            color: #eee;
-            min-height: 1.5em;
-        }
-
-        /* --- ESCENA 2: EL ÁRBOL (CORREGIDO) --- */
-        #jardin {
-            /* Fondo Atardecer Romántico (No negro) */
-            background: linear-gradient(to bottom, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        /* --- 1. INTRO ANIMATION (TUDUM) --- */
+        #splash-screen {
+            background: black;
+            z-index: 5000;
             flex-direction: column;
-            overflow: hidden;
+            animation: fadeOut 1s ease 3s forwards; /* Desaparece a los 3s */
         }
-        canvas#arbolCanvas { 
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2; 
-        }
-        .mensaje-arbol {
-            position: absolute;
-            bottom: 30px;
-            z-index: 10;
-            text-align: center;
-            font-family: 'Pacifico', cursive;
-            font-size: 2.5rem;
-            color: #fff;
-            text-shadow: 0 2px 5px rgba(255, 77, 109, 0.8);
-            opacity: 0;
-            animation: aparecer 2s ease-in 3s forwards;
-            background: rgba(255, 77, 109, 0.3);
-            padding: 10px 30px;
-            border-radius: 50px;
+        .netflix-logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 5rem;
+            color: #E50914; /* Rojo Netflix */
+            letter-spacing: 5px;
+            animation: zoomIn 2s ease;
         }
 
-        /* --- ESCENA 3: CARTA SORPRESA (NUEVO) --- */
-        #carta-scene {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* --- 2. PERFIL DE USUARIO --- */
+        #profile-gate {
+            background: #141414;
+            z-index: 4000;
             flex-direction: column;
+            text-align: center;
         }
-        
-        .sobre-container {
-            position: relative;
-            width: 300px;
-            height: 200px;
+        .profile-title { font-size: 2rem; margin-bottom: 30px; font-weight: 300; }
+        .profile-box {
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: transform 0.2s;
         }
-        .sobre-container:hover { transform: scale(1.05); }
-
-        .sobre {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #ff4d6d;
+        .profile-box:hover { transform: scale(1.1); }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7e1n3n6w4qC8y4i8z2u8e8e8e8e8e8e8e8&s') center/cover; /* Placeholder avatar */
+            background-color: #333;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 5;
+            margin: 0 auto 15px;
+            border: 3px solid transparent;
+        }
+        .profile-box:hover .avatar { border-color: white; }
+        .profile-name { color: grey; font-size: 1.2rem; }
+        .profile-box:hover .profile-name { color: white; }
+
+        /* --- 3. HOME (BROWSE) --- */
+        #browse-screen {
+            background: #141414;
+            z-index: 3000;
+            overflow-y: auto; /* Permitir scroll si es necesario */
+            padding-bottom: 50px;
+        }
+        
+        /* Navbar */
+        .navbar {
+            position: fixed; top: 0; width: 100%; 
+            padding: 20px 4%; 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0));
+            z-index: 3001;
+            display: flex; align-items: center;
+        }
+        .logo-small { font-family: 'Bebas Neue'; color: #E50914; font-size: 1.8rem; margin-right: 30px; cursor: pointer;}
+
+        /* Hero Section (Fondo Universo) */
+        .hero {
+            position: relative;
+            height: 70vh;
+            width: 100%;
             overflow: hidden;
         }
-        .solapa {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0; 
-            height: 0; 
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 100px solid #ff758c;
-            transform-origin: top;
-            transition: transform 0.6s 1s; /* Retraso para que salga la carta */
-            z-index: 6;
+        .hero-bg {
+            position: absolute; top:0; left:0; width:100%; height:100%; z-index: 0;
+            background: black;
         }
-        .carta-papel {
+        .hero-content {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 280px;
-            height: 180px;
-            background: white;
-            border-radius: 5px;
-            padding: 20px;
-            box-sizing: border-box;
-            font-family: 'Dancing Script', cursive;
+            bottom: 35%; left: 4%;
+            z-index: 10;
+            max-width: 600px;
+        }
+        .hero-title {
+            font-family: 'Bebas Neue';
+            font-size: 5rem;
+            line-height: 1;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+        .hero-desc {
             font-size: 1.2rem;
-            color: #333;
-            text-align: center;
-            transition: transform 1s ease-in-out;
-            z-index: 4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 -5px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
         }
-        
-        /* Animación Carta Abierta */
-        .abrir-sobre .solapa { transform: rotateX(180deg); transition: transform 0.6s; z-index: 1;}
-        .abrir-sobre .carta-papel { transform: translateY(-150px); z-index: 10; transition: transform 1s 0.6s; }
-        
-        .click-hint {
-            margin-top: 50px;
-            color: white;
-            font-size: 0.9rem;
-            animation: blink 2s infinite;
+        .btn-play {
+            background: white; color: black;
+            padding: 10px 25px; border-radius: 5px;
+            font-weight: bold; font-size: 1.1rem;
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+            transition: 0.2s;
         }
+        .btn-play:hover { background: #rgba(255,255,255,0.8); transform: scale(1.05); }
 
-        /* --- ESCENA 4: CORAZÓN 3D --- */
-        #corazon-scene {
-            background: radial-gradient(circle, #1a0b14 0%, #000000 100%);
-            flex-direction: column;
+        /* Carrusel de Episodios */
+        .row-title {
+            margin-left: 4%; margin-top: -100px; margin-bottom: 10px;
+            font-weight: bold; font-size: 1.2rem; z-index: 20; position: relative;
+        }
+        .carousel {
+            display: flex; gap: 10px; padding: 0 4%;
+            overflow-x: auto; scroll-behavior: smooth;
+            z-index: 20; position: relative;
+            padding-bottom: 40px;
+        }
+        .carousel::-webkit-scrollbar { display: none; }
+        
+        .episode-card {
+            min-width: 250px; height: 140px;
+            background: #333; border-radius: 5px;
+            position: relative; cursor: pointer;
+            transition: transform 0.3s;
             overflow: hidden;
+            border: 2px solid transparent;
         }
-        #heartCanvas { position: absolute; z-index: 1; }
-        .titulo-flotante {
-            position: absolute;
-            top: 15%;
-            font-family: 'Pacifico', cursive;
-            font-size: 3rem;
-            color: #ff99ac;
-            text-shadow: 0 0 20px #ff006e;
-            z-index: 10;
-            animation: flotar 3s ease-in-out infinite;
+        .episode-card:hover { transform: scale(1.05); border-color: white; z-index: 21;}
+        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.3s; }
+        .episode-card:hover .card-img { opacity: 0.3; }
+        .card-title {
+            position: absolute; bottom: 10px; left: 10px;
+            font-weight: bold; font-size: 1rem; text-transform: uppercase;
         }
+        .card-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 2rem; opacity: 0; transition: 0.3s;
+        }
+        .episode-card:hover .card-icon { opacity: 1; }
 
-        /* --- ESCENA 5: CARRUSEL --- */
-        #galeria {
-            background: #000;
-            overflow: hidden;
+        /* --- 4. VIEWER (REPRODUCTOR) --- */
+        #viewer-screen {
+            background: black;
+            z-index: 4000;
         }
-        .carousel-container {
-            position: relative;
-            width: 200px;
-            height: 300px;
-            transform-style: preserve-3d;
-            animation: rotarCarrusel 20s infinite linear;
+        .close-btn {
+            position: absolute; top: 30px; right: 30px;
+            font-size: 2rem; color: white; cursor: pointer;
+            z-index: 5000; background: rgba(0,0,0,0.5);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            transition: 0.3s; border: 2px solid white;
         }
-        .carousel-container:hover { animation-play-state: paused; }
-        .foto-card {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid #ff4d6d;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(255, 77, 109, 0.5);
-            backface-visibility: hidden; /* Mejor rendimiento */
-        }
+        .close-btn:hover { background: white; color: black; }
+
+        /* --- ESCENAS INTERNAS (Copiadas y adaptadas) --- */
+        #universo-canvas { position: absolute; top:0; left:0; width:100%; height:100%; }
+        
+        #jardin-container { background: linear-gradient(to bottom, #ff9a9e, #fecfef); flex-direction: column; }
+        #carta-container { background: linear-gradient(135deg, #667eea, #764ba2); flex-direction: column; }
+        #corazon-container { background: radial-gradient(circle, #1a0b14, #000000); flex-direction: column; }
+        #galeria-container { background: #000; overflow: hidden; perspective: 1000px; }
+
+        /* Estilos específicos de las escenas */
+        .mensaje-arbol { font-family: 'Pacifico'; font-size: 2rem; margin-top: 20px; color: white; text-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 10;}
+        
+        /* Carta */
+        .sobre-container { position: relative; width: 300px; height: 200px; cursor: pointer; transition: transform 0.3s; }
+        .sobre-container:hover { transform: scale(1.05); }
+        .sobre { position: absolute; width: 100%; height: 100%; background: #ff4d6d; border-radius: 10px; z-index: 5; }
+        .solapa { position: absolute; top: 0; left: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-top: 100px solid #ff758c; transform-origin: top; transition: 0.6s; z-index: 6; }
+        .carta-papel { position: absolute; top: 10px; left: 10px; width: 280px; height: 180px; background: white; padding: 20px; font-family: 'Dancing Script'; font-size: 1.2rem; color: #333; text-align: center; transition: 0.6s; z-index: 4; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+        .abrir-sobre .solapa { transform: rotateX(180deg); z-index: 1; }
+        .abrir-sobre .carta-papel { transform: translateY(-120px); z-index: 10; }
+
+        /* Carrusel */
+        .carousel-3d { position: relative; width: 200px; height: 300px; transform-style: preserve-3d; animation: rotar 20s infinite linear; }
+        .foto-card { position: absolute; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; overflow: hidden; }
         .foto-card img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes rotar { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 
-        /* ANIMACIONES */
-        @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } }
-        @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes aparecer { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .cursor { display: inline-block; width: 2px; height: 1.2em; background: white; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        /* Animaciones Intro */
+        @keyframes zoomIn { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
     </style>
 </head>
 <body>
 
-    <div class="controls">
-        <button id="btn-music" class="btn-glass" onclick="toggleMusic()">🎵 Música</button>
-        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button>
+    <div id="splash-screen" class="full-screen flex-center">
+        <div class="netflix-logo">LOVEFLIX</div>
     </div>
+
+    <div id="profile-gate" class="full-screen flex-center oculto">
+        <div class="profile-title">¿Quién está viendo ahora?</div>
+        <div class="profile-box" onclick="enterApp()">
+            <div class="avatar"></div>
+            <div class="profile-name">Mi Amor ❤️</div>
+        </div>
+    </div>
+
+    <div id="browse-screen" class="full-screen oculto">
+        <div class="navbar">
+            <div class="logo-small" onclick="closeViewer()">LOVEFLIX</div>
+            <div style="flex-grow:1"></div>
+            <div style="font-size: 0.9rem; margin-right: 15px;">Inicio</div>
+            <div style="font-size: 0.9rem;">Mi Lista</div>
+        </div>
+
+        <div class="hero">
+            <div class="hero-bg" id="hero-bg">
+                </div>
+            <div class="hero-content">
+                <div class="hero-title">NUESTRA<br>HISTORIA</div>
+                <div class="hero-desc">Una serie original basada en hechos reales. Protagonizada por tú y yo. 98% de coincidencia.</div>
+                <button class="btn-play" onclick="openScene('universo')">
+                    ▶ Reproducir
+                </button>
+            </div>
+        </div>
+
+        <div class="row-title">Ver de nuevo</div>
+        <div class="carousel">
+            <div class="episode-card" onclick="openScene('jardin')">
+                <div style="background: linear-gradient(to bottom, #ff9a9e, #fecfef); width:100%; height:100%;"></div>
+                <div class="card-icon">🌳</div>
+                <div class="card-title">Episodio 1: El Jardín</div>
+            </div>
+            
+            <div class="episode-card" onclick="openScene('carta')">
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); width:100%; height:100%;"></div>
+                <div class="card-icon">💌</div>
+                <div class="card-title">Episodio 2: La Carta</div>
+            </div>
+
+            <div class="episode-card" onclick="openScene('corazon')">
+                <div style="background: #1a0b14; width:100%; height:100%;"></div>
+                <div class="card-icon">💖</div>
+                <div class="card-title">Episodio 3: Mi Corazón</div>
+            </div>
+
+            <div class="episode-card" onclick="openScene('galeria')">
+                <div style="background: #333; width:100%; height:100%;"></div>
+                <div class="card-icon">📸</div>
+                <div class="card-title">Episodio 4: Recuerdos</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewer-screen" class="full-screen oculto">
+        <div class="close-btn" onclick="closeViewer()">✕</div>
+        
+        <div id="universo-container" class="full-screen oculto">
+            <div id="universo-canvas-placeholder"></div>
+            <div class="flex-center full-screen" style="pointer-events: none; z-index: 10; flex-direction: column;">
+                <h1 style="font-size: 3rem; text-shadow: 0 0 10px black;">Para ti</h1>
+                <div id="maquina-escribir" style="font-size: 1.5rem; margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <div id="jardin-container" class="full-screen flex-center oculto">
+            <canvas id="arbolCanvas"></canvas>
+            <div class="mensaje-arbol">Nuestro Amor Florece</div>
+        </div>
+
+        <div id="carta-container" class="full-screen flex-center oculto">
+            <div class="sobre-container" id="sobre" onclick="this.classList.toggle('abrir-sobre')">
+                <div class="sobre"></div>
+                <div class="solapa"></div>
+                <div class="carta-papel">
+                    "Gracias por ser la mejor parte de mi vida. <br> Te Amo."
+                </div>
+            </div>
+            <div style="margin-top: 50px; opacity: 0.8;">(Toca el sobre)</div>
+        </div>
+
+        <div id="corazon-container" class="full-screen flex-center oculto">
+            <canvas id="heartCanvas"></canvas>
+            <div style="position: absolute; top: 10%; font-family: 'Pacifico'; font-size: 3rem; color: #ff99ac;">Eres mi Todo</div>
+        </div>
+
+        <div id="galeria-container" class="full-screen flex-center oculto">
+            <div class="carousel-3d" id="galeria-wrapper">
+                </div>
+        </div>
+
+    </div>
+
+    <canvas id="starCanvas" style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
 
     <audio id="bg-music" loop>
         <source src="tu_cancion.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="universo" class="escena activa">
-        <canvas id="starCanvas"></canvas>
-        <div id="contenido-texto">
-            <h1>Para mi Amor</h1>
-            <div><span id="maquina-escribir"></span><span class="cursor"></span></div>
-        </div>
-    </div>
-
-    <div id="jardin" class="escena">
-        <canvas id="arbolCanvas"></canvas>
-        <div class="mensaje-arbol">
-            Nuestro Amor Florece
-        </div>
-    </div>
-    
-    <div id="carta-scene" class="escena">
-        <div class="sobre-container" id="sobre" onclick="abrirCarta()">
-            <div class="sobre"></div>
-            <div class="solapa"></div>
-            <div class="carta-papel">
-                "Cada día a tu lado es un regalo.<br>Gracias por ser tú.<br>Te Amo."
-            </div>
-        </div>
-        <div class="click-hint">👇 Haz clic en el sobre 👇</div>
-    </div>
-
-    <div id="corazon-scene" class="escena">
-        <div class="titulo-flotante">Eres mi Todo</div>
-        <canvas id="heartCanvas"></canvas>
-    </div>
-
-    <div id="galeria" class="escena">
-        <div class="titulo-flotante" style="top: 10%; font-size: 2.5rem;">Nuestros Recuerdos</div>
-        <div class="carousel-container" id="carousel">
-            </div>
-    </div>
-
     <script>
-        /* =========================================
-           CONFIGURACIÓN
-           ========================================= */
-        const FRASES = ["Eres mi universo.", "Mi casualidad favorita.", "Te amo infinito."];
+        /* --- CONFIGURACIÓN --- */
         const FOTOS = [
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+1",
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+2",
@@ -311,177 +318,178 @@
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+4",
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+5"
         ];
+        const FRASES = ["Eres increíble.", "Te quiero.", "Siempre juntos."];
 
-        let escenaActual = 0;
-        const escenasIds = ['universo', 'jardin', 'carta-scene', 'corazon-scene', 'galeria'];
+        /* --- NAVEGACIÓN --- */
+        setTimeout(() => {
+            document.getElementById('splash-screen').classList.add('oculto');
+            document.getElementById('profile-gate').classList.remove('oculto');
+            document.getElementById('profile-gate').style.display = 'flex';
+        }, 3500); // Intro dura 3.5s
 
-        function siguienteEscena() {
-            document.getElementById(escenasIds[escenaActual]).classList.remove('activa');
-            escenaActual = (escenaActual + 1) % escenasIds.length;
-            const nueva = document.getElementById(escenasIds[escenaActual]);
-            nueva.classList.add('activa');
+        function enterApp() {
+            document.getElementById('profile-gate').classList.add('oculto');
+            document.getElementById('browse-screen').classList.remove('oculto');
+            // Mover canvas al hero
+            const canvas = document.getElementById('starCanvas');
+            document.getElementById('hero-bg').appendChild(canvas);
+            canvas.style.position = 'absolute';
             
-            // Lógica por escena
-            const btn = document.getElementById('btn-next');
-            if(escenaActual === 0) { btn.innerText = "Ver Árbol 🌳"; initStars(); animateStars(); }
-            else if(escenaActual === 1) { btn.innerText = "Ver Carta 💌"; initTree(); } // Árbol
-            else if(escenaActual === 2) { btn.innerText = "Ver Corazón 💖"; } // Carta
-            else if(escenaActual === 3) { btn.innerText = "Ver Fotos 📸"; initHeart(); animateHeart(); }
-            else { btn.innerText = "Inicio ✨"; crearCarrusel(); }
+            initStars(); animateStars(); // Arrancar estrellas
+            
+            // Intentar reproducir música
+            document.getElementById('bg-music').play().catch(e => console.log("Audio requiere click"));
         }
 
-        function toggleMusic() {
-            const audio = document.getElementById('bg-music');
-            audio.paused ? audio.play() : audio.pause();
-        }
-        
-        function abrirCarta() {
-            document.getElementById('sobre').classList.toggle('abrir-sobre');
+        function openScene(sceneName) {
+            const viewer = document.getElementById('viewer-screen');
+            viewer.classList.remove('oculto');
+            
+            // Ocultar todas las escenas internas
+            document.querySelectorAll('#viewer-screen > div:not(.close-btn)').forEach(el => el.classList.add('oculto'));
+
+            if (sceneName === 'universo') {
+                document.getElementById('universo-container').classList.remove('oculto');
+                // Mover canvas al viewer
+                const canvas = document.getElementById('starCanvas');
+                document.getElementById('universo-container').insertBefore(canvas, document.getElementById('universo-container').firstChild);
+                typeWriter();
+            }
+            else if (sceneName === 'jardin') {
+                document.getElementById('jardin-container').classList.remove('oculto');
+                document.getElementById('jardin-container').style.display = 'flex';
+                initTree();
+            }
+            else if (sceneName === 'carta') {
+                document.getElementById('carta-container').classList.remove('oculto');
+                document.getElementById('carta-container').style.display = 'flex';
+            }
+            else if (sceneName === 'corazon') {
+                document.getElementById('corazon-container').classList.remove('oculto');
+                document.getElementById('corazon-container').style.display = 'flex';
+                initHeart(); animateHeart();
+            }
+            else if (sceneName === 'galeria') {
+                document.getElementById('galeria-container').classList.remove('oculto');
+                document.getElementById('galeria-container').style.display = 'flex';
+                initGallery();
+            }
         }
 
-        /* =========================================
-           1. UNIVERSO
-           ========================================= */
-        const starCanvas = document.getElementById('starCanvas');
-        const sCtx = starCanvas.getContext('2d');
+        function closeViewer() {
+            document.getElementById('viewer-screen').classList.add('oculto');
+            // Devolver canvas al hero
+            const canvas = document.getElementById('starCanvas');
+            document.getElementById('hero-bg').appendChild(canvas);
+        }
+
+        /* --- 1. ESTRELLAS --- */
+        const sCanvas = document.getElementById('starCanvas');
+        const sCtx = sCanvas.getContext('2d');
         let stars = [];
-
         function initStars() {
-            starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight;
+            sCanvas.width = window.innerWidth; sCanvas.height = window.innerHeight;
             stars = [];
-            for(let i=0; i<300; i++) stars.push({x:Math.random()*starCanvas.width, y:Math.random()*starCanvas.height, z:Math.random()*starCanvas.width});
+            for(let i=0; i<200; i++) stars.push({x:Math.random()*sCanvas.width, y:Math.random()*sCanvas.height, z:Math.random()*sCanvas.width});
         }
         function animateStars() {
-            if(!document.getElementById('universo').classList.contains('activa')) return;
-            sCtx.fillStyle = "black"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height);
+            sCtx.fillStyle = "black"; sCtx.fillRect(0,0,sCanvas.width, sCanvas.height);
             sCtx.fillStyle = "white";
             stars.forEach(s => {
-                s.z -= 2; if(s.z <= 0) s.z = starCanvas.width;
-                let x = (s.x-starCanvas.width/2)*(starCanvas.width/s.z)+starCanvas.width/2;
-                let y = (s.y-starCanvas.height/2)*(starCanvas.width/s.z)+starCanvas.height/2;
-                if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,(1-s.z/starCanvas.width)*3,0,Math.PI*2); sCtx.fill(); }
+                s.z -= 2; if(s.z<=0) s.z=sCanvas.width;
+                let x = (s.x-sCanvas.width/2)*(sCanvas.width/s.z)+sCanvas.width/2;
+                let y = (s.y-sCanvas.height/2)*(sCanvas.width/s.z)+sCanvas.height/2;
+                if(x>0&&x<sCanvas.width&&y>0&&y<sCanvas.height){ sCtx.beginPath(); sCtx.arc(x,y,(1-s.z/sCanvas.width)*3,0,Math.PI*2); sCtx.fill(); }
             });
             requestAnimationFrame(animateStars);
         }
 
-        /* =========================================
-           2. ÁRBOL CORREGIDO (FRONDOSO Y SIN DERRETIRSE)
-           ========================================= */
-        const treeCanvas = document.getElementById('arbolCanvas');
-        const tCtx = treeCanvas.getContext('2d');
-        let treeW, treeH;
-
+        /* --- 2. ÁRBOL --- */
+        const tCanvas = document.getElementById('arbolCanvas');
+        const tCtx = tCanvas.getContext('2d');
         function initTree() {
-            treeW = treeCanvas.width = window.innerWidth;
-            treeH = treeCanvas.height = window.innerHeight;
-            tCtx.clearRect(0,0,treeW,treeH);
-            // Dibujar desde abajo
-            drawBranch(treeW/2, treeH, 130, -90, 25, 0); 
+            tCanvas.width = window.innerWidth; tCanvas.height = window.innerHeight;
+            tCtx.clearRect(0,0,tCanvas.width, tCanvas.height);
+            drawBranch(tCanvas.width/2, tCanvas.height, 120, -90, 20, 0);
         }
-
         function drawBranch(x, y, len, angle, width, depth) {
             setTimeout(() => {
-                if(!document.getElementById('jardin').classList.contains('activa')) return;
+                if(document.getElementById('jardin-container').classList.contains('oculto')) return;
+                tCtx.beginPath(); tCtx.moveTo(x, y);
+                const ex = x + len * Math.cos(angle*Math.PI/180);
+                const ey = y + len * Math.sin(angle*Math.PI/180);
+                tCtx.lineTo(ex, ey);
+                tCtx.strokeStyle = `hsl(25, ${70-depth*5}%, ${20+depth*2}%)`; tCtx.lineWidth = width; tCtx.lineCap="round"; tCtx.stroke();
                 
-                tCtx.beginPath();
-                tCtx.moveTo(x, y);
-                const endX = x + len * Math.cos(angle * Math.PI/180);
-                const endY = y + len * Math.sin(angle * Math.PI/180);
-                
-                tCtx.lineTo(endX, endY);
-                // Color marrón oscuro para contraste con fondo rosa
-                tCtx.strokeStyle = `hsl(25, ${80-depth*5}%, ${15+depth*2}%)`;
-                tCtx.lineWidth = width;
-                tCtx.lineCap = "round";
-                tCtx.stroke();
-
-                // DIBUJAR HOJAS (CORAZONES)
-                // Dibujamos corazones no solo al final, sino en ramas medias para que sea abundante
-                if (depth > 6) {
-                    // Dibujar varios corazones alrededor del punto final para dar volumen
-                    for(let i=0; i<3; i++) {
-                        tCtx.beginPath();
-                        // Colores rojos y rosas intensos
-                        tCtx.fillStyle = `hsl(${340 + Math.random()*20}, 100%, ${50 + Math.random()*20}%)`; 
-                        tCtx.font = `${15 + Math.random()*15}px Arial`;
-                        // Posición aleatoria pequeña alrededor del fin de rama
-                        let offsetX = (Math.random()-0.5) * 20;
-                        let offsetY = (Math.random()-0.5) * 20;
-                        tCtx.fillText("❤️", endX + offsetX - 8, endY + offsetY + 8);
+                if(depth>6) {
+                    for(let i=0;i<3;i++){
+                        tCtx.fillStyle = `hsl(${340+Math.random()*20}, 100%, 60%)`;
+                        tCtx.font=`${10+Math.random()*10}px Arial`; 
+                        tCtx.fillText("❤️", ex+(Math.random()-0.5)*20, ey+(Math.random()-0.5)*20);
                     }
                 }
-
-                if (depth < 11) { // Límite de recursividad
-                    const subLen = len * 0.75;
-                    const subWidth = width * 0.7;
-                    // Ramificación
-                    drawBranch(endX, endY, subLen, angle - 20 - Math.random()*15, subWidth, depth + 1);
-                    drawBranch(endX, endY, subLen, angle + 20 + Math.random()*15, subWidth, depth + 1);
+                if(depth<10) {
+                    drawBranch(ex, ey, len*0.75, angle-20-Math.random()*10, width*0.7, depth+1);
+                    drawBranch(ex, ey, len*0.75, angle+20+Math.random()*10, width*0.7, depth+1);
                 }
-
-            }, 50 * depth); // Velocidad de crecimiento
+            }, 50*depth);
         }
 
-        /* =========================================
-           3. CORAZÓN 3D
-           ========================================= */
+        /* --- 3. CORAZÓN --- */
         const hCanvas = document.getElementById('heartCanvas');
         const hCtx = hCanvas.getContext('2d');
-        let hPoints = []; let angleY = 0;
-
+        let hPoints = [], angY = 0;
         function initHeart() {
             hCanvas.width = window.innerWidth; hCanvas.height = window.innerHeight;
             hPoints = [];
-            for(let i=0; i<1500; i++) {
-                let t = Math.random()*Math.PI*2, x = 16*Math.pow(Math.sin(t),3), y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
-                let z = (Math.random()-0.5)*10;
-                hPoints.push({x:x*12, y:y*12, z:z*12, color: `hsl(${330+Math.random()*40}, 90%, 60%)`});
+            for(let i=0; i<1000; i++) {
+                let t = Math.random()*Math.PI*2, z = (Math.random()-0.5)*10;
+                let x = 16*Math.pow(Math.sin(t),3)*12;
+                let y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*12;
+                hPoints.push({x, y, z: z*12, color: `hsl(${330+Math.random()*30}, 90%, 60%)`});
             }
         }
         function animateHeart() {
-            if(!document.getElementById('corazon-scene').classList.contains('activa')) return;
-            hCtx.fillStyle = "rgba(0,0,0,0.2)"; hCtx.fillRect(0,0,hCanvas.width, hCanvas.height);
-            angleY += 0.01;
+            if(document.getElementById('corazon-container').classList.contains('oculto')) return;
+            hCtx.clearRect(0,0,hCanvas.width, hCanvas.height);
+            angY += 0.015;
             let cx = hCanvas.width/2, cy = hCanvas.height/2;
             hPoints.forEach(p => {
-                let rx = p.x*Math.cos(angleY) - p.z*Math.sin(angleY);
-                let rz = p.x*Math.sin(angleY) + p.z*Math.cos(angleY);
-                let scale = 500/(500+rz);
-                if(scale>0) {
-                    hCtx.fillStyle = p.color; hCtx.beginPath(); hCtx.arc(rx*scale+cx, p.y*scale+cy, 2*scale, 0, Math.PI*2); hCtx.fill();
-                }
+                let rx = p.x*Math.cos(angY) - p.z*Math.sin(angY);
+                let rz = p.x*Math.sin(angY) + p.z*Math.cos(angY);
+                let s = 500/(500+rz);
+                if(s>0) { hCtx.fillStyle=p.color; hCtx.beginPath(); hCtx.arc(rx*s+cx, p.y*s+cy, 2*s, 0, Math.PI*2); hCtx.fill(); }
             });
             requestAnimationFrame(animateHeart);
         }
 
-        /* =========================================
-           4. CARRUSEL
-           ========================================= */
-        function crearCarrusel() {
-            const container = document.getElementById('carousel');
-            if(container.children.length > 0) return;
-            const angleStep = 360/FOTOS.length;
+        /* --- 4. GALERÍA --- */
+        function initGallery() {
+            const wrap = document.getElementById('galeria-wrapper');
+            if(wrap.children.length > 0) return;
+            const step = 360/FOTOS.length;
             FOTOS.forEach((src, i) => {
-                const div = document.createElement('div');
-                div.className = 'foto-card';
-                div.style.transform = `rotateY(${i*angleStep}deg) translateZ(300px)`;
-                div.innerHTML = `<img src="${src}">`;
-                container.appendChild(div);
+                const d = document.createElement('div');
+                d.className = 'foto-card';
+                d.style.transform = `rotateY(${i*step}deg) translateZ(300px)`;
+                d.innerHTML = `<img src="${src}">`;
+                wrap.appendChild(d);
             });
         }
 
-        /* INIT */
-        let tIdx=0, cIdx=0, isDel=false;
+        /* --- MAQUINA ESCRIBIR --- */
+        let tI=0, cI=0, isD=false;
         function typeWriter() {
-            const txt = FRASES[tIdx];
+            if(document.getElementById('universo-container').classList.contains('oculto')) return;
+            const txt = FRASES[tI];
             const el = document.getElementById('maquina-escribir');
-            el.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++);
-            let spd = isDel ? 50 : 100;
-            if(!isDel && cIdx === txt.length+1) { spd = 2000; isDel = true; }
-            else if(isDel && cIdx === 0) { isDel = false; tIdx = (tIdx+1)%FRASES.length; spd = 500; }
+            el.innerText = isD ? txt.substring(0, cI--) : txt.substring(0, cI++);
+            let spd = isD ? 50 : 100;
+            if(!isD && cI===txt.length+1){ spd=2000; isD=true; }
+            else if(isD && cI===0){ isD=false; tI=(tI+1)%FRASES.length; spd=500; }
             setTimeout(typeWriter, spd);
         }
-        window.onload = () => { initStars(); animateStars(); typeWriter(); };
+
         window.addEventListener('resize', () => { initStars(); initHeart(); });
     </script>
 </body>
