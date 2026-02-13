@@ -8,7 +8,7 @@
         /* --- FUENTES --- */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
-        /* --- RESET Y BASE --- */
+        /* --- BASE --- */
         *, *::after, *::before { padding: 0; margin: 0; box-sizing: border-box; }
         :root { --dark-color: #000; --accent: #ff4d6d; --glass: rgba(255, 255, 255, 0.1); }
 
@@ -20,76 +20,58 @@
             -webkit-user-select: none; user-select: none;
         }
 
-        /* --- PANTALLA DE BLOQUEO (LOGIN) --- */
+        /* --- PANTALLA DE BLOQUEO --- */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #050505; z-index: 40000; /* Capa más alta */
+            background: #050505; z-index: 40000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity 0.8s ease, visibility 0.8s;
         }
-        
         .login-card {
-            text-align: center; width: 90%; max-width: 350px;
-            padding: 30px; background: rgba(20,20,20,0.8);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
-            box-shadow: 0 0 40px rgba(255, 77, 109, 0.1);
+            text-align: center; width: 90%; max-width: 350px; padding: 30px;
+            background: rgba(20,20,20,0.8); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; box-shadow: 0 0 40px rgba(255, 77, 109, 0.1);
         }
-
-        .date-inputs {
-            display: flex; justify-content: center; gap: 10px; margin: 20px 0;
-        }
-
-        select {
-            background: #222; color: white; border: 1px solid #444;
-            padding: 10px; border-radius: 10px; font-size: 1rem;
-            text-align: center; outline: none; appearance: none; /* Estilo nativo móvil */
-        }
-
-        .unlock-btn {
-            background: var(--accent); color: white; border: none;
-            padding: 12px 30px; border-radius: 30px; font-weight: bold;
-            font-size: 1rem; cursor: pointer; margin-top: 15px;
-            box-shadow: 0 0 15px var(--accent); transition: 0.3s;
-        }
-        .unlock-btn:active { transform: scale(0.95); }
-
+        .date-inputs { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        select { background: #222; color: white; border: 1px solid #444; padding: 10px; border-radius: 10px; font-size: 1rem; text-align: center; outline: none; appearance: none; }
+        .unlock-btn { background: var(--accent); color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 15px; box-shadow: 0 0 15px var(--accent); transition: 0.3s; }
         .error-msg { color: #ff4d4d; margin-top: 10px; font-size: 0.9rem; opacity: 0; transition: 0.3s; }
-        
-        @keyframes shake {
-            0% { transform: translateX(0); } 25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); }
-        }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
 
-        /* --- POP-UP MÚSICA (RESPONSIVE) --- */
+        /* --- POP-UP MÚSICA --- */
         #music-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95); z-index: 30000;
             display: none; flex-direction: column; justify-content: center; align-items: center;
             opacity: 0; transition: opacity 0.8s ease;
         }
-        
-        .music-card {
-            background: #121212; padding: 30px; border-radius: 20px;
-            box-shadow: 0 0 50px rgba(255, 77, 109, 0.2);
-            text-align: center; max-width: 400px; width: 85%;
-            border: 1px solid #333;
-        }
-
+        .music-card { background: #121212; padding: 30px; border-radius: 20px; box-shadow: 0 0 50px rgba(255, 77, 109, 0.2); text-align: center; max-width: 400px; width: 85%; border: 1px solid #333; }
         .song-list { display: flex; flex-direction: column; gap: 10px; max-height: 50vh; overflow-y: auto; }
-
-        .song-btn {
-            background: #282828; color: white; border: none;
-            padding: 12px; border-radius: 10px; cursor: pointer;
-            display: flex; align-items: center; gap: 15px;
-            transition: 0.2s; text-align: left;
-        }
+        .song-btn { background: #282828; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.2s; text-align: left; }
         .song-btn:active { background: #444; }
 
-        /* --- CONTROLES MÓVILES --- */
+        /* --- POP-UP DESCRIPCIÓN FOTO (NUEVO) --- */
+        #photo-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 25000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px;
+        }
+        #photo-overlay.active { opacity: 1; pointer-events: all; }
+        .photo-detail-card {
+            background: #1a1a1a; padding: 15px; border-radius: 15px;
+            max-width: 500px; width: 100%; text-align: center;
+            border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(255,77,109,0.3);
+        }
+        .photo-detail-card img { width: 100%; max-height: 60vh; object-fit: contain; border-radius: 10px; margin-bottom: 15px; }
+        .photo-text { font-family: 'Montserrat'; font-size: 1rem; margin-bottom: 20px; line-height: 1.5; }
+        .close-photo-btn { background: var(--accent); color: white; border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+
+        /* --- CONTROLES Y REPRODUCTOR --- */
         .controls { position: absolute; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 8px; opacity: 0; transition: 1s; }
         .btn-glass { padding: 8px 16px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 30px; cursor: pointer; backdrop-filter: blur(5px); transition: 0.3s; font-weight: bold; font-size: 0.85rem; }
-        
-        /* --- SPOTIFY PLAYER (Bottom) --- */
+        .btn-glass:active { transform: scale(0.95); background: var(--accent); }
+
         .spotify-player {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 95%; max-width: 400px; height: 70px;
@@ -101,11 +83,9 @@
             transition: opacity 1s; opacity: 0; pointer-events: none;
         }
         .spotify-player.visible { opacity: 1; pointer-events: all; }
-        
         .track-info { display: flex; flex-direction: column; justify-content: center; flex-grow: 1; overflow: hidden; margin-right: 10px; }
         .track-title { font-weight: bold; font-size: 0.9rem; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .track-artist { font-size: 0.75rem; color: #b3b3b3; }
-        
         .player-controls { display: flex; align-items: center; gap: 15px; }
         .control-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
         .play-btn { width: 35px; height: 35px; background: white; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
@@ -115,32 +95,29 @@
         .escena { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 1s ease; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .activa { opacity: 1; pointer-events: all; }
 
-        /* --- ESCENA 1: UNIVERSO --- */
         #universo { background: black; }
         #starCanvas { position: absolute; z-index: 1; top:0; left:0; width:100%; height:100%; }
-        #contenido-texto { position: relative; z-index: 10; text-align: center; background: rgba(0, 0, 0, 0.4); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 600px; }
+        #contenido-texto { position: relative; z-index: 10; text-align: center; background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 600px; }
         h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff4d6d; text-shadow: 0 0 20px #ff4d6d; margin: 0; line-height: 1.1; }
 
-        /* --- ESCENA 2: JARDÍN --- */
         #jardin { width: 100%; height: 100%; }
-        .night { position: fixed; left: 50%; top: 0; transform: translateX(-50%); width: 100%; height: 100%; filter: blur(0.1vmin); background-image: radial-gradient(ellipse at top, transparent 0%, var(--dark-color)), radial-gradient(ellipse at bottom, var(--dark-color), rgba(145, 233, 255, 0.2)), repeating-linear-gradient(220deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), repeating-linear-gradient(189deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), repeating-linear-gradient(148deg, rgb(0,0,0) 0px, rgb(0,0,0) 19px, transparent 19px, transparent 22px), linear-gradient(90deg, rgb(0, 255, 250), rgb(240, 240, 240)); z-index: 0; }
+        .night { position: fixed; left: 50%; top: 0; transform: translateX(-50%); width: 100%; height: 100%; filter: blur(0.1vmin); background: radial-gradient(ellipse at bottom, #020202 0%, #000000 100%); z-index: 0; }
         .flowers-container { position: absolute; bottom: -5vmin; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         .flower-wrapper { position: absolute; bottom: 0; transform-origin: bottom center; }
 
-        /* TEXTOS */
         .mensaje-poema { position: absolute; top: 15%; z-index: 100; text-align: center; width: 90%; font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px rgba(0, 255, 250, 0.8); animation: aparecer 3s ease-in forwards; }
         .contador-dias { position: absolute; top: 28%; width: 100%; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: bold; color: #ff99ac; text-shadow: 0 2px 5px rgba(0,0,0,0.8); z-index: 100; letter-spacing: 1px; padding: 0 10px; }
 
-        /* --- ESCENA 3 & 4 --- */
         #corazon-scene { background: radial-gradient(circle, #1a0b14 0%, #000 100%); }
         #heartCanvas { position: absolute; z-index: 1; }
         .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 2.5rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 3s infinite; text-align: center; width: 100%; }
+        
         #galeria { background: #000; overflow: hidden; }
         .carousel-container { position: relative; width: 140px; height: 200px; transform-style: preserve-3d; animation: rotarCarrusel 20s infinite linear; margin-top: 40px; }
-        .foto-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255,77,109,0.5); }
-        .foto-card img { width: 100%; height: 100%; object-fit: cover; }
+        .foto-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255,77,109,0.5); cursor: pointer; }
+        .foto-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-        /* --- CSS FLORES (MINIMIZADO) --- */
+        /* --- FLORES Y HIERBA CSS --- */
         .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; --fl-speed: 0.8s; }
         .flower--1 { animation: moving-flower-1 4s linear infinite; } .flower--2 { left: 50%; transform: rotate(20deg); animation: moving-flower-2 4s linear infinite; } .flower--3 { left: 50%; transform: rotate(-15deg); animation: moving-flower-3 4s linear infinite; }
         .flower__line { height: 55vmin; width: 1.5vmin; background-image: linear-gradient(to left, rgba(0,0,0,0.2), transparent, rgba(255,255,255,0.2)), linear-gradient(to top, transparent 10%, #14757a, #39c6d6); box-shadow: inset 0 0 2px rgba(0,0,0,0.5); animation: grow-flower-tree 4s backwards; }
@@ -165,7 +142,6 @@
         @keyframes moving-flower-1 { 0%, 100% { transform: rotate(2deg); } 50% { transform: rotate(-2deg); } } @keyframes moving-flower-2 { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(14deg); } } @keyframes moving-flower-3 { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(-20deg) rotateY(-10deg); } } @keyframes blooming-flower { 0% { transform: scale(0); } } @keyframes grow-flower-tree { 0% { height: 0; border-radius: 1vmin; } } @keyframes blooming-leaf-right { 0% { transform-origin: left; transform: rotate(70deg) rotateY(30deg) scale(0); } } @keyframes blooming-leaf-left { 0% { transform-origin: right; transform: rotate(-70deg) rotateY(30deg) scale(0); } } @keyframes light-ans { 0% { opacity: 0; transform: translateY(0vmin); } 25% { opacity: 1; transform: translateY(-5vmin) translateX(-2vmin); } 50% { opacity: 1; transform: translateY(-15vmin) translateX(2vmin); filter: blur(0.2vmin); } 75% { transform: translateY(-20vmin) translateX(-2vmin); filter: blur(0.2vmin); } 100% { transform: translateY(-30vmin); opacity: 0; filter: blur(1vmin); } }
         @keyframes moving-grass { 0%, 100% { transform: rotate(-48deg) rotateY(40deg); } 50% { transform: rotate(-50deg) rotateY(40deg); } } @keyframes moving-grass--2 { 0%, 100% { transform: scale(0.5) rotate(75deg) rotateX(10deg) rotateY(-200deg); } 50% { transform: scale(0.5) rotate(79deg) rotateX(10deg) rotateY(-200deg); } } @keyframes growing-grass-ans--1 { 0% { transform-origin: bottom left; transform: rotate(-20deg) scale(0); } } @keyframes growing-grass-ans--2 { 0% { transform-origin: bottom right; transform: rotate(10deg) scale(0); } } @keyframes leaf-ans-1 { 0%, 100% { transform: rotate(-5deg) scale(1); } 50% { transform: rotate(5deg) scale(1.1); } } @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } } @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } } @keyframes aparecer { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } } @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* Ajustes Mobile */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .mensaje-poema { font-size: 1.4rem; top: 12%; }
@@ -173,6 +149,7 @@
             .flowers-container { transform: scale(0.85) translateY(5%); }
             .carousel-container { width: 120px; height: 180px; }
             .titulo-flotante { font-size: 2rem; top: 10%; }
+            .spotify-player { bottom: 10px; width: 95%; height: 65px; }
         }
         .not-loaded * { animation-play-state: paused !important; }
     </style>
@@ -183,7 +160,6 @@
         <div class="login-card">
             <h2 style="font-family:'Dancing Script'; color:var(--accent); font-size:2rem; margin-bottom:10px;">Nuestra Fecha Especial</h2>
             <p style="color:#aaa; font-size:0.9rem;">Introduce el día que cambió todo...</p>
-            
             <div class="date-inputs">
                 <select id="day-select"></select>
                 <select id="month-select">
@@ -192,13 +168,8 @@
                     <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
                     <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
                 </select>
-                <select id="year-select">
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                </select>
+                <select id="year-select"><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
             </div>
-
             <button class="unlock-btn" onclick="checkPassword()">Entrar ❤️</button>
             <div class="error-msg" id="error-msg">Fecha incorrecta, inténtalo de nuevo</div>
         </div>
@@ -207,20 +178,15 @@
     <div id="music-overlay">
         <div class="music-card">
             <h2 style="font-family:'Pacifico'; color:#ff4d6d; font-size:2rem;">Playlist 🎵</h2>
-            <p style="color:#aaa; margin-bottom:20px;">Elige una canción para comenzar...</p>
+            <p style="color:#aaa; margin-bottom:20px;">Elige nuestra banda sonora...</p>
             <div class="song-list" id="song-list"></div>
         </div>
     </div>
 
-    <div class="controls" id="controls">
-        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button>
-    </div>
+    <div class="controls" id="controls"><button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ➡️</button></div>
 
     <div class="spotify-player" id="spotify-player">
-        <div class="track-info">
-            <div class="track-title" id="track-title">Selecciona canción</div>
-            <div class="track-artist" id="track-artist">...</div>
-        </div>
+        <div class="track-info"><div class="track-title" id="track-title">Selecciona canción</div><div class="track-artist" id="track-artist">...</div></div>
         <div class="player-controls">
             <button class="control-btn" onclick="prevSong()">⏮</button>
             <button class="control-btn play-btn" onclick="togglePlayPause()" id="play-btn">▶</button>
@@ -229,16 +195,19 @@
         <div class="progress-bar" id="progress-bar"></div>
     </div>
 
+    <div id="photo-overlay">
+        <div class="photo-detail-card">
+            <img id="detail-img" src="">
+            <div class="photo-text" id="detail-text"></div>
+            <button class="close-photo-btn" onclick="closeDescription()">Cerrar</button>
+        </div>
+    </div>
+
     <audio id="bg-music"></audio>
 
     <div id="universo" class="escena activa">
         <canvas id="starCanvas"></canvas>
-        <div id="contenido-texto">
-            <h1>Para mi Amor</h1>
-            <div style="font-size:1.2rem; color:#eee; min-height:1.5em; margin-top:10px;">
-                <span id="maquina-escribir"></span><span class="cursor" style="display:inline-block;width:2px;height:1em;background:white;animation:blink 1s infinite;"></span>
-            </div>
-        </div>
+        <div id="contenido-texto"><h1>Para mi Amor</h1><div style="font-size:1.2rem; color:#eee; min-height:1.5em; margin-top:10px;"><span id="maquina-escribir"></span><span class="cursor" style="display:inline-block;width:2px;height:1em;background:white;animation:blink 1s infinite;"></span></div></div>
     </div>
 
     <div id="jardin" class="escena">
@@ -267,7 +236,16 @@
 
     <script>
         const FRASES = ["Eres mi universo.", "Mi casualidad favorita.", "Te amo infinito."];
-        const FOTOS = ["foto1.jpeg", "foto2.jpeg", "foto3.jpeg", "foto4.jpeg", "foto5.jpeg"];
+        
+        // ¡¡ CONFIGURACIÓN FOTOS Y DESCRIPCIONES !!
+        const GALERIA = [
+            { url: "foto1.jpeg", desc: "La primera vez que te vi sonreír así..." },
+            { url: "foto2.jpeg", desc: "Nuestro viaje inolvidable." },
+            { url: "foto3.jpeg", desc: "Cada día a tu lado es un regalo." },
+            { url: "foto4.jpeg", desc: "Tus abrazos son mi lugar favorito." },
+            { url: "foto5.jpeg", desc: "Por mil momentos más juntos." }
+        ];
+
         const FECHA_INICIO = new Date("2025-10-25T00:00:00");
         const PLAYLIST = [
             { titulo: "Huracán", artista: "Funzo & BabyLoud", archivo: "cancion1.mp3" },
@@ -281,49 +259,28 @@
         const escenasIds = ['universo', 'jardin', 'corazon-scene', 'galeria'];
         const audio = document.getElementById('bg-music');
 
-        // --- SISTEMA LOGIN ---
-        // Llenar selectores de fecha
+        // --- LOGIN ---
         const daySelect = document.getElementById('day-select');
-        for(let i=1; i<=31; i++) {
-            let opt = document.createElement('option');
-            opt.value = i;
-            opt.innerText = i;
-            daySelect.appendChild(opt);
-        }
+        for(let i=1; i<=31; i++) { let opt = document.createElement('option'); opt.value = i; opt.innerText = i; daySelect.appendChild(opt); }
 
         function checkPassword() {
             const d = document.getElementById('day-select').value;
             const m = document.getElementById('month-select').value;
             const y = document.getElementById('year-select').value;
-
             if (d == 25 && m == 10 && y == 2025) {
-                // Correcto
                 document.getElementById('login-overlay').style.opacity = '0';
-                document.getElementById('login-overlay').style.visibility = 'hidden';
-                
-                // Mostrar Music Overlay con efecto
-                setTimeout(() => {
-                    document.getElementById('music-overlay').style.display = 'flex';
-                    setTimeout(() => document.getElementById('music-overlay').style.opacity = '1', 50);
-                }, 800);
+                setTimeout(() => { document.getElementById('login-overlay').style.display = 'none'; document.getElementById('music-overlay').style.display = 'flex'; setTimeout(() => document.getElementById('music-overlay').style.opacity = '1', 50); }, 800);
             } else {
-                // Incorrecto - Temblor
-                const card = document.querySelector('.login-card');
-                card.style.animation = 'shake 0.3s';
-                document.getElementById('error-msg').style.opacity = '1';
-                setTimeout(() => card.style.animation = '', 300);
+                const card = document.querySelector('.login-card'); card.style.animation = 'shake 0.3s'; document.getElementById('error-msg').style.opacity = '1'; setTimeout(() => card.style.animation = '', 300);
             }
         }
 
-        // --- SISTEMA MÚSICA ---
+        // --- PLAYLIST ---
         function initPlaylist() {
             const list = document.getElementById('song-list');
             PLAYLIST.forEach((song, index) => {
-                const btn = document.createElement('div');
-                btn.className = 'song-btn';
-                btn.innerHTML = `<span style="font-size:1.2rem;color:var(--accent)">▶</span>
-                                 <div><div style="font-weight:bold">${song.titulo}</div>
-                                 <div style="font-size:0.8rem;color:#ccc">${song.artista}</div></div>`;
+                const btn = document.createElement('div'); btn.className = 'song-btn';
+                btn.innerHTML = `<span style="font-size:1.2rem;color:var(--accent)">▶</span><div><div style="font-weight:bold;font-size:0.9rem">${song.titulo}</div><div style="font-size:0.75rem;color:#aaa">${song.artista}</div></div>`;
                 btn.onclick = () => startExperience(index);
                 list.appendChild(btn);
             });
@@ -332,57 +289,21 @@
         function startExperience(index) {
             loadSong(index);
             document.getElementById('music-overlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('music-overlay').style.display = 'none';
-                document.getElementById('spotify-player').classList.add('visible');
-                document.getElementById('controls').style.opacity = '1';
-            }, 800);
-
-            // Iniciar animaciones
-            document.body.classList.remove('not-loaded');
-            initStars(); animateStars(); typeWriter();
-            actualizarContador(); setInterval(actualizarContador, 60000);
+            setTimeout(() => { document.getElementById('music-overlay').style.display = 'none'; document.getElementById('spotify-player').classList.add('visible'); document.getElementById('controls').style.opacity = '1'; }, 800);
+            document.body.classList.remove('not-loaded'); initStars(); animateStars(); typeWriter(); actualizarContador(); setInterval(actualizarContador, 60000);
         }
 
         function loadSong(index) {
-            currentSongIndex = index;
-            const song = PLAYLIST[currentSongIndex];
-            audio.src = song.archivo;
-            document.getElementById('track-title').innerText = song.titulo;
-            document.getElementById('track-artist').innerText = song.artista;
-            audio.play().then(() => updatePlayIcon(true)).catch(e => console.log("Click necesario"));
+            currentSongIndex = index; const song = PLAYLIST[currentSongIndex]; audio.src = song.archivo;
+            document.getElementById('track-title').innerText = song.titulo; document.getElementById('track-artist').innerText = song.artista;
+            audio.play().then(() => updatePlayIcon(true)).catch(e => console.log("Click req"));
         }
 
-        function togglePlayPause() {
-            if (audio.paused) {
-                audio.play();
-                updatePlayIcon(true);
-            } else {
-                audio.pause();
-                updatePlayIcon(false);
-            }
-        }
-
-        function updatePlayIcon(isPlaying) {
-            const btn = document.getElementById('play-btn');
-            btn.innerText = isPlaying ? "⏸" : "▶";
-        }
-
-        function nextSong() {
-            currentSongIndex = (currentSongIndex + 1) % PLAYLIST.length;
-            loadSong(currentSongIndex);
-        }
-
-        function prevSong() {
-            currentSongIndex = (currentSongIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
-            loadSong(currentSongIndex);
-        }
-
-        audio.ontimeupdate = () => {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-        };
-
+        function togglePlayPause() { if (audio.paused) { audio.play(); updatePlayIcon(true); } else { audio.pause(); updatePlayIcon(false); } }
+        function updatePlayIcon(isPlaying) { document.getElementById('play-btn').innerText = isPlaying ? "⏸" : "▶"; }
+        function nextSong() { currentSongIndex = (currentSongIndex + 1) % PLAYLIST.length; loadSong(currentSongIndex); }
+        function prevSong() { currentSongIndex = (currentSongIndex - 1 + PLAYLIST.length) % PLAYLIST.length; loadSong(currentSongIndex); }
+        audio.ontimeupdate = () => { document.getElementById('progress-bar').style.width = `${(audio.currentTime / audio.duration) * 100}%`; };
         audio.onended = () => nextSong();
 
         // --- NAVEGACIÓN ---
@@ -394,13 +315,9 @@
             if(escenaActual === 2) { initHeart(); animateHeart(); }
             if(escenaActual === 3) { crearCarrusel(); }
         }
+        function actualizarContador() { document.getElementById('contador-dias').innerText = `Juntos desde el 25 Oct 2025 (${Math.floor((new Date() - FECHA_INICIO) / (1000 * 60 * 60 * 24))} días)`; }
 
-        function actualizarContador() {
-            const dias = Math.floor((new Date() - FECHA_INICIO) / (1000 * 60 * 60 * 24));
-            document.getElementById('contador-dias').innerText = `Juntos desde el 25 Oct 2025 (${dias} días)`;
-        }
-
-        // --- CANVAS (Stars & Heart) ---
+        // --- CANVAS ---
         const starCanvas = document.getElementById('starCanvas'); const sCtx = starCanvas.getContext('2d'); let stars = [];
         function initStars() { starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight; stars = []; for(let i=0; i<300; i++) stars.push({x:Math.random()*starCanvas.width, y:Math.random()*starCanvas.height, z:Math.random()*starCanvas.width}); }
         function animateStars() { if(!document.getElementById('universo').classList.contains('activa')) return; sCtx.fillStyle = "black"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height); sCtx.fillStyle = "white"; stars.forEach(s => { s.z -= 2; if(s.z <= 0) s.z = starCanvas.width; let x = (s.x-starCanvas.width/2)*(starCanvas.width/s.z)+starCanvas.width/2; let y = (s.y-starCanvas.height/2)*(starCanvas.width/s.z)+starCanvas.height/2; let size = (1-s.z/starCanvas.width)*2; if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,size,0,Math.PI*2); sCtx.fill(); } }); requestAnimationFrame(animateStars); }
@@ -409,7 +326,35 @@
         function initHeart() { hCanvas.width = window.innerWidth; hCanvas.height = window.innerHeight; hPoints = []; for(let i=0; i<1200; i++) { let t = Math.random()*Math.PI*2, x = 16*Math.pow(Math.sin(t),3), y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t)); let z = (Math.random()-0.5)*10; hPoints.push({x:x*10, y:y*10, z:z*10, color: `hsl(${330+Math.random()*40}, 90%, 60%)`}); } }
         function animateHeart() { if(!document.getElementById('corazon-scene').classList.contains('activa')) return; hCtx.fillStyle = "rgba(0,0,0,0.2)"; hCtx.fillRect(0,0,hCanvas.width, hCanvas.height); angY += 0.015; let cx = hCanvas.width/2, cy = hCanvas.height/2; let scaleFactor = window.innerWidth < 768 ? 300 : 500; hPoints.forEach(p => { let rx = p.x*Math.cos(angY) - p.z*Math.sin(angY); let rz = p.x*Math.sin(angY) + p.z*Math.cos(angY); let scale = scaleFactor/(scaleFactor+rz); if(scale>0) { hCtx.fillStyle = p.color; hCtx.beginPath(); hCtx.arc(rx*scale+cx, p.y*scale+cy, 1.5*scale, 0, Math.PI*2); hCtx.fill(); } }); requestAnimationFrame(animateHeart); }
 
-        function crearCarrusel() { const container = document.getElementById('carousel'); if(container.children.length > 0) return; const radius = window.innerWidth < 768 ? 180 : 300; const angleStep = 360/FOTOS.length; FOTOS.forEach((src, i) => { const div = document.createElement('div'); div.className = 'foto-card'; div.style.transform = `rotateY(${i*angleStep}deg) translateZ(${radius}px)`; div.innerHTML = `<img src="${src}">`; container.appendChild(div); }); }
+        // --- CARRUSEL INTERACTIVO ---
+        function crearCarrusel() {
+            const container = document.getElementById('carousel');
+            if(container.children.length > 0) return;
+            const radius = window.innerWidth < 768 ? 180 : 300; 
+            const angleStep = 360/GALERIA.length;
+            GALERIA.forEach((item, i) => {
+                const div = document.createElement('div');
+                div.className = 'foto-card';
+                div.style.transform = `rotateY(${i*angleStep}deg) translateZ(${radius}px)`;
+                div.innerHTML = `<img src="${item.url}">`;
+                div.onclick = () => showDescription(i); // Click Event
+                container.appendChild(div);
+            });
+        }
+
+        // --- MODAL DESCRIPCIÓN ---
+        function showDescription(index) {
+            const item = GALERIA[index];
+            document.getElementById('detail-img').src = item.url;
+            document.getElementById('detail-text').innerText = item.desc;
+            document.getElementById('carousel').style.animationPlayState = 'paused';
+            document.getElementById('photo-overlay').classList.add('active');
+        }
+
+        function closeDescription() {
+            document.getElementById('photo-overlay').classList.remove('active');
+            document.getElementById('carousel').style.animationPlayState = 'running';
+        }
 
         let tIdx=0, cIdx=0, isDel=false;
         function typeWriter() { const txt = FRASES[tIdx]; const el = document.getElementById('maquina-escribir'); el.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++); let spd = isDel ? 50 : 100; if(!isDel && cIdx === txt.length+1) { spd = 2000; isDel = true; } else if(isDel && cIdx === 0) { isDel = false; tIdx = (tIdx+1)%FRASES.length; spd = 500; } setTimeout(typeWriter, spd); }
@@ -419,6 +364,4 @@
     </script>
 </body>
 </html>
-
-
 
