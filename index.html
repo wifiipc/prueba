@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para ti ❤️</title>
     <style>
-        /* --- FUENTES ESTILO "DEDICAPAG" --- */
+        /* --- FUENTES --- */
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500;700&display=swap');
 
         /* --- CONFIGURACIÓN BASE --- */
@@ -17,14 +17,14 @@
             color: white;
         }
 
-        /* --- BOTÓN FLOTANTE ESTILIZADO --- */
+        /* --- BOTÓN FLOTANTE --- */
         #btn-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 100;
             padding: 10px 25px;
-            background: rgba(255, 255, 255, 0.1); /* Efecto cristal */
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.4);
             color: white;
             border-radius: 50px;
@@ -35,7 +35,7 @@
             letter-spacing: 1px;
             transition: all 0.4s ease;
             box-shadow: 0 0 15px rgba(255, 77, 109, 0.3);
-            animation: latido 2s infinite; /* Animación de latido constante */
+            animation: latido 2s infinite;
         }
         
         #btn-toggle:hover {
@@ -50,10 +50,10 @@
             position: absolute;
             width: 100%;
             height: 100vh;
-            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out; /* Transición súper suave */
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
             opacity: 0;
             pointer-events: none;
-            display: flex; /* Flex para centrar todo */
+            display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
@@ -67,12 +67,13 @@
 
         .escena.oculta {
             opacity: 0;
-            transform: scale(1.1); /* Efecto zoom al salir */
+            transform: scale(1.1);
         }
 
         /* --- ESCENA 1: UNIVERSO --- */
         #universo {
-            background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+            /* Fondo negro profundo para resaltar las estrellas */
+            background: radial-gradient(circle at center, #0a0a14 0%, #000000 100%);
         }
 
         #spaceCanvas {
@@ -86,12 +87,12 @@
             position: relative;
             z-index: 10;
             text-align: center;
-            /* Efecto cristal (Glassmorphism) */
-            background: rgba(0, 0, 0, 0.3);
+            /* Efecto cristal sutil */
+            background: rgba(0, 0, 0, 0.2);
             padding: 40px;
             border-radius: 20px;
-            backdrop-filter: blur(3px);
-            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.05);
             animation: flotar 6s ease-in-out infinite;
         }
 
@@ -109,12 +110,11 @@
         #frase {
             font-size: 1.4rem;
             margin-top: 20px;
-            min-height: 1.5em; /* Evita saltos */
+            min-height: 1.5em;
             color: #eee;
             text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         }
 
-        /* Cursor de escritura */
         .cursor {
             display: inline-block;
             width: 2px;
@@ -124,17 +124,6 @@
             vertical-align: bottom;
             margin-left: 2px;
         }
-
-        /* PLANETAS */
-        .planeta {
-            position: absolute;
-            border-radius: 50%;
-            z-index: 5;
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.1);
-            animation: orbitar 60s linear infinite;
-        }
-        .p1 { width: 120px; height: 120px; top: 10%; left: 10%; background: radial-gradient(#ff99ac, #ff006e); animation-duration: 45s; }
-        .p2 { width: 60px; height: 60px; bottom: 20%; right: 15%; background: radial-gradient(#a2d2ff, #0077b6); animation-duration: 35s; }
 
         /* --- ESCENA 2: JARDÍN --- */
         #jardin {
@@ -153,11 +142,11 @@
             text-align: center;
             box-shadow: 0 20px 50px rgba(255, 77, 109, 0.2);
             position: absolute;
-            bottom: 10%; /* Posición fija abajo */
+            bottom: 10%;
             z-index: 10;
             max-width: 80%;
             border: 2px solid white;
-            animation: aparecerConRebote 1s ease-out 0.5s both; /* Entra con retraso y rebote */
+            animation: aparecerConRebote 1s ease-out 0.5s both;
         }
 
         .texto-poema {
@@ -182,11 +171,8 @@
 
         /* --- ANIMACIONES KEYFRAMES --- */
         @keyframes latido {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.1); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.1); }
-            60% { transform: scale(1); }
+            0%, 30%, 60% { transform: scale(1); }
+            15%, 45% { transform: scale(1.1); }
         }
 
         @keyframes flotar {
@@ -207,11 +193,6 @@
 
         @keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        @keyframes orbitar {
-            from { transform: rotate(0deg) translateX(20px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
-        }
-
     </style>
 </head>
 <body>
@@ -220,9 +201,6 @@
 
     <div id="universo" class="escena activa">
         <canvas id="spaceCanvas"></canvas>
-        <div class="planeta p1"></div>
-        <div class="planeta p2"></div>
-
         <div id="contenido-universo">
             <h1>Para mi Amor</h1>
             <div id="frase"></div><span class="cursor"></span>
@@ -259,43 +237,4 @@
         let escenaActual = 1;
         const divUniverso = document.getElementById('universo');
         const divJardin = document.getElementById('jardin');
-        const btn = document.getElementById('btn-toggle');
-        
-        // --- INICIO ---
-        window.onload = function() {
-            initSpace(); 
-            escribirFrase(0); // Iniciar efecto máquina de escribir
-            setInterval(actualizarReloj, 1000);
-        };
-
-        // --- MÁQUINA DE ESCRIBIR (EFECTO DEDICAPAG) ---
-        let fraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        const typingSpeed = 100; // Velocidad escribir
-        const deletingSpeed = 50; // Velocidad borrar
-        const pauseEnd = 2000; // Pausa al final de la frase
-
-        function escribirFrase() {
-            if (escenaActual !== 1) return; // Solo escribir si estamos en el universo
-
-            const currentText = frases[fraseIndex];
-            const fraseEl = document.getElementById('frase');
-
-            if (isDeleting) {
-                fraseEl.innerText = currentText.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                fraseEl.innerText = currentText.substring(0, charIndex + 1);
-                charIndex++;
-            }
-
-            let typeSpeed = isDeleting ? deletingSpeed : typingSpeed;
-
-            if (!isDeleting && charIndex === currentText.length) {
-                typeSpeed = pauseEnd;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                fraseIndex = (fraseIndex + 1) % frases.length;
-                typeSpeed
+        const btn = document.getElementById('
