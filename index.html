@@ -98,34 +98,80 @@
             min-height: 1.5em;
         }
 
-        /* --- ESCENA 2: PRADERA CON FLORES Y ÁRBOL --- */
+        /* --- ESCENA 2: CAMPO DE FLORES (NUEVO) --- */
         #jardin {
-            /* Fondo de cielo azul claro con nubes suaves (gradiente) */
-            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 80%, #90EE90 80%, #228B22 100%); 
+            /* Fondo cielo y pradera */
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 60%, #90EE90 70%, #228B22 100%); 
             flex-direction: column;
             overflow: hidden;
             position: relative;
         }
-        canvas#arbolCanvas { 
+
+        /* Contenedor para las flores generadas */
+        #flower-field {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
-            z-index: 2; 
+            width: 100%;
+            height: 40%; /* Ocupan la parte baja */
+            z-index: 2;
+            pointer-events: none;
         }
+
+        /* Estilos de las flores CSS */
+        .css-flower {
+            position: absolute;
+            bottom: 0;
+            transform-origin: bottom center;
+            animation: sway 3s ease-in-out infinite alternate;
+        }
+
+        .flower-head {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            /* El color se define en JS */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Centro de la flor */
+        .flower-head::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 10px; height: 10px;
+            background: yellow;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .flower-stem {
+            width: 4px;
+            background: linear-gradient(to top, #1a491a, #228B22);
+            margin: 0 auto;
+            /* La altura se define en JS */
+            position: relative;
+            top: -2px;
+            z-index: 1;
+            border-radius: 2px;
+        }
+
         .mensaje-arbol {
             position: absolute;
-            top: 20%; /* Posición para el poema en el cielo */
+            top: 20%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
             text-align: center;
             font-family: 'Pacifico', cursive;
-            font-size: 1.5rem; /* Tamaño ajustable */
-            color: #ff69b4; /* Rosa fuerte para resaltar */
-            text-shadow: 1px 1px 2px white, 0 0 10px rgba(255,255,255,0.8); /* Borde blanco para legibilidad */
+            font-size: 1.8rem;
+            color: #ff006e;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
             opacity: 0;
-            animation: aparecer 2s ease-in 4s forwards; 
-            width: 80%; /* Ancho máximo */
+            animation: aparecer 2s ease-in 1s forwards; 
+            width: 90%;
             max-width: 600px;
         }
 
@@ -178,6 +224,12 @@
         @keyframes aparecer { from { opacity: 0; transform: translateY(20px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background: white; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        /* Animación de balanceo para las flores */
+        @keyframes sway {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
 
     </style>
 </head>
@@ -201,7 +253,8 @@
     </div>
 
     <div id="jardin" class="escena">
-        <canvas id="arbolCanvas"></canvas>
+        <div id="flower-field"></div>
+
         <div class="mensaje-arbol">
             En el jardín de mi vida,<br>
             tú eres la flor más bella,<br>
@@ -245,7 +298,7 @@
             
             // Iniciar animaciones según escena
             if(escenaActual === 0) { initStars(); animateStars(); }
-            else if(escenaActual === 1) { initTree(); } 
+            else if(escenaActual === 1) { initFlowers(); } // Inicia el campo de flores
             else if(escenaActual === 2) { initHeart(); animateHeart(); }
             else { crearCarrusel(); }
         }
@@ -281,129 +334,54 @@
         }
 
         /* =========================================
-           2. PRADERA CON FLORES Y ÁRBOL
+           2. CAMPO DE FLORES (NUEVO SISTEMA CSS/JS)
            ========================================= */
-        const treeCanvas = document.getElementById('arbolCanvas');
-        const tCtx = treeCanvas.getContext('2d');
-        let treeW, treeH;
-        let fallingLeaves = [];
+        function initFlowers() {
+            const container = document.getElementById('flower-field');
+            // Si ya hay flores, no hacemos nada
+            if (container.children.length > 0) return;
 
-        function initTree() {
-            treeW = treeCanvas.width = window.innerWidth;
-            treeH = treeCanvas.height = window.innerHeight;
-            fallingLeaves = [];
-            
-            tCtx.clearRect(0,0,treeW,treeH);
-            
-            // Dibujar el suelo (pradera) con flores
-            drawMeadow();
+            const colors = [
+                'radial-gradient(circle, #ff99ac, #ff006e)', // Rosa
+                'radial-gradient(circle, #ffccd5, #e63946)', // Rojo claro
+                'radial-gradient(circle, #e0aaff, #7b2cbf)', // Púrpura
+                'radial-gradient(circle, #ffea00, #ff7b00)'  // Naranja/Amarillo
+            ];
 
-            // Dibujar árbol recursivo desde abajo
-            // Ajustamos posición base para que salga del "suelo" verde (80% altura)
-            drawBranch(treeW/2, treeH * 0.85, 120, -90, 20, 0); 
-            
-            animateFallingLeaves();
+            // Crear 50 flores
+            for (let i = 0; i < 60; i++) {
+                createFlower(container, colors);
+            }
         }
 
-        function drawMeadow() {
-             // Ya el fondo CSS hace el cielo y el suelo base. Aquí añadimos detalles
-             // Dibujar muchas flores en la parte inferior (suelo)
-             for(let i=0; i<200; i++) {
-                 let x = Math.random() * treeW;
-                 let y = (treeH * 0.8) + Math.random() * (treeH * 0.2); // Solo en el 20% inferior
-                 
-                 // Tallo
-                 tCtx.beginPath();
-                 tCtx.moveTo(x, y);
-                 tCtx.lineTo(x, y - (5 + Math.random()*10));
-                 tCtx.strokeStyle = "green";
-                 tCtx.lineWidth = 1;
-                 tCtx.stroke();
-
-                 // Flor
-                 tCtx.beginPath();
-                 tCtx.arc(x, y - (5 + Math.random()*10), 3 + Math.random()*3, 0, Math.PI*2);
-                 tCtx.fillStyle = `hsl(${Math.random()*360}, 70%, 60%)`; // Colores variados
-                 tCtx.fill();
-             }
-        }
-
-        function drawBranch(x, y, len, angle, width, depth) {
-            // Animación de crecimiento: setTimeout para cada rama
-            setTimeout(() => {
-                if(!document.getElementById('jardin').classList.contains('activa')) return;
-                
-                tCtx.beginPath();
-                tCtx.moveTo(x, y);
-                // Calcular fin de la rama
-                const endX = x + len * Math.cos(angle * Math.PI/180);
-                const endY = y + len * Math.sin(angle * Math.PI/180);
-                
-                tCtx.lineTo(endX, endY);
-                // Color tronco (marrón oscuro a claro)
-                tCtx.strokeStyle = `hsl(25, ${80-depth*5}%, ${20+depth*5}%)`;
-                tCtx.lineWidth = width;
-                tCtx.lineCap = "round";
-                tCtx.stroke();
-
-                // Si es el final (hojas)
-                if (depth > 8 || len < 10) {
-                    // Dibujar corazón
-                    tCtx.beginPath();
-                    tCtx.fillStyle = `hsl(${330 + Math.random()*30}, 100%, 60%)`; // Rosas variados
-                    tCtx.font = `${10 + Math.random()*15}px Arial`;
-                    tCtx.fillText("❤️", endX-6, endY+6);
-                    
-                    // A veces soltar una hoja
-                    if(Math.random() > 0.9) {
-                        fallingLeaves.push({x: endX, y: endY, speed: 1 + Math.random()*2, sway: Math.random()*0.1});
-                    }
-                    return;
-                }
-
-                // Recursividad: 2 ramas nuevas
-                // Ángulo aleatorio para realismo
-                const subLen = len * 0.75;
-                const subWidth = width * 0.7;
-                drawBranch(endX, endY, subLen, angle - 20 - Math.random()*10, subWidth, depth + 1);
-                drawBranch(endX, endY, subLen, angle + 20 + Math.random()*10, subWidth, depth + 1);
-
-            }, 100 * depth); // El retraso crea la animación de crecimiento
-        }
-
-        function animateFallingLeaves() {
-            if(!document.getElementById('jardin').classList.contains('activa')) return;
-            // No limpiamos todo el canvas para que el árbol se quede, 
-            // pero necesitamos limpiar las hojas viejas... 
-            // Truco: redibujar hojas cayendo sobre el lienzo existente
+        function createFlower(container, colors) {
+            const flower = document.createElement('div');
+            flower.className = 'css-flower';
             
-            // Para simplificar sin borrar el árbol, solo añadimos corazones cayendo encima
-            fallingLeaves.forEach((leaf, i) => {
-                // Borrar rastro hoja anterior (chapuza visual pero efectiva en fondo negro, aquí en cielo puede notarse un poco)
-                // En lugar de borrar, simplemente dibujamos encima. Si se acumulan muchas, podemos limpiar el canvas y redibujar todo (árbol + pradera)
-                // Para mantenerlo simple y performante, dejamos que caigan.
-               
-                // Para evitar rastro feo en fondo claro, idealmente redibujaríamos todo cada frame. 
-                // Dado que el árbol es recursivo y costoso, vamos a dejar que las hojas se "acumulen" en el suelo o desaparezcan.
-                
-                // Si queremos animación fluida sin rastro en canvas único:
-                // Lo ideal sería tener 2 canvas: uno para el árbol estático y otro para las hojas cayendo.
-                // Como estamos editando este código, vamos a hacer que las hojas caigan y desaparezcan al tocar el suelo.
+            // Posición aleatoria horizontal
+            flower.style.left = `${Math.random() * 100}%`;
+            
+            // Tamaño aleatorio
+            const scale = 0.5 + Math.random() * 0.8;
+            flower.style.transform = `scale(${scale})`;
+            
+            // Retraso de animación aleatorio para que no se muevan igual
+            flower.style.animationDelay = `${Math.random() * -5}s`;
+            flower.style.animationDuration = `${3 + Math.random() * 3}s`;
 
-                // NOTA: Con este método simple en un solo canvas sobre fondo complejo, mover cosas deja rastro.
-                // Si quieres animación perfecta de caída, avísame para separar en capas.
-                // Por ahora, dibujamos nuevas hojas cayendo.
+            // Altura del tallo aleatoria
+            const stemHeight = 60 + Math.random() * 100;
 
-                leaf.y += leaf.speed;
-                leaf.x += Math.sin(leaf.y * 0.05) * 2; // Oscilación
-                
-                tCtx.font = "16px Arial";
-                tCtx.fillStyle = "#ff4d6d";
-                tCtx.fillText("❤️", leaf.x, leaf.y);
+            // Color aleatorio
+            const color = colors[Math.floor(Math.random() * colors.length)];
 
-                if(leaf.y > treeH * 0.9) fallingLeaves.splice(i, 1); // Desaparecen al llegar al suelo
-            });
-            requestAnimationFrame(animateFallingLeaves);
+            // Crear estructura HTML de la flor
+            flower.innerHTML = `
+                <div class="flower-head" style="background: ${color}"></div>
+                <div class="flower-stem" style="height: ${stemHeight}px"></div>
+            `;
+
+            container.appendChild(flower);
         }
 
         /* =========================================
@@ -470,3 +448,4 @@
     </script>
 </body>
 </html>
+
