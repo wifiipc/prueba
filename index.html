@@ -17,10 +17,10 @@
             color: white;
             height: 100vh;
             width: 100vw;
-            perspective: 1000px; /* Para el 3D */
+            perspective: 1000px;
         }
 
-        /* --- BOTONES DE CONTROL --- */
+        /* --- BOTONES --- */
         .controls {
             position: absolute;
             top: 20px;
@@ -64,7 +64,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transform: scale(1.2); /* Efecto zoom out al estar oculta */
+            transform: scale(1.2);
         }
 
         .activa {
@@ -98,21 +98,29 @@
             min-height: 1.5em;
         }
 
-        /* --- ESCENA 2: JARDÍN --- */
+        /* --- ESCENA 2: EL ÁRBOL TIKTOK (FONDO NEGRO) --- */
         #jardin {
-            background: linear-gradient(to bottom, #1a0b14, #2d1b2e); /* Fondo noche romántica */
+            background: black; /* El árbol viral suele tener fondo negro */
             flex-direction: column;
+            overflow: hidden;
         }
-        canvas#arbolCanvas { z-index: 2; margin-bottom: 20px; }
-        .tarjeta {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px 40px;
-            border-radius: 15px;
+        canvas#arbolCanvas { 
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2; 
+        }
+        .mensaje-arbol {
+            position: absolute;
+            bottom: 50px;
+            z-index: 10;
             text-align: center;
-            color: #5c3a45;
-            max-width: 80%;
-            z-index: 3;
-            box-shadow: 0 0 30px rgba(255, 77, 109, 0.3);
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: #ff99ac;
+            text-shadow: 0 0 10px #ff006e;
+            opacity: 0;
+            animation: aparecer 2s ease-in 4s forwards; /* Aparece después de que crece el árbol */
         }
 
         /* --- ESCENA 3: CORAZÓN 3D --- */
@@ -133,12 +141,11 @@
             animation: flotar 3s ease-in-out infinite;
         }
 
-        /* --- ESCENA 4: CARRUSEL DE FOTOS 3D --- */
+        /* --- ESCENA 4: CARRUSEL --- */
         #galeria {
             background: #000;
             overflow: hidden;
         }
-        
         .carousel-container {
             position: relative;
             width: 200px;
@@ -146,44 +153,23 @@
             transform-style: preserve-3d;
             animation: rotarCarrusel 20s infinite linear;
         }
-
-        .carousel-container:hover {
-            animation-play-state: paused; /* Se para si pasas el ratón */
-        }
-
+        .carousel-container:hover { animation-play-state: paused; }
         .foto-card {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255,255,255,0.1);
             border: 2px solid #ff4d6d;
             border-radius: 10px;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
+            display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 20px rgba(255, 77, 109, 0.5);
-            /* Cada foto se rotará por JS */
         }
+        .foto-card img { width: 100%; height: 100%; object-fit: cover; }
 
-        .foto-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @keyframes rotarCarrusel {
-            from { transform: perspective(1000px) rotateY(0deg); }
-            to { transform: perspective(1000px) rotateY(360deg); }
-        }
-
+        /* ANIMACIONES */
+        @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } }
         @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        
-        /* Cursor */
+        @keyframes aparecer { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background: white; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
@@ -192,8 +178,8 @@
 <body>
 
     <div class="controls">
-        <button id="btn-music" class="btn-glass" onclick="toggleMusic()">🎵 Música: Off</button>
-        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Ver Jardín 🌱</button>
+        <button id="btn-music" class="btn-glass" onclick="toggleMusic()">🎵 Música</button>
+        <button id="btn-next" class="btn-glass" onclick="siguienteEscena()">Siguiente ✨</button>
     </div>
 
     <audio id="bg-music" loop>
@@ -210,12 +196,9 @@
 
     <div id="jardin" class="escena">
         <canvas id="arbolCanvas"></canvas>
-        <div class="tarjeta">
-            <p style="font-style: italic; font-size: 1.1rem;">"Mis raíces buscan tu tierra,<br>mis hojas buscan tu luz."</p>
-            <div style="font-size: 0.8rem; text-transform: uppercase; margin-top: 10px; color: #ff4d6d; font-weight:bold;">
-                Juntos desde el 25/10/2025
-            </div>
-            <div id="reloj" style="font-weight:bold; margin-top:5px;">Calculando...</div>
+        <div class="mensaje-arbol">
+            "Mi amor por ti crece cada día" <br>
+            <span style="font-size: 1rem; font-family: 'Montserrat'; color: white;">(Juntos desde el 25/10/2025)</span>
         </div>
     </div>
 
@@ -228,69 +211,40 @@
         <div class="titulo-flotante" style="top: 10%; font-size: 2.5rem;">Nuestros Recuerdos</div>
         <div class="carousel-container" id="carousel">
             </div>
-        <div style="position: absolute; bottom: 10%; color: #ccc; font-size: 0.9rem;">
-            (Pasa el ratón para detener el giro)
-        </div>
     </div>
 
     <script>
         /* =========================================
            CONFIGURACIÓN
            ========================================= */
-        const FECHA_INICIO = new Date("2025-10-25T00:00:00");
-        const FRASES = ["Eres mi universo.", "Mi lugar favorito.", "Te amo infinito."];
-        
-        // FOTOS PARA EL CARRUSEL (Puedes poner URLs reales aquí)
-        // Ejemplo: "foto1.jpg", "foto2.jpg"...
+        const FRASES = ["Eres mi universo.", "Mi casualidad favorita.", "Te amo infinito."];
         const FOTOS = [
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+1",
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+2",
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+3",
             "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+4",
-            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+5",
-            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+6"
+            "https://via.placeholder.com/200x300/ff4d6d/fff?text=Foto+5"
         ];
 
-        /* =========================================
-           LÓGICA DE ESCENAS
-           ========================================= */
         let escenaActual = 0;
         const escenasIds = ['universo', 'jardin', 'corazon-scene', 'galeria'];
 
         function siguienteEscena() {
-            // Ocultar actual
             document.getElementById(escenasIds[escenaActual]).classList.remove('activa');
-            
-            // Siguiente
             escenaActual = (escenaActual + 1) % escenasIds.length;
-            
-            // Mostrar nueva
             const nueva = document.getElementById(escenasIds[escenaActual]);
             nueva.classList.add('activa');
             
-            // Actualizar botón
-            const btn = document.getElementById('btn-next');
-            if(escenaActual === 0) { btn.innerText = "Ver Jardín 🌱"; initStars(); animateStars(); }
-            else if(escenaActual === 1) { btn.innerText = "Ver Corazón 💖"; growth=0; drawTree(); }
-            else if(escenaActual === 2) { btn.innerText = "Ver Recuerdos 📸"; initHeart(); animateHeart(); }
-            else { btn.innerText = "Volver al Inicio ✨"; crearCarrusel(); }
+            // Iniciar animaciones según escena
+            if(escenaActual === 0) { initStars(); animateStars(); }
+            else if(escenaActual === 1) { initTree(); } // Inicia el árbol viral
+            else if(escenaActual === 2) { initHeart(); animateHeart(); }
+            else { crearCarrusel(); }
         }
 
-        /* =========================================
-           MÚSICA
-           ========================================= */
         function toggleMusic() {
             const audio = document.getElementById('bg-music');
-            const btn = document.getElementById('btn-music');
-            if (audio.paused) {
-                audio.play();
-                btn.innerText = "🎵 Música: On";
-                btn.style.background = "#ff4d6d";
-            } else {
-                audio.pause();
-                btn.innerText = "🎵 Música: Off";
-                btn.style.background = "rgba(255,255,255,0.1)";
-            }
+            audio.paused ? audio.play() : audio.pause();
         }
 
         /* =========================================
@@ -301,62 +255,108 @@
         let stars = [];
 
         function initStars() {
-            starCanvas.width = window.innerWidth;
-            starCanvas.height = window.innerHeight;
+            starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight;
             stars = [];
-            for(let i=0; i<300; i++) stars.push({
-                x: Math.random() * starCanvas.width - starCanvas.width/2,
-                y: Math.random() * starCanvas.height - starCanvas.height/2,
-                z: Math.random() * starCanvas.width
-            });
+            for(let i=0; i<300; i++) stars.push({x:Math.random()*starCanvas.width, y:Math.random()*starCanvas.height, z:Math.random()*starCanvas.width});
         }
-
         function animateStars() {
             if(!document.getElementById('universo').classList.contains('activa')) return;
-            sCtx.fillStyle = "rgba(0,0,0,0.3)"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height);
+            sCtx.fillStyle = "black"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height);
             sCtx.fillStyle = "white";
             stars.forEach(s => {
-                s.z -= 5;
-                if(s.z <= 0) { s.z = starCanvas.width; s.x = Math.random()*starCanvas.width - starCanvas.width/2; s.y = Math.random()*starCanvas.height - starCanvas.height/2; }
-                let x = (s.x / s.z) * starCanvas.width + starCanvas.width/2;
-                let y = (s.y / s.z) * starCanvas.height + starCanvas.height/2;
-                let size = (1 - s.z/starCanvas.width) * 3;
-                if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,size,0,Math.PI*2); sCtx.fill(); }
+                s.z -= 2; if(s.z <= 0) s.z = starCanvas.width;
+                let x = (s.x-starCanvas.width/2)*(starCanvas.width/s.z)+starCanvas.width/2;
+                let y = (s.y-starCanvas.height/2)*(starCanvas.width/s.z)+starCanvas.height/2;
+                if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,(1-s.z/starCanvas.width)*3,0,Math.PI*2); sCtx.fill(); }
             });
             requestAnimationFrame(animateStars);
         }
 
         /* =========================================
-           2. JARDÍN (BONSÁI)
+           2. EL ÁRBOL VIRAL (CÓDIGO COMPLEJO)
            ========================================= */
         const treeCanvas = document.getElementById('arbolCanvas');
         const tCtx = treeCanvas.getContext('2d');
-        let growth = 0;
+        let treeW, treeH;
+        let fallingLeaves = [];
 
-        function drawTree() {
-            if(!document.getElementById('jardin').classList.contains('activa')) return;
-            treeCanvas.width = 350; treeCanvas.height = 400;
-            if(growth < 1) growth += 0.01;
-            drawBranch(175, 400, 80 * growth, 0, 12);
-            requestAnimationFrame(drawTree);
+        function initTree() {
+            treeW = treeCanvas.width = window.innerWidth;
+            treeH = treeCanvas.height = window.innerHeight;
+            fallingLeaves = [];
+            // Limpiar y empezar animación
+            tCtx.clearRect(0,0,treeW,treeH);
+            // Dibujar árbol recursivo desde abajo
+            drawBranch(treeW/2, treeH, 120, -90, 20, 0); 
+            animateFallingLeaves();
         }
 
-        function drawBranch(x, y, len, angle, width) {
-            tCtx.save(); tCtx.translate(x, y); tCtx.rotate(angle * Math.PI/180);
-            tCtx.beginPath(); tCtx.moveTo(0,0); tCtx.lineTo(0, -len);
-            tCtx.strokeStyle = "#4a3b2a"; tCtx.lineWidth = width; tCtx.lineCap = "round"; tCtx.stroke();
+        function drawBranch(x, y, len, angle, width, depth) {
+            // Animación de crecimiento: setTimeout para cada rama
+            setTimeout(() => {
+                if(!document.getElementById('jardin').classList.contains('activa')) return;
+                
+                tCtx.beginPath();
+                tCtx.moveTo(x, y);
+                // Calcular fin de la rama
+                const endX = x + len * Math.cos(angle * Math.PI/180);
+                const endY = y + len * Math.sin(angle * Math.PI/180);
+                
+                tCtx.lineTo(endX, endY);
+                // Color tronco (marrón oscuro a claro)
+                tCtx.strokeStyle = `hsl(25, ${80-depth*5}%, ${20+depth*5}%)`;
+                tCtx.lineWidth = width;
+                tCtx.lineCap = "round";
+                tCtx.stroke();
+
+                // Si es el final (hojas)
+                if (depth > 8 || len < 10) {
+                    // Dibujar corazón
+                    tCtx.beginPath();
+                    tCtx.fillStyle = `hsl(${330 + Math.random()*30}, 100%, 60%)`; // Rosas variados
+                    tCtx.font = `${10 + Math.random()*15}px Arial`;
+                    tCtx.fillText("❤️", endX-6, endY+6);
+                    
+                    // A veces soltar una hoja
+                    if(Math.random() > 0.9) {
+                        fallingLeaves.push({x: endX, y: endY, speed: 1 + Math.random()*2, sway: Math.random()*0.1});
+                    }
+                    return;
+                }
+
+                // Recursividad: 2 ramas nuevas
+                // Ángulo aleatorio para realismo
+                const subLen = len * 0.75;
+                const subWidth = width * 0.7;
+                drawBranch(endX, endY, subLen, angle - 20 - Math.random()*10, subWidth, depth + 1);
+                drawBranch(endX, endY, subLen, angle + 20 + Math.random()*10, subWidth, depth + 1);
+
+            }, 100 * depth); // El retraso crea la animación de crecimiento
+        }
+
+        function animateFallingLeaves() {
+            if(!document.getElementById('jardin').classList.contains('activa')) return;
+            // No limpiamos todo el canvas para que el árbol se quede, 
+            // pero necesitamos limpiar las hojas viejas... 
+            // Truco: redibujar hojas cayendo sobre el lienzo existente
             
-            if(len < 20 && len > 0) {
-                // Hojas verdes y flores rosas (estilo bonsái)
-                tCtx.fillStyle = Math.random() > 0.5 ? "#ff8fa3" : "#556b2f"; 
-                tCtx.beginPath(); tCtx.arc(0, -len, 5, 0, Math.PI*2); tCtx.fill();
-            }
-            if(len > 10) {
-                tCtx.translate(0, -len);
-                drawBranch(0, 0, len*0.75, 25+Math.random()*10, width*0.7);
-                drawBranch(0, 0, len*0.75, -25-Math.random()*10, width*0.7);
-            }
-            tCtx.restore();
+            // Para simplificar sin borrar el árbol, solo añadimos corazones cayendo encima
+            fallingLeaves.forEach((leaf, i) => {
+                // Borrar rastro hoja anterior (chapuza visual pero efectiva en fondo negro)
+                tCtx.globalCompositeOperation = 'destination-out';
+                tCtx.beginPath(); tCtx.arc(leaf.x, leaf.y-leaf.speed, 8, 0, Math.PI*2); tCtx.fill();
+                tCtx.globalCompositeOperation = 'source-over';
+
+                leaf.y += leaf.speed;
+                leaf.x += Math.sin(leaf.y * 0.05) * 2; // Oscilación
+                
+                tCtx.font = "16px Arial";
+                tCtx.fillStyle = "#ff4d6d";
+                tCtx.fillText("❤️", leaf.x, leaf.y);
+
+                if(leaf.y > treeH) fallingLeaves.splice(i, 1);
+            });
+            requestAnimationFrame(animateFallingLeaves);
         }
 
         /* =========================================
@@ -369,60 +369,46 @@
         function initHeart() {
             hCanvas.width = window.innerWidth; hCanvas.height = window.innerHeight;
             hPoints = [];
-            for(let i=0; i<1000; i++) {
-                let t = Math.random() * Math.PI * 2, r = Math.random();
-                let x = 16 * Math.pow(Math.sin(t), 3);
-                let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                let z = (Math.random()-0.5)*10; 
-                hPoints.push({x: x*10, y: y*10, z: z*10, color: `hsl(${330+Math.random()*30}, 80%, 60%)`});
+            for(let i=0; i<1500; i++) {
+                let t = Math.random()*Math.PI*2, x = 16*Math.pow(Math.sin(t),3), y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+                let z = (Math.random()-0.5)*10;
+                hPoints.push({x:x*12, y:y*12, z:z*12, color: `hsl(${330+Math.random()*40}, 90%, 60%)`});
             }
         }
-
         function animateHeart() {
             if(!document.getElementById('corazon-scene').classList.contains('activa')) return;
-            hCtx.fillStyle = "rgba(0,0,0,0.1)"; hCtx.fillRect(0,0,hCanvas.width, hCanvas.height);
-            angleY += 0.02;
+            hCtx.fillStyle = "rgba(0,0,0,0.2)"; hCtx.fillRect(0,0,hCanvas.width, hCanvas.height);
+            angleY += 0.01;
             let cx = hCanvas.width/2, cy = hCanvas.height/2;
-            
             hPoints.forEach(p => {
-                let rx = p.x * Math.cos(angleY) - p.z * Math.sin(angleY);
-                let rz = p.x * Math.sin(angleY) + p.z * Math.cos(angleY);
-                let scale = 400 / (400 + rz);
-                let x2d = rx * scale + cx, y2d = p.y * scale + cy;
-                if(scale > 0) {
-                    hCtx.fillStyle = p.color; hCtx.beginPath(); hCtx.arc(x2d, y2d, scale*2, 0, Math.PI*2); hCtx.fill();
+                let rx = p.x*Math.cos(angleY) - p.z*Math.sin(angleY);
+                let rz = p.x*Math.sin(angleY) + p.z*Math.cos(angleY);
+                let scale = 500/(500+rz);
+                if(scale>0) {
+                    hCtx.fillStyle = p.color; hCtx.beginPath(); hCtx.arc(rx*scale+cx, p.y*scale+cy, 2*scale, 0, Math.PI*2); hCtx.fill();
                 }
             });
             requestAnimationFrame(animateHeart);
         }
 
         /* =========================================
-           4. CARRUSEL 3D
+           4. CARRUSEL
            ========================================= */
         function crearCarrusel() {
             const container = document.getElementById('carousel');
-            if(container.children.length > 0) return; // Ya creado
-
-            const radius = 250; // Radio del círculo
-            const angleStep = 360 / FOTOS.length;
-
+            if(container.children.length > 0) return;
+            const angleStep = 360/FOTOS.length;
             FOTOS.forEach((src, i) => {
-                const card = document.createElement('div');
-                card.className = 'foto-card';
-                // Posicionar en círculo 3D
-                const theta = i * angleStep;
-                card.style.transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
-                
-                // Contenido (Imagen)
-                card.innerHTML = `<img src="${src}" alt="Foto ${i+1}">`;
-                container.appendChild(card);
+                const div = document.createElement('div');
+                div.className = 'foto-card';
+                div.style.transform = `rotateY(${i*angleStep}deg) translateZ(300px)`;
+                div.innerHTML = `<img src="${src}">`;
+                container.appendChild(div);
             });
         }
 
-        /* =========================================
-           INIT
-           ========================================= */
-        let tIdx = 0, cIdx = 0, isDel = false;
+        /* INIT */
+        let tIdx=0, cIdx=0, isDel=false;
         function typeWriter() {
             const txt = FRASES[tIdx];
             const el = document.getElementById('maquina-escribir');
@@ -432,21 +418,8 @@
             else if(isDel && cIdx === 0) { isDel = false; tIdx = (tIdx+1)%FRASES.length; spd = 500; }
             setTimeout(typeWriter, spd);
         }
-
-        function updateClock() {
-            const diff = new Date() - FECHA_INICIO;
-            const d = Math.floor(diff/(1000*60*60*24));
-            const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-            document.getElementById('reloj').innerText = `${d} Días, ${h} Horas juntos`;
-        }
-
-        window.onload = () => {
-            initStars(); animateStars();
-            typeWriter();
-            setInterval(updateClock, 1000);
-        };
+        window.onload = () => { initStars(); animateStars(); typeWriter(); };
         window.addEventListener('resize', () => { initStars(); initHeart(); });
-
     </script>
 </body>
 </html>
