@@ -76,16 +76,15 @@
         /* CONTENEDOR FLORES - Ajustado para que se vea bien */
        /* --- ACTUALIZAR ESTO EN TU CSS --- */
 /* --- SUSTITUYE ESTO EN EL CSS --- */
-        .flowers {
-            position: relative;
-            transform: scale(0.9); /* Hacemos todo un poco más pequeño para que quepa bien */
+       .flowers {
+            position: absolute;
+            bottom: -5vmin; /* Ajusta esto si quieres que suban o bajen más */
+            left: 0;
             width: 100%;
             height: 100%;
-            bottom: -5vmin; /* Esto las baja hacia el suelo */
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
             z-index: 10;
+            pointer-events: none;
+            /* Permite que los elementos absolutos se posicionen libremente */
         }
         }
 
@@ -246,7 +245,7 @@
 
         <div class="flowers">
             
-            <div class="flower flower--1" style="left: 10%; bottom: 2vmin; transform: scale(0.6);">
+            <div class="flower flower--1" style="left: 5%; bottom: 2vmin; transform: scale(0.55);">
                 <div class="flower__leafs flower__leafs--1">
                     <div class="flower__leaf flower__leaf--1"></div>
                     <div class="flower__leaf flower__leaf--2"></div>
@@ -270,7 +269,7 @@
                 </div>
             </div>
 
-            <div class="flower flower--2" style="left: 30%; bottom: 4vmin; transform: scale(0.8) rotate(10deg);">
+            <div class="flower flower--2" style="left: 18%; bottom: 4vmin; transform: scale(0.75) rotate(5deg);">
                 <div class="flower__leafs flower__leafs--2">
                     <div class="flower__leaf flower__leaf--1"></div>
                     <div class="flower__leaf flower__leaf--2"></div>
@@ -294,7 +293,7 @@
                 </div>
             </div>
 
-            <div class="flower flower--3" style="left: 50%; bottom: 0; transform: translateX(-50%) scale(1);">
+            <div class="flower flower--3" style="left: 33%; bottom: 1vmin; transform: scale(0.9) rotate(2deg);">
                 <div class="flower__leafs flower__leafs--3">
                     <div class="flower__leaf flower__leaf--1"></div>
                     <div class="flower__leaf flower__leaf--2"></div>
@@ -318,7 +317,31 @@
                 </div>
             </div>
 
-            <div class="flower flower--2" style="left: 70%; bottom: 5vmin; transform: scale(0.75) rotate(-5deg);">
+            <div class="flower flower--3" style="left: 64%; bottom: 1vmin; transform: scale(0.9) rotate(-2deg);">
+                <div class="flower__leafs flower__leafs--3">
+                    <div class="flower__leaf flower__leaf--1"></div>
+                    <div class="flower__leaf flower__leaf--2"></div>
+                    <div class="flower__leaf flower__leaf--3"></div>
+                    <div class="flower__leaf flower__leaf--4"></div>
+                    <div class="flower__white-circle"></div>
+                    <div class="flower__light flower__light--1"></div>
+                    <div class="flower__light flower__light--2"></div>
+                    <div class="flower__light flower__light--3"></div>
+                    <div class="flower__light flower__light--4"></div>
+                    <div class="flower__light flower__light--5"></div>
+                    <div class="flower__light flower__light--6"></div>
+                    <div class="flower__light flower__light--7"></div>
+                    <div class="flower__light flower__light--8"></div>
+                </div>
+                <div class="flower__line">
+                    <div class="flower__line__leaf flower__line__leaf--1"></div>
+                    <div class="flower__line__leaf flower__line__leaf--2"></div>
+                    <div class="flower__line__leaf flower__line__leaf--3"></div>
+                    <div class="flower__line__leaf flower__line__leaf--4"></div>
+                </div>
+            </div>
+
+            <div class="flower flower--2" style="left: 79%; bottom: 4vmin; transform: scale(0.75) rotate(-5deg);">
                 <div class="flower__leafs flower__leafs--2">
                     <div class="flower__leaf flower__leaf--1"></div>
                     <div class="flower__leaf flower__leaf--2"></div>
@@ -342,7 +365,7 @@
                 </div>
             </div>
 
-            <div class="flower flower--1" style="left: 90%; bottom: 3vmin; transform: scale(0.6) rotate(5deg);">
+            <div class="flower flower--1" style="left: 92%; bottom: 2vmin; transform: scale(0.55);">
                 <div class="flower__leafs flower__leafs--1">
                     <div class="flower__leaf flower__leaf--1"></div>
                     <div class="flower__leaf flower__leaf--2"></div>
@@ -364,69 +387,6 @@
                     <div class="flower__line__leaf flower__line__leaf--3"></div>
                     <div class="flower__line__leaf flower__line__leaf--4"></div>
                 </div>
-            </div>
-
-            <div class="growing-grass">
-                <div class="flower__grass flower__grass--1">
-                    <div class="flower__grass--top"></div>
-                    <div class="flower__grass--bottom"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--1"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--2"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--3"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--4"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--5"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--6"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--7"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--8"></div>
-                    <div class="flower__grass__overlay"></div>
-                </div>
-            </div>
-            
-            <div class="growing-grass">
-                <div class="flower__grass flower__grass--2">
-                    <div class="flower__grass--top"></div>
-                    <div class="flower__grass--bottom"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--1"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--2"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--3"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--4"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--5"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--6"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--7"></div>
-                    <div class="flower__grass__leaf flower__grass__leaf--8"></div>
-                    <div class="flower__grass__overlay"></div>
-                </div>
-            </div>
-
-            <div class="long-g long-g--0">
-                <div class="grow-ans" style="--d:3s"><div class="leaf leaf--0"></div></div>
-                <div class="grow-ans" style="--d:2.2s"><div class="leaf leaf--1"></div></div>
-                <div class="grow-ans" style="--d:3.4s"><div class="leaf leaf--2"></div></div>
-                <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
-            </div>
-            <div class="long-g long-g--1">
-                <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--0"></div></div>
-                <div class="grow-ans" style="--d:3.8s"><div class="leaf leaf--1"></div></div>
-                <div class="grow-ans" style="--d:4s"><div class="leaf leaf--2"></div></div>
-                <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--3"></div></div>
-            </div>
-            <div class="long-g long-g--2">
-                <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
-                <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
-                <div class="grow-ans" style="--d:4.4s"><div class="leaf leaf--2"></div></div>
-                <div class="grow-ans" style="--d:4.6s"><div class="leaf leaf--3"></div></div>
-            </div>
-            <div class="long-g long-g--3">
-                <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
-                <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
-                <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
-                <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
-            </div>
-            <div class="long-g long-g--5">
-                <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
-                <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
-                <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
-                <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
             </div>
 
         </div>
@@ -564,4 +524,5 @@
     </script>
 </body>
 </html>
+
 
