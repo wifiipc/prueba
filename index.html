@@ -115,11 +115,13 @@
         #jardin {
             background: linear-gradient(to bottom, #fff0f3, #ffffff);
             flex-direction: column;
-            z-index: 20; /* Encima del universo cuando se activa */
+            z-index: 5; /* Nivel base del jardín */
         }
 
         canvas#arbolCanvas {
             margin-bottom: 20px;
+            z-index: 10; /* Árbol sobre el fondo */
+            position: relative;
         }
 
         .tarjeta {
@@ -131,6 +133,8 @@
             color: #5c3a45;
             max-width: 80%;
             border: 2px solid #fff0f3;
+            z-index: 20; /* Tarjeta sobre el árbol */
+            position: relative;
         }
 
         .contador {
@@ -280,7 +284,7 @@
         }
 
         /* =========================================
-           3. JARDÍN Y ÁRBOL
+           3. JARDÍN Y ÁRBOL (Estilo Bonsái)
            ========================================= */
         const treeCanvas = document.getElementById('arbolCanvas');
         const tCtx = treeCanvas.getContext('2d');
@@ -297,7 +301,8 @@
             tCtx.clearRect(0, 0, treeCanvas.width, treeCanvas.height);
             if (growth < 1) growth += 0.01;
 
-            drawBranch(treeCanvas.width/2, treeCanvas.height, 100 * growth, 0, 10);
+            // Iniciar dibujo del bonsái desde el centro inferior
+            drawBranch(treeCanvas.width/2, treeCanvas.height, 80 * growth, 0, 12);
             requestAnimationFrame(drawTree);
         }
 
@@ -308,20 +313,25 @@
             tCtx.beginPath();
             tCtx.moveTo(0, 0);
             tCtx.lineTo(0, -len);
-            tCtx.strokeStyle = "#5c3a45";
+            // Color verde oscuro para el tronco tipo bonsái
+            tCtx.strokeStyle = "#556b2f"; 
             tCtx.lineWidth = width;
+            tCtx.lineCap = "round"; // Bordes redondeados
             tCtx.stroke();
 
-            if (len < 15 && len > 0) {
+            // Dibujar hojas/corazones al final de las ramas más pequeñas
+            if (len < 20 && len > 0) {
                 tCtx.fillStyle = "#ff006e";
-                tCtx.font = "20px Arial";
-                tCtx.fillText("❤️", -10, -len);
+                tCtx.font = "18px Arial";
+                tCtx.fillText("❤️", -9, -len);
             }
 
+            // Recursividad para crear ramas, con ángulos más pronunciados para bonsái
             if (len > 10) {
                 tCtx.translate(0, -len);
-                drawBranch(0, 0, len * 0.75, 20, width * 0.7);
-                drawBranch(0, 0, len * 0.75, -20, width * 0.7);
+                // Ramas más cortas y con más ángulo para efecto retorcido
+                drawBranch(0, 0, len * 0.7, 35 + Math.random()*10, width * 0.7);
+                drawBranch(0, 0, len * 0.7, -35 - Math.random()*10, width * 0.7);
             }
             tCtx.restore();
         }
@@ -381,3 +391,5 @@
     </script>
 </body>
 </html>
+</html>
+
