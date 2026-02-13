@@ -37,14 +37,14 @@
             color: #ff4d6d;
         }
 
-        /* --- ESCENA 1: EL UNIVERSO (OPTIMIZADO CON CSS) --- */
+        /* --- ESCENA 1: EL UNIVERSO --- */
         #universo {
             position: absolute;
             width: 100%;
             height: 100vh;
-            /* La magia del 3D en CSS: */
-            perspective: 800px; 
+            perspective: 800px; /* Profundidad 3D */
             overflow: hidden;
+            /* Fondo oscuro profundo */
             background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%);
             display: flex;
             justify-content: center;
@@ -55,7 +55,7 @@
         /* Contenedor del texto (fijo en el centro) */
         #contenido-universo {
             position: absolute;
-            z-index: 10;
+            z-index: 10; /* Texto por encima de todo */
             text-align: center;
             top: 50%;
             left: 50%;
@@ -79,29 +79,64 @@
             transition: opacity 0.5s;
         }
 
-        /* LAS ESTRELLAS CSS */
+        /* --- PLANETAS CSS --- */
+        .planeta {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 2; /* Detrás del texto, delante del fondo */
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.1);
+            animation: flotar 6s ease-in-out infinite;
+        }
+
+        /* Planeta 1: Grande y Rosado */
+        .p1 {
+            width: 120px;
+            height: 120px;
+            top: 15%;
+            right: 15%;
+            background: radial-gradient(circle at 30% 30%, #ff99ac, #ff4d6d);
+        }
+
+        /* Planeta 2: Pequeño y Azul */
+        .p2 {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 10%;
+            background: radial-gradient(circle at 30% 30%, #a2d2ff, #3a86ff);
+            animation-duration: 8s; /* Velocidad diferente */
+        }
+
+        /* Planeta 3: Lejano y Morado */
+        .p3 {
+            width: 40px;
+            height: 40px;
+            top: 60%;
+            left: 20%;
+            background: radial-gradient(circle at 30% 30%, #e0c3fc, #8e44ad);
+            animation-duration: 10s;
+            opacity: 0.7;
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* --- ESTRELLAS WARP SPEED --- */
         .estrella {
             position: absolute;
             background: white;
             border-radius: 50%;
-            /* Empezamos lejos y transparentes */
             transform: translateZ(-1000px); 
             opacity: 0;
+            z-index: 1; /* Al fondo */
         }
 
-        /* Animación pura de GPU */
         @keyframes warpSpace {
-            0% {
-                opacity: 0;
-                transform: translateZ(-1000px);
-            }
-            20% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 1;
-                transform: translateZ(800px); /* Viene hacia la cámara */
-            }
+            0% { opacity: 0; transform: translateZ(-1000px); }
+            20% { opacity: 1; }
+            100% { opacity: 1; transform: translateZ(800px); }
         }
 
         /* --- ESCENA 2: JARDÍN --- */
@@ -139,11 +174,16 @@
     <button id="btn-toggle" onclick="cambiarEscena()">Ir al Jardín 🌱</button>
 
     <div id="universo">
+        
+        <div class="planeta p1"></div>
+        <div class="planeta p2"></div>
+        <div class="planeta p3"></div>
+
         <div id="contenido-universo">
             <h1>Viajando hacia ti ❤️</h1>
             <div id="frase">Eres mi destino favorito.</div>
         </div>
-    </div>
+        </div>
 
     <div id="jardin">
         <canvas id="arbolCanvas" width="350" height="400"></canvas>
@@ -164,14 +204,14 @@
         // --- CONFIGURACIÓN ---
         const fechaInicio = new Date("2025-10-25T00:00:00");
         const frases = [
-            "Eres mi destino favorito.",
-            "A velocidad luz hacia tus brazos.",
+            "Eres mi universo entero.",
+            "Me pierdo en tu gravedad.",
             "Contigo hasta el infinito.",
-            "Gracias por iluminar mi galaxia.",
-            "Te quiero en todas las dimensiones."
+            "Eres mi estrella favorita.",
+            "Te quiero en todas las galaxias."
         ];
 
-        // --- VARIABLES GLOBALES ---
+        // --- VARIABLES ---
         let escena = 1; 
         let indiceFrase = 0;
         const divUniverso = document.getElementById('universo');
@@ -179,138 +219,21 @@
         const btn = document.getElementById('btn-toggle');
         const txtFrase = document.getElementById('frase');
 
-        // --- AL CARGAR ---
+        // --- INICIO ---
         window.onload = function() {
-            crearEstrellasCSS(); // Nueva función optimizada
+            crearEstrellasCSS();
             setInterval(cambiarFrase, 4000);
             setInterval(actualizarReloj, 1000);
         };
 
-        // --- 1. LÓGICA DE ESTRELLAS CSS (MÁS EFICIENTE) ---
+        // --- ESTRELLAS (JS genera los divs, CSS anima) ---
         function crearEstrellasCSS() {
-            const cantidadEstrellas = 200; // Número de estrellas
+            const cantidadEstrellas = 150; 
             const contenedor = document.getElementById('universo');
 
             for (let i = 0; i < cantidadEstrellas; i++) {
                 let estrella = document.createElement('div');
                 estrella.className = 'estrella';
                 
-                // Posición aleatoria en la pantalla (X, Y)
-                // Usamos 'vw' y 'vh' para que se adapte al móvil
-                const x = (Math.random() - 0.5) * 200; // -100vw a 100vw
-                const y = (Math.random() - 0.5) * 200; // -100vh a 100vh
-                
-                estrella.style.left = `50%`; 
-                estrella.style.top = `50%`;
-                // Usamos translate3d para activar la GPU del móvil
-                estrella.style.transform = `translate3d(${x}vw, ${y}vh, -1000px)`;
-                
-                // Tamaño aleatorio
-                const tamano = Math.random() * 3 + 1;
-                estrella.style.width = `${tamano}px`;
-                estrella.style.height = `${tamano}px`;
-
-                // Animación: Duración y retraso aleatorios para que no vayan todas a la vez
-                const duracion = Math.random() * 2 + 1; // Entre 1 y 3 segundos
-                estrella.style.animation = `warpSpace ${duracion}s linear infinite`;
-                // Retraso negativo para que ya haya estrellas moviéndose al abrir la página
-                estrella.style.animationDelay = `-${Math.random() * 3}s`;
-
-                contenedor.appendChild(estrella);
-            }
-        }
-
-        // --- 2. RESTO DE FUNCIONES (FRASES Y ESCENAS) ---
-        function cambiarFrase() {
-            if (escena !== 1) return;
-            txtFrase.style.opacity = 0;
-            setTimeout(() => {
-                indiceFrase = (indiceFrase + 1) % frases.length;
-                txtFrase.innerText = frases[indiceFrase];
-                txtFrase.style.opacity = 1;
-            }, 500);
-        }
-
-        function cambiarEscena() {
-            if (escena === 1) {
-                // Ir a Jardin
-                divUniverso.style.opacity = 0;
-                setTimeout(() => {
-                    divUniverso.style.display = 'none';
-                    divJardin.style.display = 'flex';
-                    setTimeout(() => divJardin.style.opacity = 1, 50);
-                    btn.innerText = "Volver a la Nave ✨";
-                    btn.style.borderColor = "#ff4d6d";
-                    btn.style.color = "#ff4d6d";
-                    escena = 2;
-                    dibujarArbol();
-                }, 500);
-            } else {
-                // Ir a Universo
-                divJardin.style.opacity = 0;
-                setTimeout(() => {
-                    divJardin.style.display = 'none';
-                    divUniverso.style.display = 'flex';
-                    setTimeout(() => divUniverso.style.opacity = 1, 50);
-                    btn.innerText = "Ir al Jardín 🌱";
-                    btn.style.borderColor = "white";
-                    btn.style.color = "white";
-                    escena = 1;
-                }, 500);
-            }
-        }
-
-        // --- 3. ÁRBOL ---
-        function dibujarArbol() {
-            const canvas = document.getElementById('arbolCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, 350, 400);
-            let crecimiento = 0;
-            
-            function animar() {
-                if (escena !== 2) return;
-                ctx.clearRect(0, 0, 350, 400);
-                if (crecimiento < 1) crecimiento += 0.01;
-                rama(175, 400, 100 * crecimiento, 0, 12, ctx);
-                if (crecimiento < 1) requestAnimationFrame(animar);
-            }
-
-            function rama(x, y, alto, angulo, ancho, c) {
-                c.save();
-                c.translate(x, y);
-                c.rotate(angulo * Math.PI / 180);
-                c.beginPath();
-                c.moveTo(0, 0);
-                c.lineTo(0, -alto);
-                c.strokeStyle = "#5c3a45";
-                c.lineWidth = ancho;
-                c.stroke();
-
-                if (alto < 15 && alto > 5) {
-                    c.fillStyle = "#ff4d6d";
-                    c.font = "20px Arial";
-                    c.fillText("❤️", -10, -alto);
-                }
-
-                if (alto > 10) {
-                    c.translate(0, -alto);
-                    rama(0, 0, alto * 0.75, 20, ancho * 0.7, c);
-                    rama(0, 0, alto * 0.75, -20, ancho * 0.7, c);
-                }
-                c.restore();
-            }
-            animar();
-        }
-
-        // --- 4. RELOJ ---
-        function actualizarReloj() {
-            const diff = new Date() - fechaInicio;
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById('contador').innerText = `${d}d ${h}h ${m}m ${s}s`;
-        }
-    </script>
-</body>
-</html>
+                // Posición aleatoria
+                const x = (Math.
