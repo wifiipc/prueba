@@ -10,7 +10,7 @@
 
         /* --- BASE --- */
         *, *::after, *::before { padding: 0; margin: 0; box-sizing: border-box; }
-        :root { --dark-color: #000; --accent: #ff4d6d; --glass: rgba(255, 255, 255, 0.1); }
+        :root { --dark-color: #000; --accent: #ff4d6d; --glass: rgba(255, 255, 255, 0.1); --cockpit-metal: #0a0a12; }
 
         body {
             display: flex; align-items: flex-end; justify-content: center;
@@ -50,22 +50,23 @@
         .song-btn { background: #282828; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.2s; text-align: left; }
         .song-btn:active { background: #444; }
 
-        /* --- POP-UP DESCRIPCIÓN FOTO (NUEVO) --- */
+        /* --- POP-UP DESCRIPCIÓN FOTO --- */
         #photo-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 25000;
+            background: rgba(0,0,0,0.95); z-index: 25000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px;
         }
         #photo-overlay.active { opacity: 1; pointer-events: all; }
         .photo-detail-card {
-            background: #1a1a1a; padding: 15px; border-radius: 15px;
+            background: #1a1a1a; padding: 20px; border-radius: 15px;
             max-width: 500px; width: 100%; text-align: center;
-            border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(255,77,109,0.3);
+            border: 1px solid var(--accent); box-shadow: 0 0 40px rgba(255,77,109,0.2);
         }
-        .photo-detail-card img { width: 100%; max-height: 60vh; object-fit: contain; border-radius: 10px; margin-bottom: 15px; }
-        .photo-text { font-family: 'Montserrat'; font-size: 1rem; margin-bottom: 20px; line-height: 1.5; }
-        .close-photo-btn { background: var(--accent); color: white; border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        .photo-detail-card img { width: 100%; max-height: 50vh; object-fit: contain; border-radius: 10px; margin-bottom: 20px; border: 1px solid #333; }
+        .photo-text { font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 25px; line-height: 1.5; color: #eee; }
+        .close-photo-btn { background: var(--accent); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .close-photo-btn:active { transform: scale(0.95); }
 
         /* --- CONTROLES Y REPRODUCTOR --- */
         .controls { position: absolute; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 8px; opacity: 0; transition: 1s; }
@@ -95,11 +96,37 @@
         .escena { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 1s ease; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .activa { opacity: 1; pointer-events: all; }
 
-        #universo { background: black; }
+        /* --- ESCENA 1: NAVE ESPACIAL (NUEVO DISEÑO) --- */
+        #universo { background: black; overflow: hidden; }
         #starCanvas { position: absolute; z-index: 1; top:0; left:0; width:100%; height:100%; }
-        #contenido-texto { position: relative; z-index: 10; text-align: center; background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 600px; }
-        h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff4d6d; text-shadow: 0 0 20px #ff4d6d; margin: 0; line-height: 1.1; }
+        
+        /* Pseudo-elemento para el marco de la cabina */
+        #universo::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5; pointer-events: none;
+            /* Gradientes complejos para simular la cabina */
+            background: 
+                /* Reflejo sutil en el cristal */
+                linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 40%),
+                /* Marco circular oscuro que se desvanece hacia el centro */
+                radial-gradient(ellipse at center, transparent 50%, var(--cockpit-metal) 95%, #000 100%),
+                /* Paneles superior e inferior */
+                linear-gradient(to bottom, var(--cockpit-metal) 0%, transparent 15%, transparent 85%, var(--cockpit-metal) 100%);
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
+        }
 
+        /* Texto estilo HUD (Heads-Up Display) */
+        #contenido-texto {
+            position: relative; z-index: 10; text-align: center;
+            /* Eliminamos el fondo y borde anteriores para que parezca proyectado */
+            text-shadow: 0 0 15px var(--accent); /* Resplandor del texto */
+            width: 90%; max-width: 600px;
+            transform: translateY(-5%); /* Ajuste de posición visual */
+        }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; color: #ff4d6d; margin: 0; line-height: 1.1; }
+        #maquina-escribir { color: #fff; font-weight: 500; letter-spacing: 1px; }
+
+        /* --- ESCENA 2: JARDÍN --- */
         #jardin { width: 100%; height: 100%; }
         .night { position: fixed; left: 50%; top: 0; transform: translateX(-50%); width: 100%; height: 100%; filter: blur(0.1vmin); background: radial-gradient(ellipse at bottom, #020202 0%, #000000 100%); z-index: 0; }
         .flowers-container { position: absolute; bottom: -5vmin; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
@@ -108,6 +135,7 @@
         .mensaje-poema { position: absolute; top: 15%; z-index: 100; text-align: center; width: 90%; font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px rgba(0, 255, 250, 0.8); animation: aparecer 3s ease-in forwards; }
         .contador-dias { position: absolute; top: 28%; width: 100%; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: bold; color: #ff99ac; text-shadow: 0 2px 5px rgba(0,0,0,0.8); z-index: 100; letter-spacing: 1px; padding: 0 10px; }
 
+        /* --- ESCENA 3 & 4 --- */
         #corazon-scene { background: radial-gradient(circle, #1a0b14 0%, #000 100%); }
         #heartCanvas { position: absolute; z-index: 1; }
         .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 2.5rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 3s infinite; text-align: center; width: 100%; }
@@ -143,7 +171,7 @@
         @keyframes moving-grass { 0%, 100% { transform: rotate(-48deg) rotateY(40deg); } 50% { transform: rotate(-50deg) rotateY(40deg); } } @keyframes moving-grass--2 { 0%, 100% { transform: scale(0.5) rotate(75deg) rotateX(10deg) rotateY(-200deg); } 50% { transform: scale(0.5) rotate(79deg) rotateX(10deg) rotateY(-200deg); } } @keyframes growing-grass-ans--1 { 0% { transform-origin: bottom left; transform: rotate(-20deg) scale(0); } } @keyframes growing-grass-ans--2 { 0% { transform-origin: bottom right; transform: rotate(10deg) scale(0); } } @keyframes leaf-ans-1 { 0%, 100% { transform: rotate(-5deg) scale(1); } 50% { transform: rotate(5deg) scale(1.1); } } @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } } @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } } @keyframes aparecer { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } } @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 2.8rem; }
             .mensaje-poema { font-size: 1.4rem; top: 12%; }
             .contador-dias { font-size: 0.9rem; top: 25%; }
             .flowers-container { transform: scale(0.85) translateY(5%); }
@@ -159,7 +187,7 @@
     <div id="login-overlay">
         <div class="login-card">
             <h2 style="font-family:'Dancing Script'; color:var(--accent); font-size:2rem; margin-bottom:10px;">Nuestra Fecha Especial</h2>
-            <p style="color:#aaa; font-size:0.9rem;">Introduce el día de la bolera...</p>
+            <p style="color:#aaa; font-size:0.9rem;">Introduce el día que cambió todo...</p>
             <div class="date-inputs">
                 <select id="day-select"></select>
                 <select id="month-select">
@@ -207,7 +235,12 @@
 
     <div id="universo" class="escena activa">
         <canvas id="starCanvas"></canvas>
-        <div id="contenido-texto"><h1>Para mi Amor</h1><div style="font-size:1.2rem; color:#eee; min-height:1.5em; margin-top:10px;"><span id="maquina-escribir"></span><span class="cursor" style="display:inline-block;width:2px;height:1em;background:white;animation:blink 1s infinite;"></span></div></div>
+        <div id="contenido-texto">
+            <h1>Para mi Amor</h1>
+            <div style="font-size:1.3rem; min-height:1.5em; margin-top:15px;">
+                <span id="maquina-escribir"></span><span class="cursor" style="display:inline-block;width:2px;height:1em;background:var(--accent);animation:blink 1s infinite; margin-left: 5px;"></span>
+            </div>
+        </div>
     </div>
 
     <div id="jardin" class="escena">
@@ -239,11 +272,11 @@
         
         // ¡¡ CONFIGURACIÓN FOTOS Y DESCRIPCIONES !!
         const GALERIA = [
-            { url: "foto1.jpeg", desc: "No se me veían las intenciones ni nada..." },
-            { url: "foto2.jpeg", desc: "Nuestro primer atardecer siendo novios." },
-            { url: "foto3.jpeg", desc: "Tú durmiendo toda mona. :)" },
-            { url: "foto4.jpeg", desc: "Dos palabras: Monte Ferro. " },
-            { url: "foto5.jpeg", desc: "nuestros primeros reyes juntos" }
+            { url: "foto1.jpeg", desc: "La primera vez que te vi sonreír así..." },
+            { url: "foto2.jpeg", desc: "Nuestro viaje inolvidable." },
+            { url: "foto3.jpeg", desc: "Cada día a tu lado es un regalo." },
+            { url: "foto4.jpeg", desc: "Tus abrazos son mi lugar favorito." },
+            { url: "foto5.jpeg", desc: "Por mil momentos más juntos." }
         ];
 
         const FECHA_INICIO = new Date("2025-10-25T00:00:00");
@@ -364,7 +397,4 @@
     </script>
 </body>
 </html>
-
-
-
 
