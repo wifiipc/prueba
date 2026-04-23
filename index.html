@@ -95,6 +95,7 @@
         #netflix-container netflixintro [class*=helper-] .effect-brush .fur-29 { left: 90%; width: 2.8%; background: linear-gradient(to bottom, #e40913 0%, #e40913 30%, rgba(0, 0, 0, 0) 100%); }
         #netflix-container netflixintro [class*=helper-] .effect-brush .fur-30 { left: 92.8%; width: 3.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 19%, rgba(0, 0, 0, 0) 100%); }
         #netflix-container netflixintro [class*=helper-] .effect-brush .fur-31 { left: 96.3%; width: 3.7%; background: linear-gradient(to bottom, #e40913 0%, #e40913 37%, rgba(0, 0, 0, 0) 100%); }
+        
         #netflix-container netflixintro .effect-lumieres { position: absolute; width: 100%; height: 100%; opacity: 0; animation-name: showing-lumieres; animation-duration: 2s; animation-delay: 1.6s; animation-fill-mode: forwards; }
         #netflix-container netflixintro .effect-lumieres [class*=lamp-] { position: absolute; display: block; height: 100%; box-shadow: 0px 0px 10px 0px rgba(228, 9, 19, 0.75); background: var(--color); }
         #netflix-container netflixintro .effect-lumieres [class*=lamp-]::before { position: absolute; content: " "; display: block; width: 100%; height: 100%; background: var(--color); box-shadow: 0px 0px 10px 0px rgba(228, 9, 19, 0.75); }
@@ -167,6 +168,7 @@
         .song-list::-webkit-scrollbar { width: 6px; }
         .song-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
         .song-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        
         .song-btn { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08); color: white; padding: 15px 20px; border-radius: 15px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; text-align: left; }
         .song-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); transform: translateX(5px); }
         .song-btn:active { background: rgba(255,255,255,0.05); transform: scale(0.98); }
@@ -213,11 +215,12 @@
         .scroll-arrow svg { width: 32px; height: 32px; fill: none; stroke: white; stroke-width: 2; animation: bounceArrow 2s infinite; }
         @keyframes bounceArrow { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
         @keyframes fadeInOut { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        
         .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico', cursive; font-size: 2.8rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 4s ease-in-out infinite; text-align: center; width: 100%; }
         @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
         /* ========================================= */
-        /* --- 5. CSS ESCENAS SAN VALENTÍN (SV) ---  */
+        /* --- 5. CSS ESCENAS SAN VALENTÍN ---       */
         /* ========================================= */
         .escena-sv { display: none; } 
         
@@ -228,7 +231,7 @@
         h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; color: #ff4d6d; margin: 0; line-height: 1.1; letter-spacing: 2px; }
         #maquina-escribir { color: #fff; font-weight: 500; letter-spacing: 1px; font-size: 1.3rem; }
 
-        /* --- JARDÍN Y FLORES --- */
+        /* JARDIN Y FLORES */
         #jardin { width: 100%; background: #000; }
         .night { position: absolute; left: 0; top: 0; width: 100%; height: 100%; filter: blur(0.1vmin); background: radial-gradient(ellipse at bottom, #050505 0%, #000000 100%); z-index: 0; }
         .flowers-container { position: absolute; bottom: -5vmin; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
@@ -259,7 +262,6 @@
         @keyframes moving-flower-1 { 0%, 100% { transform: rotate(2deg); } 50% { transform: rotate(-2deg); } } @keyframes moving-flower-2 { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(14deg); } } @keyframes moving-flower-3 { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(-20deg) rotateY(-10deg); } } @keyframes blooming-flower { 0% { transform: scale(0); } } @keyframes grow-flower-tree { 0% { height: 0; border-radius: 1vmin; } } @keyframes blooming-leaf-right { 0% { transform-origin: left; transform: rotate(70deg) rotateY(30deg) scale(0); } } @keyframes blooming-leaf-left { 0% { transform-origin: right; transform: rotate(-70deg) rotateY(30deg) scale(0); } } @keyframes light-ans { 0% { opacity: 0; transform: translateY(0vmin); } 25% { opacity: 1; transform: translateY(-5vmin) translateX(-2vmin); } 50% { opacity: 1; transform: translateY(-15vmin) translateX(2vmin); filter: blur(0.2vmin); } 75% { transform: translateY(-20vmin) translateX(-2vmin); filter: blur(0.2vmin); } 100% { transform: translateY(-30vmin); opacity: 0; filter: blur(1vmin); } }
         @keyframes moving-grass { 0%, 100% { transform: rotate(-48deg) rotateY(40deg); } 50% { transform: rotate(-50deg) rotateY(40deg); } } @keyframes moving-grass--2 { 0%, 100% { transform: scale(0.5) rotate(75deg) rotateX(10deg) rotateY(-200deg); } 50% { transform: scale(0.5) rotate(79deg) rotateX(10deg) rotateY(-200deg); } } @keyframes growing-grass-ans--1 { 0% { transform-origin: bottom left; transform: rotate(-20deg) scale(0); } } @keyframes growing-grass-ans--2 { 0% { transform-origin: bottom right; transform: rotate(10deg) scale(0); } } @keyframes leaf-ans-1 { 0%, 100% { transform: rotate(-5deg) scale(1); } 50% { transform: rotate(5deg) scale(1.1); } } @keyframes rotarCarrusel { from { transform: perspective(1000px) rotateY(0deg); } to { transform: perspective(1000px) rotateY(360deg); } } @keyframes aparecer { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } } @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* --- CORAZÓN Y CARRUSEL --- */
         #corazon-scene { background: radial-gradient(circle, #1a0b14 0%, #000 100%); }
         #heartCanvas { position: absolute; z-index: 1; }
         
@@ -270,7 +272,7 @@
         .foto-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
         /* ========================================= */
-        /* --- 6. ESCENA 6 MESES: CINTA DE PELÍCULA -*/
+        /* --- 6. ESCENA 6 MESES: CINTA PELÍCULA --- */
         /* ========================================= */
         .escena-6m { display: none; background: #050505; align-items: center; justify-content: center; }
         .film-wrapper { position: relative; width: 100vw; background: #111; padding: 50px 0; box-shadow: 0 15px 50px rgba(0,0,0,0.9); border-top: 2px solid #222; border-bottom: 2px solid #222; }
@@ -446,6 +448,7 @@
     <script>
         const FRASES = ["Eres mi niña hermosa", "El amor de mi vida","Eres mía y solo mía","Mi casualidad favorita", "Te amo infinito","te quiero mucho mucho muchísimo"];
         
+        // --- FOTOS SAN VALENTÍN ---
         const GALERIA = [
             { url: "foto1.jpeg", desc: "No se me veían las intenciones ni nada..." },
             { url: "foto2.jpeg", desc: "Nuestro primer atardecer siendo novios." },
@@ -454,6 +457,7 @@
             { url: "foto5.jpeg", desc: "nuestros primeros reyes juntos" }
         ];
 
+        // --- 20+ FOTOS 6 MESES ---
         const GALERIA_6MESES = [
             { url: "foto1.jpeg", desc: "Mes 1: Nuestro comienzo" },
             { url: "foto2.jpeg", desc: "Una tarde especial" },
@@ -479,6 +483,7 @@
             { url: "foto2.jpeg", desc: "Felices 6 Meses mi amor" }
         ];
         
+        // --- PLAYLIST COMPLETA ---
         const PLAYLIST = [
             { titulo: "Eu e Ti", artista: "9Louro, Yuly", archivo: "9Louro, Yuly - Eu e Ti (SPOTISAVER).mp3" },
             { titulo: "Os Meus Males", artista: "9Louro, Yuly", archivo: "9Louro, Yuly - Os Meus Males (SPOTISAVER).mp3" },
@@ -578,7 +583,7 @@
             { titulo: "Reventar la Ciudad", artista: "Walls, Funzo & Baby Loud", archivo: "Walls, Funzo & Baby Loud - Reventar la Ciudad (SPOTISAVER).mp3" }
         ];
 
-        // --- VARIABLES DE ESTADO Y CANDADOS DE ANIMACIÓN ---
+        // --- VARIABLES DE ESTADO ---
         let currentSongIndex = 0;
         let isShuffle = false;
         let currentProfile = '';
@@ -588,7 +593,7 @@
         let heartRunning = false; 
         const audio = document.getElementById('bg-music');
 
-        // --- SISTEMA DE SCROLL SNAP ---
+        // --- OBSERVER PARA ANIMACIONES ---
         const observerOptions = { root: document.getElementById('main-container'), threshold: 0.6 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -606,7 +611,7 @@
 
         function vibrate(pattern) { if (navigator.vibrate) navigator.vibrate(pattern); }
 
-        // --- LOGICA DE INICIO ---
+        // --- LOGICA DE INICIO (FECHA -> NETFLIX -> PREGUNTA MUSICA) ---
         const daySelect = document.getElementById('day-select');
         for(let i=1; i<=31; i++) { let opt = document.createElement('option'); opt.value = i; opt.innerText = i; daySelect.appendChild(opt); }
 
@@ -615,7 +620,7 @@
             const m = document.getElementById('month-select').value;
             const y = document.getElementById('year-select').value;
             
-            if (d == 25 && m == 10 && y == 2025) { 
+            if (d == 25 && m == 10 && y == 2025) { // FECHA CORRECTA
                 vibrate(50);
                 document.getElementById('login-overlay').style.opacity = '0';
                 
@@ -637,7 +642,6 @@
             }
         }
 
-        // --- PREGUNTA MÚSICA ---
         function promptMusicChoice(wantsMusic) {
             vibrate(30);
             hasMusic = wantsMusic;
@@ -654,7 +658,6 @@
             }, 800);
         }
 
-        // --- PLAYLIST INIT ---
         function initPlaylist() {
             const list = document.getElementById('song-list');
             const dropdown = document.getElementById('track-dropdown');
@@ -688,7 +691,7 @@
             if(hasMusic) audio.play().then(() => updatePlayIcon(true)).catch(e => console.log("Espera interacción"));
         }
 
-        // --- MOSTRAR PERFILES ---
+        // --- PERFILES ---
         function showProfilesScreen() {
             const profileMenu = document.getElementById('profile-overlay');
             profileMenu.style.display = 'flex';
@@ -698,7 +701,6 @@
             document.getElementById('back-btn').style.display = 'none';
         }
 
-        // --- SELECCIÓN DE PERFIL ---
         function selectProfile(profile) {
             vibrate(30);
             currentProfile = profile;
@@ -728,7 +730,7 @@
             }, 800);
         }
 
-        // --- BOTÓN VOLVER ---
+        // --- VOLVER ---
         function goBackToMenu() {
             vibrate(30);
             document.body.classList.add('not-loaded');
@@ -747,7 +749,7 @@
             showProfilesScreen();
         }
 
-        // --- CONTROLES REPRODUCTOR ---
+        // --- REPRODUCTOR ---
         function togglePlayPause() { vibrate(30); if (audio.paused) { audio.play(); updatePlayIcon(true); } else { audio.pause(); updatePlayIcon(false); } }
         function updatePlayIcon(isPlaying) { 
             const btn = document.getElementById('play-btn');
@@ -769,7 +771,7 @@
         audio.ontimeupdate = () => { document.getElementById('progress-bar').style.width = `${(audio.currentTime / audio.duration) * 100}%`; };
         audio.onended = () => nextSong();
 
-        // --- CANVAS (SAN VALENTIN) ---
+        // --- ANIMACIONES (SAN VALENTIN) ---
         const starCanvas = document.getElementById('starCanvas'); const sCtx = starCanvas.getContext('2d'); let stars = [];
         function initStars() { starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight; stars = []; for(let i=0; i<300; i++) stars.push({x:Math.random()*starCanvas.width, y:Math.random()*starCanvas.height, z:Math.random()*starCanvas.width}); }
         function animateStars() { 
@@ -803,7 +805,6 @@
             });
         }
 
-        // --- ROLLO DE PELÍCULA (6 MESES) ---
         function crearFilmStrip() {
             const container = document.getElementById('film-strip');
             if(container.children.length > 0) return; 
@@ -816,7 +817,6 @@
             });
         }
 
-        // --- MODALES Y TEXTOS ---
         function showDescription(url, desc) {
             document.getElementById('detail-img').src = url;
             document.getElementById('detail-text').innerText = desc;
@@ -826,6 +826,7 @@
 
         let tIdx=0, cIdx=0, isDel=false;
         function typeWriter() { 
+            if(currentProfile !== 'san_valentin') { typingRunning = false; return; }
             const txt = FRASES[tIdx]; const el = document.getElementById('maquina-escribir'); 
             el.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++); 
             let spd = isDel ? 50 : 100; 
