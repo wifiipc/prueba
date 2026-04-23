@@ -6,52 +6,40 @@
     <title>Para ti ❤️</title>
     <style>
         /* ========================================= */
-        /* --- 1. FUENTES Y VARIABLES BASE ---       */
+        /* --- 1. FUENTES Y VARIABLES BASE --- */
         /* ========================================= */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap');
 
         *, *::after, *::before { padding: 0; margin: 0; box-sizing: border-box; }
-        
-        :root { 
-            --dark-bg: #050505; 
-            --accent: #ff4d6d;
-            --accent-hover: #ff2a55;
-            --glass-bg: rgba(30, 30, 30, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --text-main: #ffffff;
-            --text-muted: #aaaaaa;
-        }
+        :root { --dark-color: #000; --accent: #ff4d6d; }
 
-        html { background-color: var(--dark-bg); overscroll-behavior: none; height: 100vh; height: 100dvh; }
+        html { background-color: var(--dark-color); overscroll-behavior: none; }
         body { 
-            margin: 0; padding: 0; background-color: var(--dark-bg); 
-            font-family: 'Montserrat', sans-serif; color: var(--text-main); 
-            height: 100vh; height: 100dvh; width: 100vw; overflow: hidden; 
+            margin: 0; padding: 0; background-color: var(--dark-color); 
+            font-family: 'Montserrat', sans-serif; color: white; 
+            height: 100dvh; width: 100vw; overflow: hidden; 
             -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; 
         }
 
-        #main-container { 
-            height: 100vh; height: 100dvh; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; 
-            scroll-behavior: smooth; position: absolute; top: 0; left: 0; scrollbar-width: none; 
-        }
-        #main-container::-webkit-scrollbar { display: none; }
-        
-        #back-btn { 
-            position: fixed; top: 25px; left: 20px; z-index: 50000; 
-            background: var(--glass-bg); color: white; border: 1px solid var(--glass-border); 
-            padding: 10px 20px; border-radius: 20px; font-family: 'Montserrat', sans-serif; 
-            font-size: 0.85rem; font-weight: 500; cursor: pointer; display: none; 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-        }
-        #back-btn:hover { background: var(--accent); border-color: var(--accent); transform: translateX(-5px); }
-
         /* ========================================= */
-        /* --- 2. INTRODUCCIÓN NETFLIX ---           */
+        /* --- 2. INTRODUCCIÓN NETFLIX --- */
         /* ========================================= */
-        #netflix-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; z-index: 70000; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; }
-        #netflix-container netflixintro { display: block; position: relative; width: 300px; height: 300px; overflow: hidden; animation-name: zoom-in; animation-delay: 0.5s; animation-duration: 3.5s; animation-timing-function: ease-in; animation-fill-mode: forwards; background-size: 4000px; background-position: -1950px 0; }
-        #netflix-container netflixintro::before { content: ""; position: absolute; display: block; background-color: #000000; width: 150%; height: 30%; left: -25%; bottom: -27%; border-radius: 50%; z-index: 5; transform-origin: left center; background-size: 4000px; background-position: -1950px 0; }
+        #netflix-container { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-color: #000000; z-index: 70000; flex-direction: column; 
+            justify-content: center; align-items: center; overflow: hidden; 
+        }
+        #netflix-container netflixintro { 
+            display: block; position: relative; width: 300px; height: 300px; overflow: hidden; 
+            animation-name: zoom-in; animation-delay: 0.5s; animation-duration: 3.5s; 
+            animation-timing-function: ease-in; animation-fill-mode: forwards; 
+            background-size: 4000px; background-position: -1950px 0; 
+        }
+        #netflix-container netflixintro::before { 
+            content: ""; position: absolute; display: block; background-color: #000000; 
+            width: 150%; height: 30%; left: -25%; bottom: -27%; border-radius: 50%; 
+            z-index: 5; transform-origin: left center; background-size: 4000px; background-position: -1950px 0; 
+        }
         #netflix-container netflixintro[letter=N] { transform-origin: 30% center; }
         #netflix-container netflixintro[letter=N] .helper-1 { width: 19.5%; height: 100%; background-color: rgba(228, 9, 19, 0.5); left: 22.4%; top: 0; transform: rotate(180deg); animation-name: fading-lumieres-box; animation-duration: 2s; animation-delay: 0.6s; animation-fill-mode: forwards; }
         #netflix-container netflixintro[letter=N] .helper-1 .effect-brush { animation-name: brush-moving; animation-duration: 2.5s; animation-fill-mode: forwards; animation-delay: 1.2s; }
@@ -95,7 +83,6 @@
         #netflix-container netflixintro [class*=helper-] .effect-brush .fur-29 { left: 90%; width: 2.8%; background: linear-gradient(to bottom, #e40913 0%, #e40913 30%, rgba(0, 0, 0, 0) 100%); }
         #netflix-container netflixintro [class*=helper-] .effect-brush .fur-30 { left: 92.8%; width: 3.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 19%, rgba(0, 0, 0, 0) 100%); }
         #netflix-container netflixintro [class*=helper-] .effect-brush .fur-31 { left: 96.3%; width: 3.7%; background: linear-gradient(to bottom, #e40913 0%, #e40913 37%, rgba(0, 0, 0, 0) 100%); }
-        
         #netflix-container netflixintro .effect-lumieres { position: absolute; width: 100%; height: 100%; opacity: 0; animation-name: showing-lumieres; animation-duration: 2s; animation-delay: 1.6s; animation-fill-mode: forwards; }
         #netflix-container netflixintro .effect-lumieres [class*=lamp-] { position: absolute; display: block; height: 100%; box-shadow: 0px 0px 10px 0px rgba(228, 9, 19, 0.75); background: var(--color); }
         #netflix-container netflixintro .effect-lumieres [class*=lamp-]::before { position: absolute; content: " "; display: block; width: 100%; height: 100%; background: var(--color); box-shadow: 0px 0px 10px 0px rgba(228, 9, 19, 0.75); }
@@ -142,85 +129,70 @@
         @keyframes fading-lumieres-box { 0% { background-color: rgba(228, 9, 19, 0.5); } 100% { background-color: rgba(228, 9, 19, 0); } }
 
         /* ========================================= */
-        /* --- 3. UI MENÚS Y REPRODUCTOR GLASS ---   */
+        /* --- 3. UI MENÚS Y REPRODUCTOR GLASS --- */
         /* ========================================= */
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); border-radius: 24px; padding: 35px; text-align: center; width: 85%; max-width: 400px; }
-        
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 60000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
-        .date-inputs { display: flex; justify-content: center; gap: 10px; margin: 25px 0; }
-        select { background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 14px 8px; border-radius: 12px; flex: 1; outline: none; text-align: center; font-size: 1rem; font-family: 'Montserrat', sans-serif; cursor: pointer; transition: 0.3s; }
-        select:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(255,77,109,0.3); }
-        .unlock-btn { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 30px; font-weight: 600; width: 100%; cursor: pointer; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); font-family: 'Montserrat', sans-serif; }
-        .unlock-btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 5px 25px rgba(255, 77, 109, 0.6); }
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 60000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
+        .glass-card { background: rgba(30, 30, 30, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); border-radius: 24px; padding: 35px; text-align: center; width: 85%; max-width: 400px; }
+        .date-inputs { display: flex; justify-content: center; gap: 8px; margin: 25px 0; }
+        select { background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 12px 5px; border-radius: 10px; flex: 1; outline: none; text-align: center; font-size: 1rem;}
+        .unlock-btn { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 30px; font-weight: bold; width: 100%; cursor: pointer; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); }
         .unlock-btn:active { transform: scale(0.95); }
-        .error-msg { color: #ff4d4d; margin-top: 15px; font-size: 0.9rem; font-weight: 500; opacity: 0; transition: 0.3s; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        .error-msg { color: #ff4d4d; margin-top: 15px; font-size: 0.9rem; opacity: 0; transition: 0.3s; }
 
         .overlay-center { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a0a10 0%, #000 100%); z-index: 48000; display: none; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.8s ease; }
         .btn-glass-group { display: flex; gap: 15px; margin-top: 25px; flex-direction: column; }
-        .btn-glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 15px; border-radius: 15px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); }
-        .btn-glass:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
-        .btn-glass.primary { background: rgba(255, 77, 109, 0.8); border-color: var(--accent); box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3); }
-        .btn-glass.primary:hover { background: var(--accent); box-shadow: 0 6px 20px rgba(255, 77, 109, 0.5); }
+        .btn-glass { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 15px; border-radius: 15px; font-family: 'Montserrat'; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .btn-glass.primary { background: rgba(255, 77, 109, 0.6); border-color: var(--accent); }
         .btn-glass:active { transform: scale(0.95); }
 
-        .song-list { display: flex; flex-direction: column; gap: 12px; max-height: 45vh; overflow-y: auto; margin-top: 25px; padding-right: 8px; }
+        .song-list { display: flex; flex-direction: column; gap: 10px; max-height: 45vh; overflow-y: auto; margin-top: 20px; padding-right: 5px; }
         .song-list::-webkit-scrollbar { width: 6px; }
         .song-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
         .song-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-        
-        .song-btn { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08); color: white; padding: 15px 20px; border-radius: 15px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; text-align: left; }
-        .song-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); transform: translateX(5px); }
-        .song-btn:active { background: rgba(255,255,255,0.05); transform: scale(0.98); }
+        .song-btn { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 15px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.2s; text-align: left; }
+        .song-btn:active { background: rgba(255,255,255,0.1); }
 
         #profile-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; z-index: 45000; display: none; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.8s ease; }
-        .profile-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: white; margin-bottom: 45px; text-align: center; font-weight: 500; letter-spacing: 1px;}
-        .profiles-container { display: flex; gap: 35px; }
-        .profile-card { cursor: pointer; text-align: center; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .profile-card:hover { transform: scale(1.1); }
-        .profile-img { width: 120px; height: 120px; border-radius: 12px; border: 3px solid transparent; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; font-size: 4.5rem; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .profile-card:hover .profile-img { border-color: white; box-shadow: 0 15px 30px rgba(255,255,255,0.2); }
+        .profile-title { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: white; margin-bottom: 40px; text-align: center; font-weight: 500; letter-spacing: 1px;}
+        .profiles-container { display: flex; gap: 30px; }
+        .profile-card { cursor: pointer; text-align: center; transition: transform 0.3s ease; }
+        .profile-card:hover { transform: scale(1.05); }
+        .profile-img { width: 110px; height: 110px; border-radius: 10px; border: 3px solid transparent; transition: border-color 0.3s; display: flex; justify-content: center; align-items: center; font-size: 4rem; margin-bottom: 10px; }
+        .profile-card:hover .profile-img { border-color: white; }
         .profile-sv .profile-img { background: linear-gradient(135deg, #ff006e, #ff4d6d); }
         .profile-6m .profile-img { background: linear-gradient(135deg, #3a0ca3, #4cc9f0); }
-        .profile-name { font-size: 1.2rem; color: var(--text-muted); transition: color 0.3s; font-weight: 500; }
+        .profile-name { font-size: 1.1rem; color: #ccc; transition: color 0.3s; }
         .profile-card:hover .profile-name { color: white; font-weight: bold; }
 
-        .spotify-player { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); width: 92%; max-width: 420px; height: 80px; background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 20000; box-shadow: 0 15px 35px rgba(0,0,0,0.6); transition: opacity 0.8s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; pointer-events: none; }
-        .spotify-player.visible { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
-        .track-info { display: flex; flex-direction: column; justify-content: center; flex-grow: 1; overflow: hidden; margin-right: 15px; }
-        .track-dropdown { background: transparent; color: white; border: none; outline: none; font-weight: 600; font-size: 1rem; font-family: 'Montserrat', sans-serif; width: 100%; cursor: pointer; padding: 0; appearance: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-bottom: 4px; transition: color 0.3s;}
-        .track-dropdown:hover { color: var(--accent); }
-        .track-dropdown option { background: #1a1a1a; color: white; font-size: 0.95rem; font-weight: 500; padding: 10px;}
-        .track-artist { font-size: 0.8rem; color: #cccccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400;}
-        .player-controls { display: flex; align-items: center; gap: 15px; }
-        .control-btn { background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 5px; transition: all 0.3s ease; }
-        .control-btn:hover { color: white; transform: scale(1.1); }
-        .control-btn svg { width: 26px; height: 26px; fill: currentColor; }
+        .spotify-player { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 400px; height: 75px; background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; z-index: 20000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transition: opacity 1s, transform 0.5s; opacity: 0; pointer-events: none; }
+        .spotify-player.visible { opacity: 1; pointer-events: all; }
+        .track-info { display: flex; flex-direction: column; justify-content: center; flex-grow: 1; overflow: hidden; margin-right: 10px; }
+        .track-dropdown { background: transparent; color: white; border: none; outline: none; font-weight: 600; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; width: 100%; cursor: pointer; padding: 0; appearance: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-bottom: 2px;}
+        .track-dropdown option { background: #222; color: white; font-size: 0.9rem;}
+        .track-artist { font-size: 0.75rem; color: #bbb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .player-controls { display: flex; align-items: center; gap: 12px; }
+        .control-btn { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 5px; transition: color 0.3s; }
+        .control-btn svg { width: 24px; height: 24px; fill: currentColor; }
         .shuffle-active { color: var(--accent) !important; }
-        .play-btn { width: 46px; height: 46px; background: var(--accent); border-radius: 50%; color: white !important; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.5); display: flex; align-items: center; justify-content: center; padding: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .play-btn:hover { background: var(--accent-hover); transform: scale(1.1); box-shadow: 0 8px 25px rgba(255, 77, 109, 0.6); }
-        .play-btn:active { transform: scale(0.95); }
-        .play-btn svg { width: 20px; height: 20px; fill: white; }
-        .progress-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, #ff006e, var(--accent)); width: 0%; border-radius: 0 0 0 18px; transition: width 0.1s linear; }
+        .play-btn { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; color: white !important; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4); display: flex; align-items: center; justify-content: center; padding: 0; }
+        .play-btn svg { width: 18px; height: 18px; fill: white; }
+        .progress-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent); width: 0%; border-radius: 0 0 0 12px; transition: width 0.1s linear; }
 
-        #photo-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 80000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 20px; }
+        #photo-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 80000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px; }
         #photo-overlay.active { opacity: 1; pointer-events: all; }
-        .photo-detail-card { background: #111; padding: 15px; border-radius: 24px; max-width: 500px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
-        .photo-detail-card img { width: 100%; max-height: 60vh; object-fit: contain; border-radius: 16px; margin-bottom: 20px; }
-        .photo-text { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; margin-bottom: 25px; line-height: 1.5; color: #eee; font-weight: 500; }
-        .close-photo-btn { background: var(--accent); color: white; border: none; padding: 14px 40px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: 0.3s; box-shadow: 0 5px 15px rgba(255,77,109,0.3); }
-        .close-photo-btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,77,109,0.5); }
+        .photo-detail-card { background: #151515; padding: 15px; border-radius: 20px; max-width: 500px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 50px rgba(255,77,109,0.15); }
+        .photo-detail-card img { width: 100%; max-height: 55vh; object-fit: contain; border-radius: 12px; margin-bottom: 20px; }
+        .photo-text { font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 25px; line-height: 1.5; color: #eee; }
+        .close-photo-btn { background: var(--accent); color: white; border: none; padding: 12px 35px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 1rem; }
 
-        .scroll-hint { position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.85rem; font-weight: 500; z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 8px; animation: fadeInOut 3s infinite; pointer-events: none; letter-spacing: 3px; text-transform: uppercase; }
-        .scroll-arrow svg { width: 32px; height: 32px; fill: none; stroke: white; stroke-width: 2; animation: bounceArrow 2s infinite; }
+        .scroll-hint { position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.5); font-size: 0.8rem; z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 5px; animation: fadeInOut 3s infinite; pointer-events: none; letter-spacing: 2px; text-transform: uppercase; }
+        .scroll-arrow svg { width: 30px; height: 30px; fill: none; stroke: white; stroke-width: 2; animation: bounceArrow 2s infinite; }
         @keyframes bounceArrow { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
-        @keyframes fadeInOut { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
-        
-        .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico', cursive; font-size: 2.8rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 4s ease-in-out infinite; text-align: center; width: 100%; }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        .titulo-flotante { position: absolute; top: 15%; font-family: 'Pacifico'; font-size: 2.5rem; color: #ff99ac; text-shadow: 0 0 20px #ff006e; z-index: 10; animation: flotar 3s infinite; text-align: center; width: 100%; }
         @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
         /* ========================================= */
-        /* --- 5. CSS ESCENAS SAN VALENTÍN ---       */
+        /* --- 4. CSS DE LAS ESCENAS --- */
         /* ========================================= */
         .escena-sv { display: none; } 
         
@@ -228,15 +200,15 @@
         #starCanvas { position: absolute; z-index: 1; top:0; left:0; width:100%; height:100%; }
         #universo::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; background: radial-gradient(ellipse at center, transparent 60%, rgba(10,10,18,0.9) 100%), linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.8) 100%); }
         #contenido-texto { position: relative; z-index: 10; text-align: center; text-shadow: 0 0 20px var(--accent); width: 85%; max-width: 600px; transform: translateY(-5%); }
-        h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; color: #ff4d6d; margin: 0; line-height: 1.1; letter-spacing: 2px; }
-        #maquina-escribir { color: #fff; font-weight: 500; letter-spacing: 1px; font-size: 1.3rem; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3.8rem; color: #ff4d6d; margin: 0; line-height: 1.1; }
+        #maquina-escribir { color: #fff; font-weight: 500; letter-spacing: 1px; font-size: 1.2rem; }
 
-        /* JARDIN Y FLORES */
+        /* JARDIN Y FLORES ORIGINALES INTACTOS */
         #jardin { width: 100%; background: #000; }
         .night { position: absolute; left: 0; top: 0; width: 100%; height: 100%; filter: blur(0.1vmin); background: radial-gradient(ellipse at bottom, #050505 0%, #000000 100%); z-index: 0; }
         .flowers-container { position: absolute; bottom: -5vmin; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         .flower-wrapper { position: absolute; bottom: 0; transform-origin: bottom center; }
-        .mensaje-poema { position: absolute; top: 20%; z-index: 100; text-align: center; width: 90%; font-family: 'Dancing Script', cursive; font-size: 2rem; color: #fff; text-shadow: 0 0 15px rgba(0, 255, 250, 0.8); animation: aparecer 3s ease-in forwards; }
+        .mensaje-poema { position: absolute; top: 20%; z-index: 100; text-align: center; width: 90%; font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px rgba(0, 255, 250, 0.8); animation: aparecer 3s ease-in forwards; }
         
         .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; --fl-speed: 0.8s; }
         .flower--1 { animation: moving-flower-1 4s linear infinite; } .flower--2 { left: 50%; transform: rotate(20deg); animation: moving-flower-2 4s linear infinite; } .flower--3 { left: 50%; transform: rotate(-15deg); animation: moving-flower-3 4s linear infinite; }
@@ -266,48 +238,31 @@
         #heartCanvas { position: absolute; z-index: 1; }
         
         #galeria { background: #000; overflow: hidden; }
-        .carousel-container { position: relative; width: 150px; height: 220px; transform-style: preserve-3d; animation: rotarCarrusel 25s infinite linear; margin-top: 40px; }
-        .foto-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 3px solid #ff4d6d; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255,77,109,0.5); cursor: pointer; transition: 0.3s; }
-        .foto-card:hover { border-color: white; box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        .carousel-container { position: relative; width: 140px; height: 200px; transform-style: preserve-3d; animation: rotarCarrusel 20s infinite linear; margin-top: 40px; }
+        .foto-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 2px solid #ff4d6d; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255,77,109,0.5); cursor: pointer; }
         .foto-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-        /* ========================================= */
-        /* --- 6. ESCENA 6 MESES: CINTA PELÍCULA --- */
-        /* ========================================= */
+        /* --- ESCENA 6 MESES: ROLLO DE PELÍCULA --- */
         .escena-6m { display: none; background: #050505; align-items: center; justify-content: center; }
-        .film-wrapper { position: relative; width: 100vw; background: #111; padding: 50px 0; box-shadow: 0 15px 50px rgba(0,0,0,0.9); border-top: 2px solid #222; border-bottom: 2px solid #222; }
-        
-        .film-wrapper::before, .film-wrapper::after { content: ''; position: absolute; left: 0; width: 100%; height: 24px; background-image: linear-gradient(90deg, transparent 40%, #000 40%); background-size: 34px 24px; z-index: 5; }
-        .film-wrapper::before { top: 8px; } .film-wrapper::after { bottom: 8px; }
-        
-        .film-strip-scroll { display: flex; gap: 20px; padding: 0 50vw 0 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; align-items: center; }
+        .film-wrapper { position: relative; width: 100vw; background: #111; padding: 40px 0; box-shadow: 0 15px 40px rgba(0,0,0,0.8); }
+        .film-wrapper::before, .film-wrapper::after { content: ''; position: absolute; left: 0; width: 100%; height: 20px; background-image: linear-gradient(90deg, transparent 40%, #000 40%); background-size: 30px 20px; z-index: 5; }
+        .film-wrapper::before { top: 5px; } .film-wrapper::after { bottom: 5px; }
+        .film-strip-scroll { display: flex; gap: 15px; padding: 0 50vw 0 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; align-items: center; }
         .film-strip-scroll::-webkit-scrollbar { display: none; }
-        
-        .film-frame { flex: 0 0 auto; width: 240px; height: 320px; scroll-snap-align: center; background: #000; border: 2px solid #333; padding: 8px; cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s, border-color 0.3s; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
-        .film-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%) sepia(25%) contrast(1.1); transition: 0.4s; }
-        .film-frame:hover { transform: scale(1.08); z-index: 10; border-color: #4cc9f0; box-shadow: 0 0 25px rgba(76, 201, 240, 0.4); }
-        .film-frame:hover img { filter: grayscale(0%) sepia(0%) contrast(1.05); }
-        
-        .swipe-hint { position: absolute; top: 18%; color: #4cc9f0; font-family: 'Montserrat', sans-serif; letter-spacing: 3px; font-size: 0.85rem; font-weight: 500; text-transform: uppercase; animation: fadeInOut 2.5s infinite; text-shadow: 0 0 10px rgba(76, 201, 240, 0.5); }
+        .film-frame { flex: 0 0 auto; width: 220px; height: 300px; scroll-snap-align: center; background: #000; border: 2px solid #333; padding: 5px; cursor: pointer; transition: transform 0.3s, filter 0.3s; }
+        .film-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(15%) sepia(20%) contrast(1.1); transition: 0.3s; }
+        .film-frame:hover { transform: scale(1.05); z-index: 10; border-color: #4cc9f0; }
+        .film-frame:hover img { filter: grayscale(0%) sepia(0%) contrast(1); }
+        .swipe-hint { position: absolute; top: 15%; color: #4cc9f0; font-family: 'Montserrat'; letter-spacing: 2px; font-size: 0.8rem; text-transform: uppercase; animation: fadeInOut 2s infinite; }
 
-        /* ========================================= */
-        /* --- 7. RESPONSIVE Y UTILIDADES ---        */
-        /* ========================================= */
         @media (max-width: 768px) {
-            h1 { font-size: 3rem; } 
-            .carousel-container { width: 130px; height: 190px; } 
-            .titulo-flotante { font-size: 2.2rem; top: 10%; } 
-            .spotify-player { bottom: 15px; width: 95%; height: 80px; padding: 0 12px; }
-            .flowers-container { transform: scale(0.85) translateY(5%); } 
-            .mensaje-poema { font-size: 1.5rem; top: 12%; }
-            .film-frame { width: 200px; height: 280px; }
-            .glass-card { width: 90%; padding: 25px; }
+            h1 { font-size: 2.8rem; } .carousel-container { width: 120px; height: 180px; } .titulo-flotante { font-size: 2rem; top: 10%; } .spotify-player { bottom: 10px; width: 95%; height: 75px; }
+            .flowers-container { transform: scale(0.85) translateY(5%); } .mensaje-poema { font-size: 1.4rem; top: 12%; }
         }
         .not-loaded * { animation-play-state: paused !important; }
     </style>
 </head>
 <body class="not-loaded">
-
     <button id="back-btn" onclick="goBackToMenu()">❮ Volver a Perfiles</button>
 
     <div id="netflix-container">
@@ -321,7 +276,7 @@
 
     <div id="login-overlay">
         <div class="glass-card login-card">
-            <h2 style="font-family:'Dancing Script'; color:var(--accent); font-size:2.2rem; margin-bottom:10px;">Nuestra Fecha</h2>
+            <h2 style="font-family:'Dancing Script'; color:var(--accent); font-size:2rem; margin-bottom:10px;">Nuestra Fecha</h2>
             <div class="date-inputs">
                 <select id="day-select"></select>
                 <select id="month-select">
@@ -339,8 +294,8 @@
 
     <div id="music-prompt-overlay" class="overlay-center">
         <div class="glass-card">
-            <h2 style="font-family:'Montserrat', sans-serif; font-size:1.5rem; margin-bottom: 10px;">Música de fondo</h2>
-            <p style="color:#ddd; font-size:0.95rem;">¿Quieres que nuestra música suene de fondo mientras ves los recuerdos?</p>
+            <h2 style="font-family:'Montserrat', sans-serif; font-size:1.4rem; margin-bottom: 10px;">Música de fondo</h2>
+            <p style="color:#ddd; font-size:0.9rem;">¿Quieres que nuestra música suene de fondo mientras ves los recuerdos?</p>
             <div class="btn-glass-group">
                 <button class="btn-glass primary" onclick="promptMusicChoice(true)">Sí, elegir música 🎵</button>
                 <button class="btn-glass" onclick="promptMusicChoice(false)">No, prefiero en silencio</button>
@@ -349,9 +304,9 @@
     </div>
 
     <div id="music-overlay" class="overlay-center">
-        <div class="glass-card" style="padding: 25px;">
-            <h2 style="font-family:'Pacifico'; color:#ff4d6d; font-size:2.2rem;">Playlist 🎵</h2>
-            <p style="color:#ccc; font-size:0.9rem;">Elige nuestra banda sonora...</p>
+        <div class="glass-card" style="padding: 20px;">
+            <h2 style="font-family:'Pacifico'; color:#ff4d6d; font-size:2rem;">Playlist 🎵</h2>
+            <p style="color:#aaa; font-size:0.85rem;">Elige nuestra banda sonora...</p>
             <div class="song-list" id="song-list"></div>
         </div>
     </div>
@@ -400,7 +355,7 @@
         
         <div id="universo" class="escena escena-sv">
             <canvas id="starCanvas"></canvas>
-            <div id="contenido-texto"><h1>Para mi pingüina</h1><div style="font-size:1.3rem; color:#eee; min-height:1.5em; margin-top:15px;"><span id="maquina-escribir"></span><span class="cursor" style="display:inline-block;width:2px;height:1em;background:var(--accent);animation:blink 1s infinite; margin-left: 5px;"></span></div></div>
+            <div id="contenido-texto"><h1>Para mi pingüina</h1><div style="font-size:1.2rem; color:#eee; min-height:1.5em; margin-top:10px;"><span id="maquina-escribir"></span><span class="cursor" style="display:inline-block;width:2px;height:1em;background:var(--accent);animation:blink 1s infinite; margin-left: 5px;"></span></div></div>
             <div class="scroll-hint"><span>Desliza</span><div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path></svg></div></div>
         </div>
 
@@ -439,12 +394,11 @@
             <div class="swipe-hint">Desliza hacia los lados ↔</div>
             <div class="film-wrapper">
                 <div class="film-strip-scroll" id="film-strip">
-                </div>
+                    </div>
             </div>
         </div>
 
     </div>
-
     <script>
         const FRASES = ["Eres mi niña hermosa", "El amor de mi vida","Eres mía y solo mía","Mi casualidad favorita", "Te amo infinito","te quiero mucho mucho muchísimo"];
         
@@ -583,25 +537,19 @@
             { titulo: "Reventar la Ciudad", artista: "Walls, Funzo & Baby Loud", archivo: "Walls, Funzo & Baby Loud - Reventar la Ciudad (SPOTISAVER).mp3" }
         ];
 
-        // --- VARIABLES DE ESTADO ---
         let currentSongIndex = 0;
         let isShuffle = false;
         let currentProfile = '';
         let hasMusic = false; 
-        let starsRunning = false; 
-        let typingRunning = false; 
-        let heartRunning = false; 
         const audio = document.getElementById('bg-music');
 
-        // --- OBSERVER PARA ANIMACIONES ---
+        // --- SISTEMA DE SCROLL SNAP ---
         const observerOptions = { root: document.getElementById('main-container'), threshold: 0.6 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    if (entry.target.id === 'corazon-scene') { 
-                        if (!heartRunning) { heartRunning = true; initHeart(); animateHeart(); }
-                        vibrate(40); 
-                    }
+                    if (entry.target.id === 'universo' && currentProfile === 'san_valentin') { initStars(); animateStars(); }
+                    if (entry.target.id === 'corazon-scene') { initHeart(); animateHeart(); vibrate(40); }
                     if (entry.target.id === 'galeria') { crearCarrusel(); }
                     if (entry.target.id === 'film-scene') { crearFilmStrip(); }
                 }
@@ -611,7 +559,7 @@
 
         function vibrate(pattern) { if (navigator.vibrate) navigator.vibrate(pattern); }
 
-        // --- LOGICA DE INICIO (FECHA -> NETFLIX -> PREGUNTA MUSICA) ---
+        // --- LOGICA DE INICIO ---
         const daySelect = document.getElementById('day-select');
         for(let i=1; i<=31; i++) { let opt = document.createElement('option'); opt.value = i; opt.innerText = i; daySelect.appendChild(opt); }
 
@@ -620,7 +568,7 @@
             const m = document.getElementById('month-select').value;
             const y = document.getElementById('year-select').value;
             
-            if (d == 25 && m == 10 && y == 2025) { // FECHA CORRECTA
+            if (d == 25 && m == 10 && y == 2025) { // FECHA
                 vibrate(50);
                 document.getElementById('login-overlay').style.opacity = '0';
                 
@@ -642,6 +590,7 @@
             }
         }
 
+        // --- PREGUNTA MÚSICA ---
         function promptMusicChoice(wantsMusic) {
             vibrate(30);
             hasMusic = wantsMusic;
@@ -658,6 +607,7 @@
             }, 800);
         }
 
+        // --- PLAYLIST INIT ---
         function initPlaylist() {
             const list = document.getElementById('song-list');
             const dropdown = document.getElementById('track-dropdown');
@@ -691,7 +641,7 @@
             if(hasMusic) audio.play().then(() => updatePlayIcon(true)).catch(e => console.log("Espera interacción"));
         }
 
-        // --- PERFILES ---
+        // --- MOSTRAR PERFILES ---
         function showProfilesScreen() {
             const profileMenu = document.getElementById('profile-overlay');
             profileMenu.style.display = 'flex';
@@ -701,6 +651,7 @@
             document.getElementById('back-btn').style.display = 'none';
         }
 
+        // --- SELECCIÓN DE PERFIL ---
         function selectProfile(profile) {
             vibrate(30);
             currentProfile = profile;
@@ -713,10 +664,7 @@
             if(currentProfile === 'san_valentin') {
                 escenasSV.forEach(el => el.style.display = 'flex');
                 escenas6M.forEach(el => el.style.display = 'none');
-                
-                if(!starsRunning) { starsRunning = true; initStars(); animateStars(); }
-                if(!typingRunning) { typingRunning = true; typeWriter(); }
-                
+                initStars(); animateStars(); typeWriter(); 
             } else {
                 escenasSV.forEach(el => el.style.display = 'none');
                 escenas6M.forEach(el => el.style.display = 'flex');
@@ -730,26 +678,14 @@
             }, 800);
         }
 
-        // --- VOLVER ---
+        // --- BOTÓN VOLVER ---
         function goBackToMenu() {
             vibrate(30);
-            document.body.classList.add('not-loaded');
-            document.getElementById('spotify-player').classList.remove('visible');
-            document.getElementById('back-btn').style.display = 'none';
-            
-            const mainContainer = document.getElementById('main-container');
-            mainContainer.style.scrollBehavior = 'auto';
-            mainContainer.scrollTop = 0; 
-            mainContainer.style.scrollBehavior = 'smooth'; 
-            
-            currentProfile = '';
-            starsRunning = false;
-            heartRunning = false;
-            
+            document.getElementById('main-container').scrollTo(0,0); 
             showProfilesScreen();
         }
 
-        // --- REPRODUCTOR ---
+        // --- CONTROLES REPRODUCTOR ---
         function togglePlayPause() { vibrate(30); if (audio.paused) { audio.play(); updatePlayIcon(true); } else { audio.pause(); updatePlayIcon(false); } }
         function updatePlayIcon(isPlaying) { 
             const btn = document.getElementById('play-btn');
@@ -771,14 +707,10 @@
         audio.ontimeupdate = () => { document.getElementById('progress-bar').style.width = `${(audio.currentTime / audio.duration) * 100}%`; };
         audio.onended = () => nextSong();
 
-        // --- ANIMACIONES (SAN VALENTIN) ---
+        // --- CANVAS (SAN VALENTIN) ---
         const starCanvas = document.getElementById('starCanvas'); const sCtx = starCanvas.getContext('2d'); let stars = [];
         function initStars() { starCanvas.width = window.innerWidth; starCanvas.height = window.innerHeight; stars = []; for(let i=0; i<300; i++) stars.push({x:Math.random()*starCanvas.width, y:Math.random()*starCanvas.height, z:Math.random()*starCanvas.width}); }
-        function animateStars() { 
-            if(currentProfile !== 'san_valentin') { starsRunning = false; return; }
-            sCtx.fillStyle = "black"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height); sCtx.fillStyle = "white"; stars.forEach(s => { s.z -= 2; if(s.z <= 0) s.z = starCanvas.width; let x = (s.x-starCanvas.width/2)*(starCanvas.width/s.z)+starCanvas.width/2; let y = (s.y-starCanvas.height/2)*(starCanvas.width/s.z)+starCanvas.height/2; let size = (1-s.z/starCanvas.width)*2; if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,size,0,Math.PI*2); sCtx.fill(); } }); 
-            requestAnimationFrame(animateStars); 
-        }
+        function animateStars() { if(currentProfile !== 'san_valentin') return; sCtx.fillStyle = "black"; sCtx.fillRect(0,0,starCanvas.width, starCanvas.height); sCtx.fillStyle = "white"; stars.forEach(s => { s.z -= 2; if(s.z <= 0) s.z = starCanvas.width; let x = (s.x-starCanvas.width/2)*(starCanvas.width/s.z)+starCanvas.width/2; let y = (s.y-starCanvas.height/2)*(starCanvas.width/s.z)+starCanvas.height/2; let size = (1-s.z/starCanvas.width)*2; if(x>0 && x<starCanvas.width && y>0 && y<starCanvas.height) { sCtx.beginPath(); sCtx.arc(x,y,size,0,Math.PI*2); sCtx.fill(); } }); requestAnimationFrame(animateStars); }
 
         const hCanvas = document.getElementById('heartCanvas'); const hCtx = hCanvas.getContext('2d'); let hPoints = []; let angY = 0;
         function initHeart() { 
@@ -786,12 +718,9 @@
             for(let i=0; i<1200; i++) { let t = Math.random()*Math.PI*2, x = 16*Math.pow(Math.sin(t),3), y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t)); let z = (Math.random()-0.5)*10; hPoints.push({x:x*10, y:y*10, z:z*10, color: `hsl(${330+Math.random()*40}, 90%, 60%)`}); } 
             hCanvas.addEventListener('click', () => { vibrate([100, 50, 100]); });
         }
-        function animateHeart() { 
-            if(currentProfile !== 'san_valentin') { heartRunning = false; return; }
-            hCtx.fillStyle = "rgba(0,0,0,0.2)"; hCtx.fillRect(0,0,hCanvas.width, hCanvas.height); angY += 0.015; let cx = hCanvas.width/2, cy = hCanvas.height/2; let scaleFactor = window.innerWidth < 768 ? 300 : 500; hPoints.forEach(p => { let rx = p.x*Math.cos(angY) - p.z*Math.sin(angY); let rz = p.x*Math.sin(angY) + p.z*Math.cos(angY); let scale = scaleFactor/(scaleFactor+rz); if(scale>0) { hCtx.fillStyle = p.color; hCtx.beginPath(); hCtx.arc(rx*scale+cx, p.y*scale+cy, 1.5*scale, 0, Math.PI*2); hCtx.fill(); } }); 
-            requestAnimationFrame(animateHeart); 
-        }
+        function animateHeart() { if(currentProfile !== 'san_valentin') return; hCtx.fillStyle = "rgba(0,0,0,0.2)"; hCtx.fillRect(0,0,hCanvas.width, hCanvas.height); angY += 0.015; let cx = hCanvas.width/2, cy = hCanvas.height/2; let scaleFactor = window.innerWidth < 768 ? 300 : 500; hPoints.forEach(p => { let rx = p.x*Math.cos(angY) - p.z*Math.sin(angY); let rz = p.x*Math.sin(angY) + p.z*Math.cos(angY); let scale = scaleFactor/(scaleFactor+rz); if(scale>0) { hCtx.fillStyle = p.color; hCtx.beginPath(); hCtx.arc(rx*scale+cx, p.y*scale+cy, 1.5*scale, 0, Math.PI*2); hCtx.fill(); } }); requestAnimationFrame(animateHeart); }
 
+        // --- CARRUSEL ORIGINAL ---
         function crearCarrusel() {
             const container = document.getElementById('carousel');
             if(container.children.length > 0) return;
@@ -805,6 +734,7 @@
             });
         }
 
+        // --- ROLLO DE PELÍCULA (6 MESES) ---
         function crearFilmStrip() {
             const container = document.getElementById('film-strip');
             if(container.children.length > 0) return; 
@@ -817,6 +747,7 @@
             });
         }
 
+        // --- MODALES Y TEXTOS ---
         function showDescription(url, desc) {
             document.getElementById('detail-img').src = url;
             document.getElementById('detail-text').innerText = desc;
@@ -825,15 +756,7 @@
         function closeDescription() { vibrate(30); document.getElementById('photo-overlay').classList.remove('active'); }
 
         let tIdx=0, cIdx=0, isDel=false;
-        function typeWriter() { 
-            if(currentProfile !== 'san_valentin') { typingRunning = false; return; }
-            const txt = FRASES[tIdx]; const el = document.getElementById('maquina-escribir'); 
-            el.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++); 
-            let spd = isDel ? 50 : 100; 
-            if(!isDel && cIdx === txt.length+1) { spd = 2000; isDel = true; } 
-            else if(isDel && cIdx === 0) { isDel = false; tIdx = (tIdx+1)%FRASES.length; spd = 500; } 
-            setTimeout(typeWriter, spd); 
-        }
+        function typeWriter() { const txt = FRASES[tIdx]; const el = document.getElementById('maquina-escribir'); el.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++); let spd = isDel ? 50 : 100; if(!isDel && cIdx === txt.length+1) { spd = 2000; isDel = true; } else if(isDel && cIdx === 0) { isDel = false; tIdx = (tIdx+1)%FRASES.length; spd = 500; } setTimeout(typeWriter, spd); }
 
         window.onload = () => { initPlaylist(); };
         window.addEventListener('resize', () => { initStars(); initHeart(); });
