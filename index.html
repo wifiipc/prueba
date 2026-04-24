@@ -20,11 +20,20 @@
         }
 
         /* --- 2. CONTENEDOR PRINCIPAL Y ESCENAS --- */
-        #main-container { 
-            height: 100vh; height: 100dvh; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; 
-            scroll-behavior: smooth; position: absolute; top: 0; left: 0; scrollbar-width: none; 
+       /* --- 3. INTRO NETFLIX (PULIDA) --- */
+        #netflix-container { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-color: #000000; z-index: 70000; flex-direction: column; 
+            justify-content: center; align-items: center; overflow: hidden; 
+            opacity: 1; transition: opacity 0.5s ease; /* Ajustado el tiempo */
         }
-        #main-container::-webkit-scrollbar { display: none; }
+        #netflix-container.fade-out { opacity: 0 !important; }
+        
+        #netflix-container netflixintro { 
+            display: block; position: relative; width: 300px; height: 300px; overflow: hidden; 
+            animation: zoom-in 3.5s ease-in 0.5s forwards; 
+            opacity: 1; /* Forzamos a que empiece visible */
+        }
         
         .escena { 
             position: relative; width: 100%; height: 100vh; height: 100dvh; 
