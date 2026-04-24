@@ -280,6 +280,8 @@
 
         /* --- 5. CSS DE LAS ESCENAS --- */
         .escena-sv { display: none; } 
+        .escena-tiempo { display: none; }
+        .profile-tiempo .profile-img { background: linear-gradient(135deg, #f9c74f, #f3722c); }
         
         #universo { background: black; }
         #starCanvas { position: absolute; z-index: 1; top:0; left:0; width:100%; height:100%; }
@@ -399,11 +401,20 @@
 
     <div id="profile-overlay">
         <h2 class="profile-title">¿Qué quieres ver hoy?</h2>
-        <div class="profiles-container">
+        <div class="profiles-container" style="flex-wrap: wrap; justify-content: center;">
             <div class="profile-card profile-sv" onclick="selectProfile('san_valentin')">
                 <div class="profile-img">❤️</div>
                 <div class="profile-name">San Valentín</div>
             </div>
+            <div class="profile-card profile-6m" onclick="selectProfile('6_meses')">
+                <div class="profile-img">🎞️</div>
+                <div class="profile-name">6 Meses</div>
+            </div>
+            <div class="profile-card profile-tiempo" onclick="selectProfile('tiempo')">
+                <div class="profile-img">⏳</div>
+                <div class="profile-name">Nuestro Tiempo</div>
+            </div>
+        </div>
             <div class="profile-card profile-6m" onclick="selectProfile('6_meses')">
                 <div class="profile-img">🎞️</div>
                 <div class="profile-name">6 Meses</div>
@@ -451,7 +462,7 @@
             <div class="scroll-hint"><span>Desliza</span><div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path></svg></div></div>
         </div>
 
-        <div id="escena-tiempo" class="escena escena-sv" style="background: radial-gradient(circle at center, #111 0%, #000 100%);">
+        <div id="escena-tiempo" class="escena escena-tiempo" style="background: radial-gradient(circle at center, #111 0%, #000 100%);">
             <div class="titulo-flotante" style="top: 10%;">Nuestro Tiempo</div>
             
             <div class="glass-card" style="margin-top: 20px; width: 90%;">
@@ -787,6 +798,7 @@
         }
 
         // --- SELECCIÓN DE PERFIL ---
+        // --- SELECCIÓN DE PERFIL ---
         function selectProfile(profile) {
             vibrate(30);
             currentProfile = profile;
@@ -799,19 +811,26 @@
             
             const escenasSV = document.querySelectorAll('.escena-sv');
             const escenas6M = document.querySelectorAll('.escena-6m');
+            const escenasTiempo = document.querySelectorAll('.escena-tiempo'); // El nuevo grupo
             
+            // Escondemos todas por defecto
+            escenasSV.forEach(el => el.style.display = 'none');
+            escenas6M.forEach(el => el.style.display = 'none');
+            escenasTiempo.forEach(el => el.style.display = 'none');
+            
+            // Mostramos solo la que toca
             if(currentProfile === 'san_valentin') {
                 escenasSV.forEach(el => el.style.display = 'flex');
-                escenas6M.forEach(el => el.style.display = 'none');
-                
-                // ARRANCAMOS LAS ANIMACIONES CON CANDADO PARA EVITAR FALLOS
                 if(!starsRunning) { starsRunning = true; initStars(); animateStars(); }
                 if(!typingRunning) { typingRunning = true; typeWriter(); }
                 
-            } else {
-                escenasSV.forEach(el => el.style.display = 'none');
+            } else if (currentProfile === '6_meses') {
                 escenas6M.forEach(el => el.style.display = 'flex');
                 crearFilmStrip();
+                
+            } else if (currentProfile === 'tiempo') {
+                escenasTiempo.forEach(el => el.style.display = 'flex');
+                // No llamamos animaciones extra porque el reloj ya funciona por su cuenta con setInterval
             }
 
             setTimeout(() => {
@@ -820,7 +839,6 @@
                 if(hasMusic) { document.getElementById('spotify-player').classList.add('visible'); }
             }, 800);
         }
-
         // --- BOTÓN VOLVER ---
         function goBackToMenu() {
             vibrate(30);
