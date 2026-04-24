@@ -441,8 +441,31 @@
         
         <div id="universo" class="escena escena-sv">
             <canvas id="starCanvas"></canvas>
-            <div id="contenido-texto"><h1>Para mi pingüina</h1><div style="font-size:1.2rem; color:#eee; min-height:1.5em; margin-top:10px;"><span id="maquina-escribir"></span><span class="cursor" style="display:inline-block;width:2px;height:1em;background:var(--accent);animation:blink 1s infinite; margin-left: 5px;"></span></div></div>
+            <div id="contenido-texto">
+                <h1 id="titulo-secreto" style="cursor: pointer;">Para mi pingüina</h1>
+                <div style="font-size:1.2rem; color:#eee; min-height:1.5em; margin-top:10px;">
+                    <span id="maquina-escribir"></span>
+                    <span class="cursor" style="display:inline-block;width:2px;height:1em;background:var(--accent);animation:blink 1s infinite; margin-left: 5px;"></span>
+                </div>
+            </div>
             <div class="scroll-hint"><span>Desliza</span><div class="scroll-arrow"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path></svg></div></div>
+        </div>
+
+        <div id="escena-tiempo" class="escena escena-sv" style="background: radial-gradient(circle at center, #111 0%, #000 100%);">
+            <div class="titulo-flotante" style="top: 10%;">Nuestro Tiempo</div>
+            
+            <div class="glass-card" style="margin-top: 20px; width: 90%;">
+                <p style="font-size: 1.1rem; color: #ccc; margin-bottom: 15px;">Llevamos sumando momentos:</p>
+                <div id="live-time" style="font-family: 'Montserrat'; font-size: 1.6rem; font-weight: bold; color: #4cc9f0; line-height: 1.8; text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);">
+                    Cargando...
+                </div>
+            </div>
+            
+            <div class="glass-card" onclick="checkCapsule()" style="margin-top: 30px; width: 90%; cursor: pointer; transition: 0.3s;" id="capsule-btn">
+                <div style="font-size: 3.5rem; margin-bottom: 10px;">🔒</div>
+                <h3 style="color: var(--accent); font-family: 'Montserrat';">Cápsula del Tiempo</h3>
+                <p style="font-size: 0.85rem; color: #aaa; margin-top: 5px;">No intentar abrir antes del <br>25 de Octubre de 2026</p>
+            </div>
         </div>
 
         <div id="jardin" class="escena escena-sv">
@@ -883,6 +906,67 @@
             if(!isDel && cIdx === txt.length+1) { spd = 2000; isDel = true; } 
             else if(isDel && cIdx === 0) { isDel = false; tIdx = (tIdx+1)%FRASES.length; spd = 500; } 
             setTimeout(typeWriter, spd); 
+        }
+        // --- 1. EASTER EGG (SECRETO) ---
+        let secretClicks = 0;
+        let secretTimer;
+        // Si toca 3 veces rápidas el título del universo, salta la sorpresa
+        document.getElementById('titulo-secreto').addEventListener('click', () => {
+            secretClicks++;
+            clearTimeout(secretTimer);
+            if (secretClicks >= 3) {
+                vibrate([100, 50, 100, 50, 100]); // Vibra como un corazón latiendo
+                
+                // Aquí usamos el modal de fotos que ya tienes programado para mostrar el secreto
+                // Pon aquí la URL de tu foto o mensaje secreto más gracioso/especial
+                showDescription('https://via.placeholder.com/500x500/ff4d6d/fff?text=Secreto+Desbloqueado', '¡Felicidades mi amor! Has encontrado el mensaje secreto. Te amo más de lo que imaginas.');
+                
+                secretClicks = 0;
+            }
+            // Si pasa 1 segundo sin hacer clic, se resetea la cuenta
+            secretTimer = setTimeout(() => { secretClicks = 0; }, 1000);
+        });
+
+        // --- 2. CONTADOR DE TIEMPO EN VIVO ---
+        // ¡IMPORTANTE! Cambia esta fecha por el día exacto en que empezasteis (Año-Mes-Día)
+        const fechaInicio = new Date('2025-10-25T00:00:00'); 
+        
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - fechaInicio;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+            
+            const timeEl = document.getElementById('live-time');
+            if (timeEl) {
+                timeEl.innerHTML = `${days} Días<br>${hours} Horas<br>${minutes} Minutos<br>${seconds} Segundos`;
+            }
+        }
+        // Actualizamos cada segundo
+        setInterval(updateCounter, 1000);
+        
+        // --- 3. CÁPSULA DEL TIEMPO ---
+        function checkCapsule() {
+            // ¡IMPORTANTE! Pon la fecha en la que quieres que se desbloquee (Año-Mes-Día)
+            const unlockDate = new Date('2026-10-25T00:00:00');
+            const now = new Date();
+            
+            const capsuleBtn = document.getElementById('capsule-btn');
+            capsuleBtn.style.transform = 'scale(0.9)';
+            setTimeout(() => capsuleBtn.style.transform = 'scale(1)', 200);
+            
+            if (now >= unlockDate) {
+                vibrate([200, 100, 200]);
+                // Si ya es la fecha, le muestras la foto/carta especial
+                showDescription('https://via.placeholder.com/500x500/4cc9f0/fff?text=Nuestra+Carta', '¡Ha llegado el día! Han pasado 1 año y mi amor por ti solo ha crecido...');
+            } else {
+                vibrate(50);
+                // Si aún no es la fecha, la troleamos un poco usando la alerta nativa del móvil
+                alert("Aún no se puede abrir. Hay que esperar hasta la fecha pingüina impaciente ❤️");
+            }
         }
 
         window.onload = () => { 
