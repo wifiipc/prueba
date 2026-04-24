@@ -20,43 +20,99 @@
         }
 
         /* --- 2. CONTENEDOR PRINCIPAL Y ESCENAS --- */
-       /* --- 3. INTRO NETFLIX (PULIDA) --- */
+/* --- 3. INTRO NETFLIX COMPLETA Y CORREGIDA --- */
         #netflix-container { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background-color: #000000; z-index: 70000; flex-direction: column; 
             justify-content: center; align-items: center; overflow: hidden; 
-            opacity: 1; transition: opacity 0.5s ease; /* Ajustado el tiempo */
+            opacity: 1; transition: opacity 0.5s ease;
         }
         #netflix-container.fade-out { opacity: 0 !important; }
-        
+
         #netflix-container netflixintro { 
             display: block; position: relative; width: 300px; height: 300px; overflow: hidden; 
             animation: zoom-in 3.5s ease-in 0.5s forwards; 
-            opacity: 1; /* Forzamos a que empiece visible */
+            background-size: 4000px; background-position: -1950px 0; 
         }
-        
-        .escena { 
-            position: relative; width: 100%; height: 100vh; height: 100dvh; 
-            scroll-snap-align: start; scroll-snap-stop: always; 
-            display: flex; justify-content: center; align-items: center; flex-direction: column; overflow: hidden; 
+        #netflix-container netflixintro::before { 
+            content: ""; position: absolute; display: block; background-color: #000000; 
+            width: 150%; height: 30%; left: -25%; bottom: -27%; border-radius: 50%; z-index: 5; 
+            transform-origin: left center; background-size: 4000px; background-position: -1950px 0; 
         }
-        /* --- BLOQUE DE LUCES CORREGIDO --- */
+        #netflix-container netflixintro[letter="N"] { transform-origin: 30% center; }
+        #netflix-container netflixintro[letter="N"] .helper-1 { 
+            width: 19.5%; height: 100%; background-color: rgba(228, 9, 19, 0.5); left: 22.4%; top: 0; 
+            transform: rotate(180deg); animation: fading-lumieres-box 2s forwards 0.6s; 
+        }
+        #netflix-container netflixintro[letter="N"] .helper-1 .effect-brush { animation: brush-moving 2.5s forwards 1.2s; }
+        #netflix-container netflixintro[letter="N"] .helper-1 .effect-brush [class*="fur-"] { bottom: 0; height: 40%; }
+        #netflix-container netflixintro[letter="N"] .helper-2 { 
+            width: 19.5%; height: 100%; left: 57.8%; top: 0; transform: rotate(180deg); overflow: hidden; 
+        }
+        #netflix-container netflixintro[letter="N"] .helper-2 .effect-brush { animation: brush-moving 2s forwards 0.5s; }
+        #netflix-container netflixintro[letter="N"] .helper-3 { 
+            width: 19%; height: 150%; left: 40.5%; top: -25%; transform: rotate(-19.5deg); 
+            box-shadow: 0px 0px 35px -12px rgba(0, 0, 0, 0.4); overflow: hidden; 
+        }
+        #netflix-container netflixintro[letter="N"] .helper-3 .effect-brush { animation: brush-moving 2s forwards 0.8s; }
+
+        #netflix-container netflixintro [class*="helper-"] { position: absolute; }
+        #netflix-container netflixintro [class*="helper-"] .effect-brush { 
+            position: absolute; width: 100%; height: 300%; top: 0; overflow: hidden; 
+        }
+        #netflix-container netflixintro [class*="helper-"] .effect-brush::before { 
+            display: block; content: ""; position: absolute; background-color: #e40913; 
+            width: 100%; height: 70%; box-shadow: 0px 0px 29px 24px #e40913; 
+        }
+        #netflix-container netflixintro [class*="helper-"] .effect-brush [class*="fur-"] { display: block; position: absolute; bottom: 10%; height: 30%; }
+
+        /* Pinceladas de la "N" */
+        .fur-1 { left: 0%; width: 3.8%; background: linear-gradient(to bottom, #e40913 0%, #e40913 15%, transparent 81%, transparent 100%); }
+        .fur-2 { left: 3.8%; width: 2.8%; background: linear-gradient(to bottom, #e40913 0%, #e40913 10%, transparent 62%, transparent 100%); }
+        .fur-3 { left: 6.6%; width: 4.8%; background: linear-gradient(to bottom, #e40913 0%, #e40913 37%, transparent 100%); }
+        .fur-4 { left: 11.4%; width: 4%; background: linear-gradient(to bottom, #e40913 0%, #e40913 23%, transparent 100%); }
+        .fur-5 { left: 15.4%; width: 4%; background: linear-gradient(to bottom, #e40913 0%, #e40913 15%, transparent 86%, transparent 100%); }
+        .fur-6 { left: 19.4%; width: 2.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 27%, transparent 89%, transparent 100%); }
+        .fur-7 { left: 21.9%; width: 4%; background: linear-gradient(to bottom, #e40913 0%, #e40913 20%, transparent 100%); }
+        .fur-8 { left: 25.9%; width: 2%; background: linear-gradient(to bottom, #e40913 0%, #e40913 30%, transparent 100%); }
+        .fur-9 { left: 27.9%; width: 4%; background: linear-gradient(to bottom, #e40913 0%, #e40913 35%, transparent 95%, transparent 100%); }
+        .fur-10 { left: 31.9%; width: 3.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 39%, transparent 95%, transparent 100%); }
+        .fur-11 { left: 35.4%; width: 2%; background: linear-gradient(to bottom, #e40913 0%, #e40913 34%, transparent 95%, transparent 100%); }
+        .fur-12 { left: 37.4%; width: 2.6%; background: linear-gradient(to bottom, #e40913 0%, #e40913 22%, transparent 95%, transparent 100%); }
+        .fur-13 { left: 40%; width: 6%; background: linear-gradient(to bottom, #e40913 0%, #e40913 47%, transparent 100%); }
+        .fur-14 { left: 46%; width: 2%; background: linear-gradient(to bottom, #e40913 0%, #e40913 36%, transparent 100%); }
+        .fur-15 { left: 48%; width: 5.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 29%, transparent 100%); }
+        .fur-16 { left: 53.5%; width: 3%; background: linear-gradient(to bottom, #e40913 0%, #e40913 39%, transparent 95%, transparent 100%); }
+        .fur-17 { left: 56.5%; width: 4.1%; background: linear-gradient(to bottom, #e40913 0%, #e40913 45%, transparent 100%); }
+        .fur-18 { left: 60.6%; width: 2.4%; background: linear-gradient(to bottom, #e40913 0%, #e40913 34%, transparent 100%); }
+        .fur-19 { left: 63%; width: 4%; background: linear-gradient(to bottom, #e40913 0%, #e40913 47%, transparent 100%); }
+        .fur-20 { left: 67%; width: 1.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 27%, transparent 95%, transparent 100%); }
+        .fur-21 { left: 68.5%; width: 2.8%; background: linear-gradient(to bottom, #e40913 0%, #e40913 37%, transparent 100%); }
+        .fur-22 { left: 71.3%; width: 2.3%; background: linear-gradient(to bottom, #e40913 0%, #e40913 9%, transparent 100%); }
+        .fur-23 { left: 73.6%; width: 2.2%; background: linear-gradient(to bottom, #e40913 0%, #e40913 28%, transparent 92%, transparent 100%); }
+        .fur-24 { left: 75.8%; width: 1%; background: linear-gradient(to bottom, #e40913 0%, #e40913 37%, transparent 100%); }
+        .fur-25 { left: 76.8%; width: 2.1%; background: linear-gradient(to bottom, #e40913 0%, #e40913 28%, transparent 100%); }
+        .fur-26 { left: 78.9%; width: 4.1%; background: linear-gradient(to bottom, #e40913 0%, #e40913 34%, transparent 100%); }
+        .fur-27 { left: 83%; width: 2.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 21%, transparent 100%); }
+        .fur-28 { left: 85.5%; width: 4.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 39%, transparent 100%); }
+        .fur-29 { left: 90%; width: 2.8%; background: linear-gradient(to bottom, #e40913 0%, #e40913 30%, transparent 100%); }
+        .fur-30 { left: 92.8%; width: 3.5%; background: linear-gradient(to bottom, #e40913 0%, #e40913 19%, transparent 100%); }
+        .fur-31 { left: 96.3%; width: 3.7%; background: linear-gradient(to bottom, #e40913 0%, #e40913 37%, transparent 100%); }
+
+        /* --- LUCES (LUMIERES) --- */
         #netflix-container netflixintro .effect-lumieres { 
             position: absolute; width: 100%; height: 100%; opacity: 0; 
             animation: showing-lumieres 2s forwards 1.6s; 
         }
-        
         #netflix-container netflixintro .effect-lumieres [class*="lamp-"] { 
             position: absolute; display: block; height: 100%; 
             box-shadow: 0px 0px 10px 0px var(--color); background: var(--color); 
         }
-        
         #netflix-container netflixintro .effect-lumieres [class*="lamp-"]::before { 
             position: absolute; content: ""; display: block; width: 100%; height: 100%; 
             background: inherit; box-shadow: inherit; 
         }
 
-        /* Definición de colores y posiciones base */
         .lamp-1 { --color: #ff0100; left: 0.7%; width: 1%; } .lamp-1::before { left: 41%; }
         .lamp-2 { --color: #ffde01; left: 2.2%; width: 1.4%; } .lamp-2::before { left: 153%; }
         .lamp-3 { --color: #ff00cc; left: 5.8%; width: 2.1%; } .lamp-3::before { left: 140%; }
@@ -86,7 +142,6 @@
         .lamp-27 { --color: #ff0036; left: 92.4%; width: 2.4%; } .lamp-27::before { left: 80%; }
         .lamp-28 { --color: #06f98c; left: 96.2%; width: 2.1%; } .lamp-28::before { left: 197%; }
 
-        /* Agrupamos animaciones IMPARES (Hacia la izquierda) */
         #netflix-container netflixintro .effect-lumieres .lamp-1, 
         #netflix-container netflixintro .effect-lumieres .lamp-3, 
         #netflix-container netflixintro .effect-lumieres .lamp-5, 
@@ -104,7 +159,6 @@
             animation: lumieres-moving-left 4s linear forwards; 
         }
         
-        /* Agrupamos animaciones PARES (Hacia la derecha) */
         #netflix-container netflixintro .effect-lumieres .lamp-2, 
         #netflix-container netflixintro .effect-lumieres .lamp-4, 
         #netflix-container netflixintro .effect-lumieres .lamp-6, 
@@ -122,21 +176,16 @@
             animation: lumieres-moving-right 4s linear forwards; 
         }
 
-        /* Animaciones para los pseudo-elementos (el rastro de luz) */
         #netflix-container netflixintro .effect-lumieres [class*="lamp-"]::before {
-             animation: lumieres-moving-left 4.5s linear forwards; /* Aplica a todos, visualmente funciona */
+             animation: inherit; /* Hereda la animación de la lámpara padre */
         }
-        /* --- FIN BLOQUE LUCES --- */
+
         @keyframes brush-moving { 0% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
         @keyframes lumieres-moving-right { 0% { transform: translate(0); } 40% { transform: translate(-10px) scaleX(1); } 50% { transform: translate(-60px); } 100% { transform: translate(-120px) scaleX(3); } }
         @keyframes lumieres-moving-left { 0% { transform: translate(0); } 40% { transform: translate(10px) scaleX(1); } 50% { transform: translate(60px); } 100% { transform: translate(120px) scaleX(3); } }
         @keyframes zoom-in { 0% { transform: scale(1); } 100% { transform: scale(15); } }
         @keyframes showing-lumieres { 0% { opacity: 0; } 100% { opacity: 1; } }
-        /* AQUI ESTABA EL FALLO, SE HACIA INVISIBLE MUY RAPIDO */
-        @keyframes fading-lumieres-box { 
-                    0% { background-color: rgba(228, 9, 19, 0.5); } 
-                    80% { background-color: rgba(228, 9, 19, 0.5); } 
-                    100% { background-color: rgba(228, 9, 19, 0); } 
+        @keyframes fading-lumieres-box { 0% { background-color: rgba(228, 9, 19, 0.5); } 80% { background-color: rgba(228, 9, 19, 0.5); } 100% { background-color: rgba(228, 9, 19, 0); } }
         }        /* --- 4. UI MENÚS Y REPRODUCTOR GLASS --- */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 60000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
         .glass-card { background: rgba(30, 30, 30, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); border-radius: 24px; padding: 35px; text-align: center; width: 85%; max-width: 400px; }
@@ -573,12 +622,11 @@
             const m = document.getElementById('month-select').value;
             const y = document.getElementById('year-select').value;
             
-            // <-- ASEGÚRATE DE QUE LA FECHA ES LA CORRECTA
             if (d == 25 && m == 10 && y == 2025) { 
                 vibrate(50);
                 document.getElementById('login-overlay').style.opacity = '0';
                 
-                // 1. DESCONGELAMOS LAS ANIMACIONES AQUÍ
+                // CRUCIAL: Descongelar las animaciones antes de mostrar Netflix
                 document.body.classList.remove('not-loaded');
                 
                 setTimeout(() => { 
@@ -588,10 +636,10 @@
                     intro.style.display = 'flex';
                     intro.classList.remove('fade-out');
                     
-                    // 2. FORZAMOS EL REINICIO DE FORMA SEGURA (Sin romper las luces)
+                    // Forzar repintado para iniciar animación
                     void intro.offsetWidth;
                     
-                    // Esperamos a que la intro termine el zoom y hacemos fade out
+                    // Fade out cuando acaba el zoom
                     setTimeout(() => {
                         intro.classList.add('fade-out'); 
                         
